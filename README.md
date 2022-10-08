@@ -21,8 +21,13 @@ https://docs.github.com/en/get-started/quickstart/github-flow
 
 # Tecnologías
 
-TODO
+Las herramientas con las que se trabajan son las siguientes:
 
+**Python->** Python 3.7.3 [https://www.python.org/downloads/release/python-3714/] o posteriores
+
+**Django->** Django 3.2.16 [https://www.djangoproject.com/] o posteriores
+
+**Bootstrap**
 
 # Roles
 **QA ->** Un QA (Quality Assurance) o analista QA es el profesional responsable de asegurar la calidad del software y de prevenir fallos en él. Es la persona encargada de garantizar el correcto funcionamiento del producto desde el primer momento, pero también de confirmar que satisface las expectativas de los usuarios que lo utilizarán. 
