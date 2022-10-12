@@ -32,7 +32,7 @@
       </div>
       <div class="vl" style=" border-left: 0.1em solid white; height: 4em;"></div>
       <ul class="nav navbar-nav navbar-right">
-        <div v-if="logged==true" class="container-profile">
+        <div v-if="logged" class="container-profile">
           <b-nav-item-dropdown right>
             <template #button-content>
               <em>Usuario</em>
@@ -51,8 +51,8 @@
                 </svg>
               </div>
             </template>
-            <b-dropdown-item href="#" @click="go_to_login">Registro</b-dropdown-item>
-            <b-dropdown-item href="#" @click="go_to_login">Iniciar sesión</b-dropdown-item>
+            <b-dropdown-item href="/register">Registro</b-dropdown-item>
+            <b-dropdown-item href="/login" @click="goToLogin">Iniciar sesión</b-dropdown-item>
           </b-nav-item-dropdown>
         </div>
       </ul>
@@ -67,17 +67,31 @@
 export default {
   data () {
     return {
-      logged: false
+      logged: false,
+      username: null,
+      token: null
     }
   },
   methods: {
-    go_to_login () {
+    goToLogin () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/login'})
+    },
+    goToRegister () {
+      // eslint-disable-next-line standard/object-curly-even-spacing
+      this.$router.push({ path: '/register'})
     },
     login () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.logged = true
+    },
+    created () {
+      this.logged = this.$route.query.logged === 'true'
+      this.username = this.$route.query.username
+      this.token = this.$route.query.token
+      if (this.logged === undefined) {
+        this.logged = false
+      }
     }
   }
 }
