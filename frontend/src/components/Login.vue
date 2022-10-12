@@ -18,12 +18,6 @@ tr:nth-child(even) {
 
 <template>
   <div>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" >
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <a class="navbar-brand" style="color: #FFFFFF; margin-left: 1em; font-size: 2em;">DoogKing</a>
-    </nav>
     <div v-if="creatingAccount==false" class="container">
       <h1 style="margin-left: 10.5em;">Iniciar sesión</h1>
       <div>
