@@ -34,10 +34,10 @@
         <div class="footer-col">
           <h4>Síguenos</h4>
           <div class="social-links">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><fa :icon="['fab', 'facebook']" /></a>
+            <a href="#"><fa :icon="['fab', 'twitter']" /></a>
+            <a href="#"><fa :icon="['fab', 'instagram']" /></a>
+            <a href="#"><fa :icon="['fab', 'linkedin']" /></a>
           </div>
         </div>
       </div>
@@ -61,11 +61,20 @@ export default {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.logged = true
     }
+  },
+  created () {
+    this.logged = this.$route.query.logged === 'true'
+    this.username = this.$route.query.username
+    this.token = this.$route.query.token
+    if (this.logged === undefined) {
+      this.logged = false
+    }
   }
 }
 </script>
 
 <style scoped>
+
 body{
   line-height: 1.5;
   font-family: 'Poppins', sans-serif;
@@ -83,6 +92,11 @@ body{
   display: flex;
   flex-wrap: wrap;
 }
+
+.hola{
+  color: #F06449;
+}
+
 ul{
   list-style: none;
 }
@@ -90,7 +104,7 @@ ul{
   background-color: #24262b;
   padding: 70px 0;
   position: relative;
-  margin-top: 200px;
+  margin-top: 250px;
 }
 .footer-col{
   width: 25%;
@@ -114,6 +128,11 @@ ul{
   box-sizing: border-box;
   width: 50px;
 }
+
+.footer-col :hover{
+  color: #F06449;
+}
+
 .footer-col ul li:not(:last-child){
   margin-bottom: 10px;
 }

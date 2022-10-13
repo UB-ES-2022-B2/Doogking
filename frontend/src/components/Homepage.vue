@@ -1,23 +1,29 @@
 <template>
   <div>
+  <Header></Header>
+  <Footer></Footer>
   </div>
 </template>
-
 <script>
+import Header from './Header'
+import Footer from './Footer'
+
 export default {
+  name: 'Homepage',
+  components: {
+    Header,
+    Footer
+  },
   data () {
     return {
-      logged: false
     }
   },
-  methods: {
-    go_to_login () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/login'})
-    },
-    login () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.logged = true
+  created () {
+    this.logged = this.$route.query.logged === 'true'
+    this.username = this.$route.query.username
+    this.token = this.$route.query.token
+    if (this.logged === undefined) {
+      this.logged = false
     }
   }
 }

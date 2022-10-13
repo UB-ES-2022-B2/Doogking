@@ -20,40 +20,32 @@
             <router-link to="/" class="nav-link active" aria-current="page" style="color: #F06449;">Inicio</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/login" class="nav-link">Información</router-link>
-          </li>
-          <li class="nav-item">
             <router-link to="/login" class="nav-link">Soporte</router-link>
           </li>
           <li class="nav-item">
             <router-link to="/login" class="nav-link">Registrar alojamiento</router-link>
           </li>
+          <li class="nav-item">
+            <router-link to="/login" class="nav-link"><fa :icon="['fas', 'circle-info']" /></router-link>
+          </li>
         </ul>
       </div>
-      <div class="vl" style=" border-left: 0.1em solid white; height: 4em;"></div>
+      <!-- USER DROPDOWN -->
       <ul class="nav navbar-nav navbar-right">
-        <div v-if="logged==true" class="container-profile">
-          <b-nav-item-dropdown right>
+        <div>
+          <b-dropdown no-caret id="dropdown-right" border="transparent" right text="Right align" class="lang-dropdown">
             <template #button-content>
-              <em>Usuario</em>
+              <span class="loginIcon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+              </svg>
+              </span>
             </template>
-            <b-dropdown-item href="#" @click="go_to_login">Perfil</b-dropdown-item>
-            <b-dropdown-item href="#" @click="go_to_login">Cerrar sesión</b-dropdown-item>
-          </b-nav-item-dropdown>
-        </div>
-        <div v-else class="container-signin">
-          <b-nav-item-dropdown right>
-            <template #button-content>
-              <div class="loginIcon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-                </svg>
-              </div>
-            </template>
-            <b-dropdown-item href="#" @click="go_to_login">Registro</b-dropdown-item>
-            <b-dropdown-item href="#" @click="go_to_login">Iniciar sesión</b-dropdown-item>
-          </b-nav-item-dropdown>
+            <b-dropdown-item href="/login">Iniciar sesión   <fa :icon="['fas', 'right-to-bracket']" /></b-dropdown-item>
+            <b-dropdown-divider></b-dropdown-divider>
+            <b-dropdown-item href="/register">Crear cuenta   <fa :icon="['fas', 'user']" /></b-dropdown-item>
+          </b-dropdown>
         </div>
       </ul>
     </div>
@@ -67,7 +59,9 @@
 export default {
   data () {
     return {
-      logged: false
+      logged: false,
+      username: null,
+      token: null
     }
   },
   methods: {
@@ -78,6 +72,14 @@ export default {
     login () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.logged = true
+    }
+  },
+  created () {
+    this.logged = this.$route.query.logged === 'true'
+    this.username = this.$route.query.username
+    this.token = this.$route.query.token
+    if (this.logged === undefined) {
+      this.logged = false
     }
   }
 }
@@ -92,10 +94,6 @@ export default {
 }
 .nav-item .nav-link:hover {
   color: #F06449;
-}
-
-.loginIcon{
-  color: white;
 }
 
 .loginIcon:hover{
