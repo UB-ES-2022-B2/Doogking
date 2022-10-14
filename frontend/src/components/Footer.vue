@@ -100,6 +100,7 @@ body{
 ul{
   list-style: none;
 }
+
 .footer{
   background-color: #24262b;
   padding: 70px 0;

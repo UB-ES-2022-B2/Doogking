@@ -16,6 +16,9 @@ export default {
   },
   data () {
     return {
+      logged: null,
+      username: null,
+      token: null
     }
   },
   created () {

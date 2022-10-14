@@ -9,7 +9,6 @@
 npm install
 
 # install FontAwesome libraries
-npm i --save @fortawesome/free-solid-svg-icons
 npm i --save @fortawesome/vue-fontawesome
 npm i --save @fortawesome/free-solid-svg-icons
 npm i --save @fortawesome/free-brands-svg-icons

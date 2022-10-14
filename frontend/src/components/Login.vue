@@ -1,4 +1,6 @@
 <template>
+  <div>
+  <Header></Header>
   <div id="app">
     <div class="body">
       <div id="container-login" class="container">
@@ -22,6 +24,8 @@
         </div>
       </div>
     </div>
+  </div>
+  <Footer></Footer>
   </div>
 </template>
 
@@ -68,8 +72,15 @@
 </style>
 
 <script>
+import Header from './Header'
+import Footer from './Footer'
+
 import axios from 'axios'
 export default {
+  components: {
+    Header,
+    Footer
+  },
   data () {
     return {
       logged: false,

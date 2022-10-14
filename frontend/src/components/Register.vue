@@ -1,4 +1,6 @@
 <template>
+  <div>
+    <Header></Header>
   <div id="app">
     <div class="body">
       <div id="container-login" class="container">
@@ -37,6 +39,8 @@
         </div>
       </div>
     </div>
+  </div>
+    <Footer></Footer>
   </div>
 </template>
 
@@ -82,10 +86,16 @@
 }
 
 </style>
-
 <script>
+import Header from './Header'
+import Footer from './Footer'
+
 import axios from 'axios'
 export default {
+  components: {
+    Header,
+    Footer
+  },
   data () {
     return {
       logged: false,
@@ -105,7 +115,7 @@ export default {
   created () {
   },
   methods: {
-    checkLogin () {
+    checkRegister () {
       const parameters = {
         username: this.username,
         password: this.password
@@ -113,9 +123,8 @@ export default {
       const path = 'http://localhost:5000/login'
       axios.post(path, parameters)
         .then((res) => {
-          this.logged = true
           this.token = res.data.token
-          this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token } })
+          this.$router.push({ path: '/', query: { username: this.addUserForm.username, logged: true, token: this.token } })
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -137,7 +146,7 @@ export default {
     },
     sendDataTest () {
       this.logged = true
-      this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token } })
+      this.$router.push({ path: '/', query: { username: this.addUserForm.username, logged: this.logged, token: this.token } })
     },
     sendCreateForm () {
       const path = 'http://localhost:5000/account'
