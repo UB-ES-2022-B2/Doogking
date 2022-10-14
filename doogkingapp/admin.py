@@ -13,7 +13,7 @@ class ProfileAdmin(UserAdmin):
     list_filter = ('email', 'is_staff', 'is_active',)
 
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('email', 'password', 'first_name', 'last_name')}),
         ('Dates', {'fields':('last_login', 'date_joined')}),
         ('Permissions', {'fields': ('is_staff', 'is_active')}),
     )
