@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 from .managers import ProfileManager
 
+
 class Profile(AbstractUser):
     username = None
     email = models.EmailField('email address', unique=True)
