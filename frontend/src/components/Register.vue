@@ -1,15 +1,20 @@
 <template>
   <div>
-  <Header></Header>
+    <Header></Header>
   <div id="app">
     <div class="body">
       <div id="container-login" class="container">
-        <div v-if="!creatingAccount" class="card" style="width: 30rem; background-color: #4f5050; color: white">
-          <h3>Iniciar sesión</h3>
+        <div class="card" style="width: 30rem; color: white">
+          <h3>Crear Cuenta</h3>
           <h5>_____________________________________</h5>
           <div class="form-label-group">
-            <label for="inputEmail">Nombre de usuario</label>
-            <input type="username" id="inputUsername" class="form-control"
+            <label for="inputEmail">Email</label>
+            <input type="email" id="inputUsername" class="form-control"
+                   required autofocus v-model="addUserForm.email">
+          </div>
+          <div class="form-label-group">
+            <label for="inputPassword">Nombre de usuario</label>
+            <input type="username" id="inputPassword" class="form-control"
                    required autofocus v-model="addUserForm.username">
           </div>
           <div class="form-label-group">
@@ -17,15 +22,25 @@
             <input type="password" id="inputPassword" class="form-control"
                    required v-model="addUserForm.password">
           </div>
+          <div class="form-label-group">
+            <label for="inputPassword">Calle</label>
+            <input type="street" id="inputPassword" class="form-control"
+                   required autofocus v-model="addUserForm.street">
+          </div>
+          <div class="form-label-group">
+            <label for="inputPassword">Número de calle</label>
+            <input type="streetNumber" id="inputPassword" class="form-control"
+                   required autofocus v-model="addUserForm.streetNumber">
+          </div>
           <div class="group-buttons">
-            <button class="btn btn-lg btn-block" @click="checkLogin" name="signIn">Iniciar sesión</button>
-            <button class="btn btn-lg btn-block" @click="goToRegister" name="createAccount">Crear cuenta</button>
+            <button class="btn btn-lg btn-block" @click="sendDataTest" name="createAccount">Crear cuenta</button>
+            <button class="btn btn-lg btn-block" @click="goToLogin" name="goToLogIn">Ir a iniciar sesión</button>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <Footer></Footer>
+    <Footer></Footer>
   </div>
 </template>
 
@@ -37,6 +52,7 @@
 .card {
   padding: 2em;
   margin: 0 auto;
+  background-color: #4f5050;
 }
 .form-label-group {
   text-align: left;
@@ -70,7 +86,6 @@
 }
 
 </style>
-
 <script>
 import Header from './Header'
 import Footer from './Footer'
@@ -90,14 +105,17 @@ export default {
       creatingAccount: false,
       addUserForm: {
         username: null,
-        password: null
+        password: null,
+        email: null,
+        street: null,
+        streetNumber: null
       }
     }
   },
   created () {
   },
   methods: {
-    checkLogin () {
+    checkRegister () {
       const parameters = {
         username: this.username,
         password: this.password
@@ -105,19 +123,14 @@ export default {
       const path = 'http://localhost:5000/login'
       axios.post(path, parameters)
         .then((res) => {
-          this.logged = true
           this.token = res.data.token
-          this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token } })
+          this.$router.push({ path: '/', query: { username: this.addUserForm.username, logged: true, token: this.token } })
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error)
           alert('Usuari o contraseña incorrecte')
         })
-    },
-    goToRegister () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/register'})
     },
     initCreateForm () {
       this.creatingAccount = true
@@ -126,6 +139,14 @@ export default {
     },
     backToLogIn () {
       this.creatingAccount = false
+    },
+    goToLogin () {
+      // eslint-disable-next-line standard/object-curly-even-spacing
+      this.$router.push({ path: '/login'})
+    },
+    sendDataTest () {
+      this.logged = true
+      this.$router.push({ path: '/', query: { username: this.addUserForm.username, logged: this.logged, token: this.token } })
     },
     sendCreateForm () {
       const path = 'http://localhost:5000/account'

@@ -8,6 +8,11 @@
 # install dependencies
 npm install
 
+# install FontAwesome libraries
+npm i --save @fortawesome/vue-fontawesome
+npm i --save @fortawesome/free-solid-svg-icons
+npm i --save @fortawesome/free-brands-svg-icons
+
 # serve with hot reload at localhost:8080
 npm run dev
 

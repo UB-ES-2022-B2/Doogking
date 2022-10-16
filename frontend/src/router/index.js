@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from '@/components/Login.vue'
 import Homepage from '@/components/Homepage'
 import process from 'shelljs'
+import Register from '../components/Register'
 
 Vue.use(Router)
 
@@ -19,6 +20,11 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register
     }
   ]
 })
