@@ -99,11 +99,13 @@ export default {
   methods: {
     checkLogin () {
       const parameters = {
-        username: this.username,
-        password: this.password
+        username: this.addUserForm.username,
+        password: this.addUserForm.password
       }
-      const path = 'http://localhost:5000/login'
-      axios.post(path, parameters)
+      const headers = {'Access-Control-Allow-Origin': '*'}
+      console.log(parameters)
+      const path = 'http://localhost:8000/api/login/'
+      axios.post(path, parameters, headers)
         .then((res) => {
           this.logged = true
           this.token = res.data.token
