@@ -111,7 +111,7 @@ export default {
       }
       const headers = {'Access-Control-Allow-Origin': '*'}
       console.log(parameters)
-      const path = 'http://localhost:8000/api/login/'
+      const path = 'https://doogking.azurewebsites.net/api/login/'
       axios.post(path, parameters, headers)
         .then((res) => {
           this.logged = true
