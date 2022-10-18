@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex-wrapper">
   <Header></Header>
   <Footer></Footer>
   </div>
@@ -33,4 +33,10 @@ export default {
 </script>
 
 <style scoped>
+.flex-wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: flex-start;
+}
 </style>

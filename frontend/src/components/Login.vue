@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex-wrapper">
   <Header></Header>
   <div id="app">
     <div class="body">
@@ -30,6 +30,13 @@
 </template>
 
 <style scoped>
+.flex-wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
 #container-login {
   padding: 2em;
   text-align: center;
@@ -99,15 +106,17 @@ export default {
   methods: {
     checkLogin () {
       const parameters = {
-        username: this.username,
-        password: this.password
+        username: this.addUserForm.username,
+        password: this.addUserForm.password
       }
-      const path = 'http://localhost:5000/login'
-      axios.post(path, parameters)
+      const headers = {'Access-Control-Allow-Origin': '*'}
+      console.log(parameters)
+      const path = 'http://localhost:8000/api/login/'
+      axios.post(path, parameters, headers)
         .then((res) => {
           this.logged = true
           this.token = res.data.token
-          this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token } })
+          this.$router.push({ path: '/', query: { username: this.addUserForm.username, logged: this.logged, token: this.token } })
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -118,33 +127,6 @@ export default {
     goToRegister () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/register'})
-    },
-    initCreateForm () {
-      this.creatingAccount = true
-      this.addUserForm.username = null
-      this.addUserForm.password = null
-    },
-    backToLogIn () {
-      this.creatingAccount = false
-    },
-    sendCreateForm () {
-      const path = 'http://localhost:5000/account'
-      const parameters = {
-        username: this.addUserForm.username,
-        password: this.addUserForm.password
-      }
-      axios.post(path, parameters)
-        .then((res) => {
-          this.username = this.addUserForm.username
-          this.password = this.addUserForm.password
-          this.creatingAccount = false
-          this.checkLogin()
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error)
-          alert("L'usuari ja existeix!")
-        })
     }
   }
 }
