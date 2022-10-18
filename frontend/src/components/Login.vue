@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex-wrapper">
   <Header></Header>
   <div id="app">
     <div class="body">
@@ -30,6 +30,13 @@
 </template>
 
 <style scoped>
+.flex-wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
 #container-login {
   padding: 2em;
   text-align: center;

@@ -17,8 +17,8 @@
       <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a v-if="this.$route.name ==='Homepage'" class="nav-link" style="color: #F06449; cursor: pointer">Inicio</a>
-            <a v-else class="nav-link" style="cursor: pointer">Inicio</a>
+            <a v-if="this.$route.name ==='Homepage'" class="nav-link" @click="goToHomepage" style="color: #F06449; cursor: pointer">Inicio</a>
+            <a v-else class="nav-link" @click="goToHomepage" style="cursor: pointer">Inicio</a>
           </li>
           <li class="nav-item">
             <a v-if="this.$route.name ==='Help'" class="nav-link" style="color: #F06449; cursor: pointer">Soporte</a>
