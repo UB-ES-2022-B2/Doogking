@@ -125,17 +125,17 @@ export default {
   methods: {
     checkLogin () {
       const parameters = {
-        username: this.addUserForm.username,
+        username: this.addUserForm.email,
         password: this.addUserForm.password
       }
       const headers = {'Access-Control-Allow-Origin': '*'}
       console.log(parameters)
-      const path = 'http://localhost:8000/api/login/'
+      const path = 'https://doogking.azurewebsites.net/api/login/'
       axios.post(path, parameters, headers)
         .then((res) => {
           this.logged = true
           this.token = res.data.token
-          this.$router.push({ path: '/', query: { username: this.addUserForm.username, logged: this.logged, token: this.token } })
+          this.$router.push({ path: '/', query: { username: this.addUserForm.email, logged: this.logged, token: this.token } })
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -144,15 +144,16 @@ export default {
         })
     },
     checkRegister () {
+      const headers = {'Access-Control-Allow-Origin': '*'}
       const parameters = {
         email: this.addUserForm.email,
-        username: this.addUserForm.username,
+        first_name: this.addUserForm.username,
         password: this.addUserForm.password,
         street: this.addUserForm.street,
-        streetNumber: this.addUserForm.streetNumber
+        street_number: this.addUserForm.streetNumber
       }
-      const path = 'http://localhost:5000/register'
-      axios.post(path, parameters)
+      const path = 'https://doogking.azurewebsites.net/api/profiles/'
+      axios.post(path, parameters, headers)
         .then((res) => {
           this.checkLogin()
         })
