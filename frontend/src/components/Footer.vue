@@ -93,20 +93,17 @@ body{
   flex-wrap: wrap;
 }
 
-.hola{
-  color: #F06449;
-}
-
 ul{
   list-style: none;
 }
 
 .footer{
   background-color: #24262b;
-  padding: 70px 0;
+  padding: 5em 0;
   position: relative;
-  margin-top: 250px;
+  margin-top: auto;
 }
+
 .footer-col{
   width: 25%;
   padding: 0 15px;

@@ -5,7 +5,7 @@
       <!-- Icono de NAVBAR -->
       <nav class="navbar navbar-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="/">
+          <a class="navbar-brand" @click="goToHomepage" style="cursor: pointer">
             <img src="@/assets/logoDog.png" alt="" width="30" height="24" class="d-inline-block align-top" style="color: #F06449;">
             DoogKing
           </a>
@@ -17,16 +17,20 @@
       <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link to="/" class="nav-link active" aria-current="page" style="color: #F06449;">Inicio</router-link>
+            <a v-if="this.$route.name ==='Homepage'" class="nav-link" style="color: #F06449; cursor: pointer">Inicio</a>
+            <a v-else class="nav-link" style="cursor: pointer">Inicio</a>
           </li>
           <li class="nav-item">
-            <router-link to="/" class="nav-link">Soporte</router-link>
+            <a v-if="this.$route.name ==='Help'" class="nav-link" style="color: #F06449; cursor: pointer">Soporte</a>
+            <a v-else class="nav-link" style="cursor: pointer">Soporte</a>
           </li>
           <li class="nav-item">
-            <router-link to="/" class="nav-link">Registrar alojamiento</router-link>
+            <a v-if="this.$route.name ==='Property'" class="nav-link" style="color: #F06449; cursor: pointer">Registrar alojamiento</a>
+            <a v-else class="nav-link" style="cursor: pointer">Registrar alojamiento</a>
           </li>
           <li class="nav-item">
-            <router-link to="/" class="nav-link"><fa :icon="['fas', 'circle-info']" /></router-link>
+            <a v-if="this.$route.name ==='AboutUs'" class="nav-link" style="color: #F06449; cursor: pointer"><fa :icon="['fas', 'circle-info'] " /></a>
+            <a v-else class="nav-link" style="cursor: pointer"><fa :icon="['fas', 'circle-info'] " /></a>
           </li>
         </ul>
       </div>
@@ -36,16 +40,16 @@
           <b-dropdown no-caret id="dropdown-right" border="transparent" right text="Right align" class="lang-dropdown">
             <template #button-content>
               <span class="loginIcon">
-                Usuario
               <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
                 <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
               </svg>
+                Usuario
               </span>
             </template>
-            <b-dropdown-item href="/login">Iniciar sesión   <fa :icon="['fas', 'right-to-bracket']" /></b-dropdown-item>
+            <b-dropdown-item @click="goToLogin"><fa :icon="['fas', 'right-to-bracket']" /> Iniciar sesión</b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item href="/register">Crear cuenta   <fa :icon="['fas', 'user']" /></b-dropdown-item>
+            <b-dropdown-item @click="goToRegister"><fa :icon="['fas', 'user']" /> Crear cuenta</b-dropdown-item>
           </b-dropdown>
         </div>
       </ul>
@@ -58,11 +62,12 @@
                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
                 <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
               </svg>
+                {{username}}
               </span>
             </template>
-            <b-dropdown-item href="/">Perfil   <fa :icon="['fas', 'user']" /></b-dropdown-item>
+            <b-dropdown-item @click="goToProfile"><fa :icon="['fas', 'user']" /> Perfil</b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item href="/">Cerrar sesión   <fa :icon="['fas', 'right-from-bracket']" /></b-dropdown-item>
+            <b-dropdown-item @click="logOut"><fa :icon="['fas', 'right-from-bracket']" /> Cerrar sesión</b-dropdown-item>
           </b-dropdown>
         </div>
       </ul>
@@ -83,13 +88,32 @@ export default {
     }
   },
   methods: {
-    go_to_login () {
+    goToRegister () {
+      // eslint-disable-next-line standard/object-curly-even-spacing
+      this.$router.push({ path: '/register'})
+    },
+    goToLogin () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/login'})
     },
-    login () {
+    goToProfile () {
       // eslint-disable-next-line standard/object-curly-even-spacing
-      this.logged = true
+      if (this.logged) {
+        this.$router.push({ path: '/profile', query: { username: this.username, logged: this.logged, token: this.token } })
+      }
+    },
+    logOut () {
+      // eslint-disable-next-line standard/object-curly-even-spacing
+      this.$router.push({ path: '/'})
+    },
+    goToHomepage () {
+      // eslint-disable-next-line standard/object-curly-even-spacing
+      if (this.logged) {
+        this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token } })
+      } else {
+        // eslint-disable-next-line standard/object-curly-even-spacing
+        this.$router.push({ path: '/'})
+      }
     }
   },
   created () {
