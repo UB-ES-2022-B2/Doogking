@@ -13,8 +13,8 @@
                    required autofocus v-model="addUserForm.email">
           </div>
           <div class="form-label-group">
-            <label for="inputUsername">Nombre de usuario</label>
-            <input type="username" id=" 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" class="form-control"
+            <label for="inputPassword">Nombre de usuario</label>
+            <input type="username" id="inputUsername" class="form-control"
                    required autofocus v-model="addUserForm.username">
           </div>
           <div class="form-label-group">
@@ -23,13 +23,13 @@
                    required v-model="addUserForm.password">
           </div>
           <div class="form-label-group">
-            <label for="inputStreet">Calle</label>
+            <label for="inputPassword">Calle</label>
             <input type="street" id="inputStreet" class="form-control"
                    required autofocus v-model="addUserForm.street">
           </div>
           <div class="form-label-group">
-            <label for="inputStreetNumber">Número de calle</label>
-            <input type="streetNumber" id="inputStreetNumber" class="form-control"
+            <label for="inputPassword">Número de calle</label>
+            <input type="streetNumber" id="inputStreetnum" class="form-control"
                    required autofocus v-model="addUserForm.streetNumber">
           </div>
           <div class="group-buttons">
