@@ -127,33 +127,6 @@ export default {
     goToRegister () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/register'})
-    },
-    initCreateForm () {
-      this.creatingAccount = true
-      this.addUserForm.username = null
-      this.addUserForm.password = null
-    },
-    backToLogIn () {
-      this.creatingAccount = false
-    },
-    sendCreateForm () {
-      const path = 'http://localhost:5000/account'
-      const parameters = {
-        username: this.addUserForm.username,
-        password: this.addUserForm.password
-      }
-      axios.post(path, parameters)
-        .then((res) => {
-          this.username = this.addUserForm.username
-          this.password = this.addUserForm.password
-          this.creatingAccount = false
-          this.checkLogin()
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error)
-          alert("L'usuari ja existeix!")
-        })
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex-wrapper">
     <Header></Header>
   <div id="app">
     <div class="body">
@@ -9,12 +9,12 @@
           <h5>_____________________________________</h5>
           <div class="form-label-group">
             <label for="inputEmail">Email</label>
-            <input type="email" id="inputUsername" class="form-control"
+            <input type="email" id="inputEmail" class="form-control"
                    required autofocus v-model="addUserForm.email">
           </div>
           <div class="form-label-group">
-            <label for="inputPassword">Nombre de usuario</label>
-            <input type="username" id="inputPassword" class="form-control"
+            <label for="inputUsername">Nombre de usuario</label>
+            <input type="username" id=" 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" class="form-control"
                    required autofocus v-model="addUserForm.username">
           </div>
           <div class="form-label-group">
@@ -23,17 +23,17 @@
                    required v-model="addUserForm.password">
           </div>
           <div class="form-label-group">
-            <label for="inputPassword">Calle</label>
-            <input type="street" id="inputPassword" class="form-control"
+            <label for="inputStreet">Calle</label>
+            <input type="street" id="inputStreet" class="form-control"
                    required autofocus v-model="addUserForm.street">
           </div>
           <div class="form-label-group">
-            <label for="inputPassword">Número de calle</label>
-            <input type="streetNumber" id="inputPassword" class="form-control"
+            <label for="inputStreetNumber">Número de calle</label>
+            <input type="streetNumber" id="inputStreetNumber" class="form-control"
                    required autofocus v-model="addUserForm.streetNumber">
           </div>
           <div class="group-buttons">
-            <button class="btn btn-lg btn-block" @click="sendDataTest" name="createAccount">Crear cuenta</button>
+            <button class="btn btn-lg btn-block" @click="checkRegister" name="createAccount">Crear cuenta</button>
             <button class="btn btn-lg btn-block" @click="goToLogin" name="goToLogIn">Ir a iniciar sesión</button>
           </div>
         </div>
@@ -45,6 +45,14 @@
 </template>
 
 <style scoped>
+
+.flex-wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
 #container-login {
   padding: 2em;
   text-align: center;
@@ -99,32 +107,54 @@ export default {
   data () {
     return {
       logged: false,
+      email: null,
       username: null,
       password: null,
+      street: null,
+      streetNumber: null,
       token: null,
-      creatingAccount: false,
       addUserForm: {
+        email: null,
         username: null,
         password: null,
-        email: null,
         street: null,
         streetNumber: null
       }
     }
   },
-  created () {
-  },
   methods: {
+    checkLogin () {
+      const parameters = {
+        username: this.addUserForm.username,
+        password: this.addUserForm.password
+      }
+      const headers = {'Access-Control-Allow-Origin': '*'}
+      console.log(parameters)
+      const path = 'http://localhost:8000/api/login/'
+      axios.post(path, parameters, headers)
+        .then((res) => {
+          this.logged = true
+          this.token = res.data.token
+          this.$router.push({ path: '/', query: { username: this.addUserForm.username, logged: this.logged, token: this.token } })
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error)
+          alert('Usuari o contraseña incorrecte')
+        })
+    },
     checkRegister () {
       const parameters = {
-        username: this.username,
-        password: this.password
+        email: this.addUserForm.email,
+        username: this.addUserForm.username,
+        password: this.addUserForm.password,
+        street: this.addUserForm.street,
+        streetNumber: this.addUserForm.streetNumber
       }
-      const path = 'http://localhost:5000/login'
+      const path = 'http://localhost:5000/register'
       axios.post(path, parameters)
         .then((res) => {
-          this.token = res.data.token
-          this.$router.push({ path: '/', query: { username: this.addUserForm.username, logged: true, token: this.token } })
+          this.checkLogin()
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -133,40 +163,19 @@ export default {
         })
     },
     initCreateForm () {
-      this.creatingAccount = true
+      this.addUserForm.email = null
       this.addUserForm.username = null
       this.addUserForm.password = null
-    },
-    backToLogIn () {
-      this.creatingAccount = false
+      this.addUserForm.street = null
+      this.addUserForm.streetNumber = null
     },
     goToLogin () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/login'})
-    },
-    sendDataTest () {
-      this.logged = true
-      this.$router.push({ path: '/', query: { username: this.addUserForm.username, logged: this.logged, token: this.token } })
-    },
-    sendCreateForm () {
-      const path = 'http://localhost:5000/account'
-      const parameters = {
-        username: this.addUserForm.username,
-        password: this.addUserForm.password
-      }
-      axios.post(path, parameters)
-        .then((res) => {
-          this.username = this.addUserForm.username
-          this.password = this.addUserForm.password
-          this.creatingAccount = false
-          this.checkLogin()
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error)
-          alert("L'usuari ja existeix!")
-        })
     }
+  },
+  created () {
+    this.initCreateForm()
   }
 }
 </script>
