@@ -5,7 +5,7 @@
     <div class="body">
       <div id="container-login" class="container">
         <div class="card" style="width: 30rem; color: white">
-          <h3>Crear Cuenta</h3>
+          <h3>Create account</h3>
           <h5>_____________________________________</h5>
           <div class="form-label-group">
             <label for="inputEmail">Email</label>
@@ -13,28 +13,28 @@
                    required autofocus v-model="addUserForm.email">
           </div>
           <div class="form-label-group">
-            <label for="inputUsername">Nombre de usuario</label>
+            <label for="inputUsername">Username</label>
             <input type="username" id=" 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" class="form-control"
                    required autofocus v-model="addUserForm.username">
           </div>
           <div class="form-label-group">
-            <label for="inputPassword">Contraseña</label>
+            <label for="inputPassword">Password</label>
             <input type="password" id="inputPassword" class="form-control"
                    required v-model="addUserForm.password">
           </div>
           <div class="form-label-group">
-            <label for="inputStreet">Calle</label>
+            <label for="inputStreet">Street</label>
             <input type="street" id="inputStreet" class="form-control"
                    required autofocus v-model="addUserForm.street">
           </div>
           <div class="form-label-group">
-            <label for="inputStreetNumber">Número de calle</label>
+            <label for="inputStreetNumber">Street number</label>
             <input type="streetNumber" id="inputStreetNumber" class="form-control"
                    required autofocus v-model="addUserForm.streetNumber">
           </div>
           <div class="group-buttons">
-            <button class="btn btn-lg btn-block" @click="checkRegister" name="createAccount">Crear cuenta</button>
-            <button class="btn btn-lg btn-block" @click="goToLogin" name="goToLogIn">Ir a iniciar sesión</button>
+            <button class="btn btn-lg btn-block" @click="checkRegister" name="createAccount">Create account</button>
+            <button class="btn btn-lg btn-block" @click="goToLogin" name="goToLogIn">Login</button>
           </div>
         </div>
       </div>
@@ -140,7 +140,7 @@ export default {
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error)
-          alert('Usuari o contraseña incorrecte')
+          alert('Wrong username or password')
         })
     },
     checkRegister () {
@@ -159,7 +159,7 @@ export default {
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error)
-          alert('Usuari o contraseña incorrecte')
+          alert('Wrong username or password')
         })
     },
     initCreateForm () {

@@ -17,16 +17,16 @@
       <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a v-if="this.$route.name ==='Homepage'" class="nav-link" @click="goToHomepage" style="color: #F06449; cursor: pointer">Inicio</a>
-            <a v-else class="nav-link" @click="goToHomepage" style="cursor: pointer">Inicio</a>
+            <a v-if="this.$route.name ==='Homepage'" class="nav-link" @click="goToHomepage" style="color: #F06449; cursor: pointer">Homepage</a>
+            <a v-else class="nav-link" @click="goToHomepage" style="cursor: pointer">Homepage</a>
           </li>
           <li class="nav-item">
-            <a v-if="this.$route.name ==='Help'" class="nav-link" style="color: #F06449; cursor: pointer">Soporte</a>
-            <a v-else class="nav-link" style="cursor: pointer">Soporte</a>
+            <a v-if="this.$route.name ==='Help'" class="nav-link" style="color: #F06449; cursor: pointer">Support</a>
+            <a v-else class="nav-link" style="cursor: pointer">Support</a>
           </li>
           <li class="nav-item">
-            <a v-if="this.$route.name ==='Property'" class="nav-link" style="color: #F06449; cursor: pointer">Registrar alojamiento</a>
-            <a v-else class="nav-link" style="cursor: pointer">Registrar alojamiento</a>
+            <a v-if="this.$route.name ==='Property'" class="nav-link" style="color: #F06449; cursor: pointer">House registry</a>
+            <a v-else class="nav-link" style="cursor: pointer">House registry</a>
           </li>
           <li class="nav-item">
             <a v-if="this.$route.name ==='AboutUs'" class="nav-link" style="color: #F06449; cursor: pointer"><fa :icon="['fas', 'circle-info'] " /></a>
@@ -35,7 +35,7 @@
         </ul>
       </div>
       <!-- USER DROPDOWN -->
-      <ul class="nav navbar-nav navbar-right" v-if="logged==false">
+      <ul class="nav navbar-nav navbar-right" v-if="logged===false">
         <div>
           <b-dropdown no-caret id="dropdown-right" border="transparent" right text="Right align" class="lang-dropdown">
             <template #button-content>
@@ -44,12 +44,12 @@
                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
                 <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
               </svg>
-                Usuario
+                Account
               </span>
             </template>
-            <b-dropdown-item @click="goToLogin"><fa :icon="['fas', 'right-to-bracket']" /> Iniciar sesión</b-dropdown-item>
+            <b-dropdown-item @click="goToLogin"><fa :icon="['fas', 'right-to-bracket']" /> Login</b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item @click="goToRegister"><fa :icon="['fas', 'user']" /> Crear cuenta</b-dropdown-item>
+            <b-dropdown-item @click="goToRegister"><fa :icon="['fas', 'user']" /> Create account</b-dropdown-item>
           </b-dropdown>
         </div>
       </ul>
@@ -65,9 +65,9 @@
                 {{username}}
               </span>
             </template>
-            <b-dropdown-item @click="goToProfile"><fa :icon="['fas', 'user']" /> Perfil</b-dropdown-item>
+            <b-dropdown-item @click="goToProfile"><fa :icon="['fas', 'user']" /> Profile</b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item @click="logOut"><fa :icon="['fas', 'right-from-bracket']" /> Cerrar sesión</b-dropdown-item>
+            <b-dropdown-item @click="logOut"><fa :icon="['fas', 'right-from-bracket']" /> Logout</b-dropdown-item>
           </b-dropdown>
         </div>
       </ul>
