@@ -13,6 +13,23 @@ Libre contribución para todos los miembros de este repositorio. Todos los miemb
 
 >  **5:** Seguir patrones de clean code y KISS. El mejor código es el que no es necesario comentar para que el resto lo entiendan.
 
+
+>  **6:** Sub-división en actions para repartir mejor las tareas. Cada integrante se coge una.
+
+
+>  **7:** Las ramas deben seguir la siguiente estructura:
+         
+         origin/US6.3
+          
+          Por ejemplo: fix/US6.3
+          NO CREAR DOS RAMAS PARA LA MISMA TAREA!
+          
+>  **8:** Hacer Pull Requests por cada cambio. Mínimo dos reviewers que acepten el cambio.
+
+
+>  **9:** Ser mas metódicos en la daily.
+
+
 # Estrategia de branching
 
 La estrategia de branching será Github Flow. Para más información:
