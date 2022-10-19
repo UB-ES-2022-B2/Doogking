@@ -1,40 +1,40 @@
 <template>
-  <div>
+  <div class="flex-wrapper">
     <Header></Header>
   <div id="app">
     <div class="body">
       <div id="container-login" class="container">
         <div class="card" style="width: 30rem; color: white">
-          <h3>Crear Cuenta</h3>
+          <h3>Create account</h3>
           <h5>_____________________________________</h5>
           <div class="form-label-group">
             <label for="inputEmail">Email</label>
-            <input type="email" id="inputUsername" class="form-control"
+            <input type="email" id="inputEmail" class="form-control"
                    required autofocus v-model="addUserForm.email">
           </div>
           <div class="form-label-group">
-            <label for="inputPassword">Nombre de usuario</label>
-            <input type="username" id="inputPassword" class="form-control"
+            <label for="inputUsername">Username</label>
+            <input type="username" id=" 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" class="form-control"
                    required autofocus v-model="addUserForm.username">
           </div>
           <div class="form-label-group">
-            <label for="inputPassword">Contraseña</label>
+            <label for="inputPassword">Password</label>
             <input type="password" id="inputPassword" class="form-control"
                    required v-model="addUserForm.password">
           </div>
           <div class="form-label-group">
-            <label for="inputPassword">Calle</label>
-            <input type="street" id="inputPassword" class="form-control"
+            <label for="inputStreet">Street</label>
+            <input type="street" id="inputStreet" class="form-control"
                    required autofocus v-model="addUserForm.street">
           </div>
           <div class="form-label-group">
-            <label for="inputPassword">Número de calle</label>
-            <input type="streetNumber" id="inputPassword" class="form-control"
+            <label for="inputStreetNumber">Street number</label>
+            <input type="streetNumber" id="inputStreetNumber" class="form-control"
                    required autofocus v-model="addUserForm.streetNumber">
           </div>
           <div class="group-buttons">
-            <button class="btn btn-lg btn-block" @click="sendDataTest" name="createAccount">Crear cuenta</button>
-            <button class="btn btn-lg btn-block" @click="goToLogin" name="goToLogIn">Ir a iniciar sesión</button>
+            <button class="btn btn-lg btn-block" @click="checkRegister" name="createAccount">Create account</button>
+            <button class="btn btn-lg btn-block" @click="goToLogin" name="goToLogIn">Login</button>
           </div>
         </div>
       </div>
@@ -45,6 +45,14 @@
 </template>
 
 <style scoped>
+
+.flex-wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
 #container-login {
   padding: 2em;
   text-align: center;
@@ -99,74 +107,76 @@ export default {
   data () {
     return {
       logged: false,
+      email: null,
       username: null,
       password: null,
+      street: null,
+      streetNumber: null,
       token: null,
-      creatingAccount: false,
       addUserForm: {
+        email: null,
         username: null,
         password: null,
-        email: null,
         street: null,
         streetNumber: null
       }
     }
   },
-  created () {
-  },
   methods: {
-    checkRegister () {
+    checkLogin () {
       const parameters = {
-        username: this.username,
-        password: this.password
+        username: this.addUserForm.email,
+        password: this.addUserForm.password
       }
-      const path = 'http://localhost:5000/login'
-      axios.post(path, parameters)
+      const headers = {'Access-Control-Allow-Origin': '*'}
+      console.log(parameters)
+      const path = 'https://doogking.azurewebsites.net/api/login/'
+      axios.post(path, parameters, headers)
         .then((res) => {
+          this.logged = true
           this.token = res.data.token
-          this.$router.push({ path: '/', query: { username: this.addUserForm.username, logged: true, token: this.token } })
+          this.$router.push({ path: '/', query: { username: this.addUserForm.email, logged: this.logged, token: this.token } })
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error)
-          alert('Usuari o contraseña incorrecte')
+          alert('Wrong username or password')
         })
     },
-    initCreateForm () {
-      this.creatingAccount = true
-      this.addUserForm.username = null
-      this.addUserForm.password = null
-    },
-    backToLogIn () {
-      this.creatingAccount = false
-    },
-    goToLogin () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/login'})
-    },
-    sendDataTest () {
-      this.logged = true
-      this.$router.push({ path: '/', query: { username: this.addUserForm.username, logged: this.logged, token: this.token } })
-    },
-    sendCreateForm () {
-      const path = 'http://localhost:5000/account'
+    checkRegister () {
+      const headers = {'Access-Control-Allow-Origin': '*'}
       const parameters = {
-        username: this.addUserForm.username,
-        password: this.addUserForm.password
+        email: this.addUserForm.email,
+        first_name: this.addUserForm.username,
+        password: this.addUserForm.password,
+        street: this.addUserForm.street,
+        street_number: this.addUserForm.streetNumber
       }
-      axios.post(path, parameters)
+      const path = 'https://doogking.azurewebsites.net/api/profiles/'
+      axios.post(path, parameters, headers)
         .then((res) => {
-          this.username = this.addUserForm.username
-          this.password = this.addUserForm.password
-          this.creatingAccount = false
           this.checkLogin()
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.log(error)
-          alert("L'usuari ja existeix!")
+          console.error(error)
+          alert('Wrong username or password')
         })
+    },
+    initCreateForm () {
+      this.addUserForm.email = null
+      this.addUserForm.username = null
+      this.addUserForm.password = null
+      this.addUserForm.street = null
+      this.addUserForm.streetNumber = null
+    },
+    goToLogin () {
+      // eslint-disable-next-line standard/object-curly-even-spacing
+      this.$router.push({ path: '/login'})
     }
+  },
+  created () {
+    this.initCreateForm()
   }
 }
 </script>

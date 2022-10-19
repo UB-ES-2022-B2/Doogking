@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex-wrapper">
   <Header></Header>
   <div id="app">
     <div class="body">
@@ -8,18 +8,18 @@
           <h3>Iniciar sesión</h3>
           <h5>_____________________________________</h5>
           <div class="form-label-group">
-            <label for="inputEmail">Nombre de usuario</label>
+            <label for="inputEmail">Username</label>
             <input type="username" id="inputUsername" class="form-control"
                    required autofocus v-model="addUserForm.username">
           </div>
           <div class="form-label-group">
-            <label for="inputPassword">Contraseña</label>
+            <label for="inputPassword">Password</label>
             <input type="password" id="inputPassword" class="form-control"
                    required v-model="addUserForm.password">
           </div>
           <div class="group-buttons">
-            <button class="btn btn-lg btn-block" @click="checkLogin" name="signIn">Iniciar sesión</button>
-            <button class="btn btn-lg btn-block" @click="goToRegister" name="createAccount">Crear cuenta</button>
+            <button class="btn btn-lg btn-block" @click="checkLogin" name="signIn">Login</button>
+            <button class="btn btn-lg btn-block" @click="goToRegister" name="createAccount">Create account</button>
           </div>
         </div>
       </div>
@@ -30,6 +30,13 @@
 </template>
 
 <style scoped>
+.flex-wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
 #container-login {
   padding: 2em;
   text-align: center;
@@ -104,49 +111,22 @@ export default {
       }
       const headers = {'Access-Control-Allow-Origin': '*'}
       console.log(parameters)
-      const path = 'http://localhost:8000/api/login/'
+      const path = 'https://doogking.azurewebsites.net/api/login/'
       axios.post(path, parameters, headers)
         .then((res) => {
           this.logged = true
           this.token = res.data.token
-          this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token } })
+          this.$router.push({ path: '/', query: { username: this.addUserForm.username, logged: this.logged, token: this.token } })
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error)
-          alert('Usuari o contraseña incorrecte')
+          alert('Wrong username or password')
         })
     },
     goToRegister () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/register'})
-    },
-    initCreateForm () {
-      this.creatingAccount = true
-      this.addUserForm.username = null
-      this.addUserForm.password = null
-    },
-    backToLogIn () {
-      this.creatingAccount = false
-    },
-    sendCreateForm () {
-      const path = 'http://localhost:5000/account'
-      const parameters = {
-        username: this.addUserForm.username,
-        password: this.addUserForm.password
-      }
-      axios.post(path, parameters)
-        .then((res) => {
-          this.username = this.addUserForm.username
-          this.password = this.addUserForm.password
-          this.creatingAccount = false
-          this.checkLogin()
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error)
-          alert("L'usuari ja existeix!")
-        })
     }
   }
 }
