@@ -1,18 +1,21 @@
 <template>
   <div class="flex-wrapper">
   <Header></Header>
+    <HouseView></HouseView>
   <Footer></Footer>
   </div>
 </template>
 <script>
 import Header from './Header'
 import Footer from './Footer'
+import HouseView from './HouseView'
 
 export default {
   name: 'Homepage',
   components: {
     Header,
-    Footer
+    Footer,
+    HouseView
   },
   data () {
     return {

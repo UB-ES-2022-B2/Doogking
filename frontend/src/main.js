@@ -11,10 +11,24 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 
+import PrimeVue from 'primevue/config'
+import 'primevue/resources/themes/saga-blue/theme.css'
+import 'primevue/resources/primevue.min.css'
+import 'primeicons/primeicons.css'
+import 'primeflex/primeflex.css'
+
+import Button from 'primevue/button'
+import DataView from 'primevue/dataview'
+import Dropdown from 'primevue/dropdown'
+import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions'
+import Panel from 'primevue/panel'
+import Dialog from 'primevue/dialog'
+
 library.add(fas, fab)
 Vue.component('fa', FontAwesomeIcon)
 
 Vue.use(BootstrapVue)
+Vue.use(PrimeVue)
 Vue.config.productionTip = false
 Vue.component('customIcon', {
   template: `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
@@ -22,6 +36,15 @@ Vue.component('customIcon', {
       <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
       </svg>`
 })
+Vue.component('Button', Button)
+Vue.component('DataView', DataView)
+Vue.component('DataViewLayoutOptions', DataViewLayoutOptions)
+// eslint-disable-next-line vue/multi-word-component-names
+Vue.component('Panel', Panel)
+// eslint-disable-next-line vue/multi-word-component-names
+Vue.component('Dropdown', Dropdown)
+Vue.component('Dialog', Dialog)
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
