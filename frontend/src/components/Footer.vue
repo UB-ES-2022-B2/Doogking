@@ -5,34 +5,34 @@
         <div class="footer-col">
           <h4>DoogKing</h4>
           <ul>
-            <li><a href="#">Sobre nosotros</a></li>
-            <li><a href="#">Servicios</a></li>
-            <li><a href="#">Política de privacidad</a></li>
-            <li><a href="#">Regístrate</a></li>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Privacy policy</a></li>
+            <li><a href="#">Register</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Soporte</h4>
+          <h4>Support</h4>
           <ul>
             <li><a href="#">FAQ</a></li>
-            <li><a href="#">Reclamaciones</a></li>
-            <li><a href="#">Atención al cliente</a></li>
-            <li><a href="#">Opciones de pago</a></li>
-            <li><a href="#">Contacto corporativo</a></li>
+            <li><a href="#">Complaints</a></li>
+            <li><a href="#">Customer support</a></li>
+            <li><a href="#">Payment options</a></li>
+            <li><a href="#">Business contact</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Alojamientos</h4>
+          <h4>Housing</h4>
           <ul>
-            <li><a href="#">Ciudades</a></li>
-            <li><a href="#">Regiones</a></li>
-            <li><a href="#">Países</a></li>
-            <li><a href="#">Casas</a></li>
-            <li><a href="#">Pisos</a></li>
+            <li><a href="#">Cities</a></li>
+            <li><a href="#">Regions</a></li>
+            <li><a href="#">Countries</a></li>
+            <li><a href="#">Houses</a></li>
+            <li><a href="#">Flats</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Síguenos</h4>
+          <h4>Follow us</h4>
           <div class="social-links">
             <a href="#"><fa :icon="['fab', 'facebook']" /></a>
             <a href="#"><fa :icon="['fab', 'twitter']" /></a>
@@ -100,6 +100,7 @@ ul{
 .footer{
   background-color: #24262b;
   padding: 5em 0;
+  max-height: min-content;
   position: relative;
   margin-top: auto;
 }
