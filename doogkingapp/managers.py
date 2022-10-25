@@ -1,15 +1,18 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+import re
 
 
 class ProfileManager(BaseUserManager):
     def create_user(self,email, password, **extra_fields):
         if not email:
             raise ValueError('The Email must be set')
-        if not validate_email(email):
-            raise ValueError('The email is not correct')
+        #if not validate_email(email):
+            #raise ValueError('The email is not correct')
 
+        if not re.match('^[(a-z0-9\_\-\.)]+@[(a-z0-9\_\-\.)]+\.[(a-z)]{2,15}$',email):
+            raise ValueError('The email is not correct')
         if not len(password) > 8:
             raise ValueError('Password length should be at least 8')
 
