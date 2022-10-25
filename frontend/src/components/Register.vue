@@ -5,7 +5,7 @@
     <div class="body">
       <div id="container-login" class="container">
         <div class="card" style="width: 30rem; color: white">
-          <h3>Crear Cuenta</h3>
+          <h3>Create account</h3>
           <h5>_____________________________________</h5>
           <div class="form-label-group">
             <label for="inputEmail">Email</label>
@@ -13,28 +13,28 @@
                    required autofocus v-model="addUserForm.email">
           </div>
           <div class="form-label-group">
-            <label for="inputPassword">Nombre de usuario</label>
+            <label for="inputPassword">Username</label>
             <input type="username" id="inputUsername" class="form-control"
                    required autofocus v-model="addUserForm.username">
           </div>
           <div class="form-label-group">
-            <label for="inputPassword">Contraseña</label>
+            <label for="inputPassword">Password</label>
             <input type="password" id="inputPassword" class="form-control"
                    required v-model="addUserForm.password">
           </div>
           <div class="form-label-group">
-            <label for="inputPassword">Calle</label>
+            <label for="inputStreet">Street</label>
             <input type="street" id="inputStreet" class="form-control"
                    required autofocus v-model="addUserForm.street">
           </div>
           <div class="form-label-group">
-            <label for="inputPassword">Número de calle</label>
-            <input type="streetNumber" id="inputStreetnum" class="form-control"
+            <label for="inputStreetNumber">Street number</label>
+            <input type="streetNumber" id="inputStreetNumber" class="form-control"
                    required autofocus v-model="addUserForm.streetNumber">
           </div>
           <div class="group-buttons">
-            <button class="btn btn-lg btn-block" @click="checkRegister" name="createAccount">Crear cuenta</button>
-            <button class="btn btn-lg btn-block" @click="goToLogin" name="goToLogIn">Ir a iniciar sesión</button>
+            <button class="btn btn-lg btn-block" @click="checkRegister" name="createAccount">Create account</button>
+            <button class="btn btn-lg btn-block" @click="goToLogin" name="goToLogIn">Login</button>
           </div>
         </div>
       </div>
@@ -125,12 +125,12 @@ export default {
   methods: {
     checkLogin () {
       const parameters = {
-        username: this.addUserForm.username,
+        username: this.addUserForm.email,
         password: this.addUserForm.password
       }
       const headers = {'Access-Control-Allow-Origin': '*'}
       console.log(parameters)
-      const path = 'http://localhost:8000/api/login/'
+      const path = 'https://doogking.azurewebsites.net/api/login/'
       axios.post(path, parameters, headers)
         .then((res) => {
           this.logged = true
@@ -140,26 +140,27 @@ export default {
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error)
-          alert('Usuari o contraseña incorrecte')
+          alert('Wrong username or password')
         })
     },
     checkRegister () {
+      const headers = {'Access-Control-Allow-Origin': '*'}
       const parameters = {
         email: this.addUserForm.email,
-        username: this.addUserForm.username,
+        first_name: this.addUserForm.username,
         password: this.addUserForm.password,
         street: this.addUserForm.street,
-        streetNumber: this.addUserForm.streetNumber
+        street_number: this.addUserForm.streetNumber
       }
-      const path = 'http://localhost:5000/register'
-      axios.post(path, parameters)
+      const path = 'https://doogking.azurewebsites.net/api/profiles/'
+      axios.post(path, parameters, headers)
         .then((res) => {
           this.checkLogin()
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error)
-          alert('Usuari o contraseña incorrecte')
+          alert('Wrong username or password')
         })
     },
     initCreateForm () {

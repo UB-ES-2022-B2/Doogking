@@ -8,18 +8,18 @@
           <h3>Iniciar sesión</h3>
           <h5>_____________________________________</h5>
           <div class="form-label-group">
-            <label for="inputEmail">Nombre de usuario</label>
+            <label for="inputEmail">Username</label>
             <input type="username" id="inputUsername" class="form-control"
                    required autofocus v-model="addUserForm.username">
           </div>
           <div class="form-label-group">
-            <label for="inputPassword">Contraseña</label>
+            <label for="inputPassword">Password</label>
             <input type="password" id="inputPassword" class="form-control"
                    required v-model="addUserForm.password">
           </div>
           <div class="group-buttons">
-            <button class="btn btn-lg btn-block" @click="checkLogin" name="signIn">Iniciar sesión</button>
-            <button class="btn btn-lg btn-block" @click="goToRegister" name="createAccount">Crear cuenta</button>
+            <button class="btn btn-lg btn-block" @click="checkLogin" name="signIn">Login</button>
+            <button class="btn btn-lg btn-block" @click="goToRegister" name="createAccount">Create account</button>
           </div>
         </div>
       </div>
@@ -111,7 +111,7 @@ export default {
       }
       const headers = {'Access-Control-Allow-Origin': '*'}
       console.log(parameters)
-      const path = 'http://localhost:8000/api/login/'
+      const path = 'https://doogking.azurewebsites.net/api/login/'
       axios.post(path, parameters, headers)
         .then((res) => {
           this.logged = true
@@ -121,7 +121,7 @@ export default {
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error)
-          alert('Usuari o contraseña incorrecte')
+          alert('Wrong username or password')
         })
     },
     goToRegister () {
