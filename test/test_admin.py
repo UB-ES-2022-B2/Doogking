@@ -5,7 +5,7 @@ from doogkingapp.models import Profile
 class SuperUserTestCase(TestCase):
 
     def create_superuser(self):
-        return Profile.objects.create_superuser(email="superusertest@gmail.com", password="password123", is_staff=True,
+        return Profile.objects.create_superuser(email="superusertest@gmail.com", password="Password123", is_staff=True,
                                                 is_superuser=True, is_active=True)
 
     def test_superuser(self):

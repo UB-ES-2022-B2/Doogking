@@ -7,11 +7,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
-#"https://doogking-testing.azurewebsites.net/"
+#url = "https://doogking-testing.azurewebsites.net/"
+url = "http://localhost:8080/"
 class LogInTestCase(LiveServerTestCase):
     def setUp(self):
         driver = webdriver.Chrome(ChromeDriverManager().install())
-        driver.get("http://localhost:8081/")
+        driver.get(url)
         return driver
 
     def testIcon(self):
@@ -19,18 +20,20 @@ class LogInTestCase(LiveServerTestCase):
         icon = driver.find_element_by_id("icon")
         icon.click()
         driver.implicitly_wait(5)
-        self.assertEqual(driver.current_url,"http://localhost:8081/")
+        self.assertEqual(driver.current_url,url)
+        driver.close()
 
-    '''def testLogIn(self):
+
+        ''' def testLogIn(self):
         driver = self.setUp()
         login = driver.find_element_by_id("login")
         login.click()
         driver.implicitly_wait(5)
-        self.assertEqual(driver.current_url, "http://localhost:8081/login")
+        self.assertEqual(driver.current_url, url +"login")
     def testRegiter(self):
         driver = self.setUp()
         register = driver.find_element_by_id("registrer")
         #register.click()
         driver.implicitly_wait(5)
-        self.assertEqual(driver.current_url, "http://localhost:8081/register")'''
+        self.assertEqual(driver.current_url, url + "register")'''
 
