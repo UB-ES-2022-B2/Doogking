@@ -19,7 +19,7 @@
     "axios": "^1.1.2",
     "bootstrap-vue": "^2.22.0",
     "primeflex": "^3.2.1",
-    "primeicons": "^6.0.1",
+    "primeicons": "^5.0.0",
     "primevue": "^2.9.2",
     "sass": "^1.55.0",
     "style-loader": "^2.0.0",

@@ -36,10 +36,16 @@ export default {
 </script>
 
 <style scoped>
+
+.dark-panel >>> .p-panel-header {
+  background-color: var(--primary-color);
+}
+
 .flex-wrapper {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
   justify-content: flex-start;
+  overflow-x: hidden;
 }
 </style>

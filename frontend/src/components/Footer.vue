@@ -122,14 +122,14 @@ ul{
   position: absolute;
   left:0;
   bottom: -10px;
-  background-color: #F06449;
+  background-color: #8DD0FF;
   height: 2px;
   box-sizing: border-box;
   width: 50px;
 }
 
 .footer-col :hover{
-  color: #F06449;
+  color: #8DD0FF;
 }
 
 .footer-col ul li:not(:last-child){

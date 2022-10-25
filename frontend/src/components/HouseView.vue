@@ -1,8 +1,7 @@
 <template>
   <div class="grid">
     <div class="col-12">
-      <div class="card" style="background-color: #9C9696; border: 0.2em solid #000000">
-        <DataView :value="products" :layout="layout" :paginator="true" :rows="9" :sortOrder="sortOrder" :sortField="sortField">
+        <DataView class="dataView" :value="products" :layout="layout" :paginator="true" :rows="9" :columns="4" :sortOrder="sortOrder" :sortField="sortField">
           <template #header>
             <div class="grid grid-nogutter">
               <div class="col-6 text-left">
@@ -20,17 +19,21 @@
                 <div class="flex-1 text-center md:text-left">
                   <div class="font-bold text-2xl">{{slotProps.data.name}}</div>
                   <div class="mb-3">{{slotProps.data.description}}</div>
-                  <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" class="mb-2"></Rating>
+                  <Rating :value="slotProps.data.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
                   <div class="flex align-items-center">
-                    <i class="pi pi-tag mr-2"></i>
-                    <span class="font-semibold">{{slotProps.data.category}}</span>
+                    <Tag value="Host: Pedro" icon="pi pi-user" style="color: white; background-color: #6c757d"></Tag>
                   </div>
 
                 </div>
                 <div class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
+                  <span v-if="slotProps.data.favorite==true">
+                      <Button id="favButtonList" icon="pi pi-heart-fill" @click="slotProps.data.favorite=false" class="p-button-rounded"/>
+                  </span>
+                  <span v-else>
+                      <Button id="favButtonList" icon="pi pi-heart" @click="slotProps.data.favorite=true" class="p-button-rounded"/>
+                  </span>
                   <span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end">${{slotProps.data.price}}</span>
-                  <Button icon="pi pi-shopping-cart" label="Add to Cart" :disabled="slotProps.data.inventoryStatus === 'OUTOFSTOCK'" class="mb-2"></Button>
-                  <span :class="'product-badge status-'+slotProps.data.inventoryStatus.toLowerCase()">{{slotProps.data.inventoryStatus}}</span>
+                  <Button label="View house" iconPos="right" class="buttonView"/>
                 </div>
               </div>
             </div>
@@ -41,26 +44,29 @@
               <div class="card m-3 border-1 surface-border">
                 <div class="flex align-items-center justify-content-between">
                   <div class="flex align-items-center">
-                    <i class="pi pi-tag mr-2"></i>
-                    <span class="font-semibold">{{slotProps.data.category}}</span>
+                    <Tag value="Host: Pedro" icon="pi pi-user" style="color: white; background-color: #2A323D"></Tag>
                   </div>
-                  <span :class="'product-badge status-'+slotProps.data.inventoryStatus.toLowerCase()">{{slotProps.data.inventoryStatus}}</span>
+                  <span v-if="slotProps.data.favorite==true">
+                      <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="slotProps.data.favorite=false" class="p-button-rounded"/>
+                  </span>
+                  <span v-else>
+                      <Button id="favButtonGrid" icon="pi pi-heart" @click="slotProps.data.favorite=true" class="p-button-rounded"/>
+                  </span>
                 </div>
                 <div class="text-center">
                   <img src="@/assets/product/pexels-binyamin.jpg" :alt="slotProps.data.name" class="w-9 shadow-2 my-3 mx-0"/>
                   <div class="text-2xl font-bold">{{slotProps.data.name}}</div>
                   <div class="mb-3">{{slotProps.data.description}}</div>
-                  <Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false"></Rating>
+                  <Rating :value="slotProps.data.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
                 </div>
                 <div class="flex align-items-center justify-content-between">
-                  <span class="text-2xl font-semibold">${{slotProps.data.price}}</span>
-                  <Button icon="pi pi-shopping-cart" :disabled="slotProps.data.inventoryStatus === 'OUTOFSTOCK'"></Button>
+                  <span class="text-2xl font-semibold">{{slotProps.data.price}}€ dia</span>
+                  <Button label="View house" iconPos="right" class="buttonView"/>
                 </div>
               </div>
             </div>
           </template>
         </DataView>
-      </div>
     </div>
   </div>
 </template>
@@ -79,6 +85,7 @@ export default {
           'description': 'Product Description',
           'image': 'bamboo-watch.jpg',
           'price': 65,
+          'favorite': true,
           'category': 'Accessories',
           'quantity': 24,
           'inventoryStatus': 'INSTOCK',
@@ -91,6 +98,7 @@ export default {
           'description': 'Product Description',
           'image': 'black-watch.jpg',
           'price': 72,
+          'favorite': true,
           'category': 'Accessories',
           'quantity': 61,
           'inventoryStatus': 'INSTOCK',
@@ -103,6 +111,7 @@ export default {
           'description': 'Product Description',
           'image': 'blue-band.jpg',
           'price': 79,
+          'favorite': false,
           'category': 'Fitness',
           'quantity': 2,
           'inventoryStatus': 'LOWSTOCK',
@@ -115,6 +124,7 @@ export default {
           'description': 'Product Description',
           'image': 'blue-t-shirt.jpg',
           'price': 29,
+          'favorite': false,
           'category': 'Clothing',
           'quantity': 25,
           'inventoryStatus': 'INSTOCK',
@@ -127,6 +137,7 @@ export default {
           'description': 'Product Description',
           'image': 'bracelet.jpg',
           'price': 15,
+          'favorite': false,
           'category': 'Accessories',
           'quantity': 73,
           'inventoryStatus': 'INSTOCK',
@@ -139,6 +150,7 @@ export default {
           'description': 'Product Description',
           'image': 'brown-purse.jpg',
           'price': 120,
+          'favorite': false,
           'category': 'Accessories',
           'quantity': 0,
           'inventoryStatus': 'OUTOFSTOCK',
@@ -151,6 +163,7 @@ export default {
           'description': 'Product Description',
           'image': 'chakra-bracelet.jpg',
           'price': 32,
+          'favorite': false,
           'category': 'Accessories',
           'quantity': 5,
           'inventoryStatus': 'LOWSTOCK',
@@ -163,6 +176,7 @@ export default {
           'description': 'Product Description',
           'image': 'galaxy-earrings.jpg',
           'price': 34,
+          'favorite': false,
           'category': 'Accessories',
           'quantity': 23,
           'inventoryStatus': 'INSTOCK',
@@ -175,6 +189,7 @@ export default {
           'description': 'Product Description',
           'image': 'game-controller.jpg',
           'price': 99,
+          'favorite': false,
           'category': 'Electronics',
           'quantity': 2,
           'inventoryStatus': 'LOWSTOCK',
@@ -187,6 +202,7 @@ export default {
           'description': 'Product Description',
           'image': 'gaming-set.jpg',
           'price': 299,
+          'favorite': false,
           'category': 'Electronics',
           'quantity': 63,
           'inventoryStatus': 'INSTOCK',
@@ -199,6 +215,7 @@ export default {
           'description': 'Product Description',
           'image': 'gold-phone-case.jpg',
           'price': 24,
+          'favorite': false,
           'category': 'Accessories',
           'quantity': 0,
           'inventoryStatus': 'OUTOFSTOCK',
@@ -211,6 +228,7 @@ export default {
           'description': 'Product Description',
           'image': 'green-earbuds.jpg',
           'price': 89,
+          'favorite': false,
           'category': 'Electronics',
           'quantity': 23,
           'inventoryStatus': 'INSTOCK',
@@ -223,6 +241,7 @@ export default {
           'description': 'Product Description',
           'image': 'green-t-shirt.jpg',
           'price': 49,
+          'favorite': false,
           'category': 'Clothing',
           'quantity': 74,
           'inventoryStatus': 'INSTOCK',
@@ -235,6 +254,7 @@ export default {
           'description': 'Product Description',
           'image': 'grey-t-shirt.jpg',
           'price': 48,
+          'favorite': false,
           'category': 'Clothing',
           'quantity': 0,
           'inventoryStatus': 'OUTOFSTOCK',
@@ -247,6 +267,7 @@ export default {
           'description': 'Product Description',
           'image': 'headphones.jpg',
           'price': 175,
+          'favorite': false,
           'category': 'Electronics',
           'quantity': 8,
           'inventoryStatus': 'LOWSTOCK',
@@ -259,6 +280,7 @@ export default {
           'description': 'Product Description',
           'image': 'light-green-t-shirt.jpg',
           'price': 49,
+          'favorite': false,
           'category': 'Clothing',
           'quantity': 34,
           'inventoryStatus': 'INSTOCK',
@@ -271,6 +293,7 @@ export default {
           'description': 'Product Description',
           'image': 'lime-band.jpg',
           'price': 79,
+          'favorite': false,
           'category': 'Fitness',
           'quantity': 12,
           'inventoryStatus': 'INSTOCK',
@@ -283,6 +306,7 @@ export default {
           'description': 'Product Description',
           'image': 'mini-speakers.jpg',
           'price': 85,
+          'favorite': false,
           'category': 'Clothing',
           'quantity': 42,
           'inventoryStatus': 'INSTOCK',
@@ -295,6 +319,7 @@ export default {
           'description': 'Product Description',
           'image': 'painted-phone-case.jpg',
           'price': 56,
+          'favorite': false,
           'category': 'Accessories',
           'quantity': 41,
           'inventoryStatus': 'INSTOCK',
@@ -307,6 +332,7 @@ export default {
           'description': 'Product Description',
           'image': 'pink-band.jpg',
           'price': 79,
+          'favorite': false,
           'category': 'Fitness',
           'quantity': 63,
           'inventoryStatus': 'INSTOCK',
@@ -319,6 +345,7 @@ export default {
           'description': 'Product Description',
           'image': 'pink-purse.jpg',
           'price': 110,
+          'favorite': false,
           'category': 'Accessories',
           'quantity': 0,
           'inventoryStatus': 'OUTOFSTOCK',
@@ -331,6 +358,7 @@ export default {
           'description': 'Product Description',
           'image': 'purple-band.jpg',
           'price': 79,
+          'favorite': false,
           'category': 'Fitness',
           'quantity': 6,
           'inventoryStatus': 'LOWSTOCK',
@@ -343,6 +371,7 @@ export default {
           'description': 'Product Description',
           'image': 'purple-gemstone-necklace.jpg',
           'price': 45,
+          'favorite': false,
           'category': 'Accessories',
           'quantity': 62,
           'inventoryStatus': 'INSTOCK',
@@ -355,6 +384,7 @@ export default {
           'description': 'Product Description',
           'image': 'purple-t-shirt.jpg',
           'price': 49,
+          'favorite': false,
           'category': 'Clothing',
           'quantity': 2,
           'inventoryStatus': 'LOWSTOCK',
@@ -367,6 +397,7 @@ export default {
           'description': 'Product Description',
           'image': 'shoes.jpg',
           'price': 64,
+          'favorite': false,
           'category': 'Clothing',
           'quantity': 0,
           'inventoryStatus': 'INSTOCK',
@@ -379,6 +410,7 @@ export default {
           'description': 'Product Description',
           'image': 'sneakers.jpg',
           'price': 78,
+          'favorite': false,
           'category': 'Clothing',
           'quantity': 52,
           'inventoryStatus': 'INSTOCK',
@@ -391,6 +423,7 @@ export default {
           'description': 'Product Description',
           'image': 'teal-t-shirt.jpg',
           'price': 49,
+          'favorite': false,
           'category': 'Clothing',
           'quantity': 3,
           'inventoryStatus': 'LOWSTOCK',
@@ -403,6 +436,7 @@ export default {
           'description': 'Product Description',
           'image': 'yellow-earbuds.jpg',
           'price': 89,
+          'favorite': false,
           'category': 'Electronics',
           'quantity': 35,
           'inventoryStatus': 'INSTOCK',
@@ -415,6 +449,7 @@ export default {
           'description': 'Product Description',
           'image': 'yoga-mat.jpg',
           'price': 20,
+          'favorite': false,
           'category': 'Fitness',
           'quantity': 15,
           'inventoryStatus': 'INSTOCK',
@@ -427,6 +462,7 @@ export default {
           'description': 'Product Description',
           'image': 'yoga-set.jpg',
           'price': 20,
+          'favorite': false,
           'category': 'Fitness',
           'quantity': 25,
           'inventoryStatus': 'INSTOCK',
@@ -459,18 +495,59 @@ export default {
         this.sortField = value
         this.sortKey = sortValue
       }
+    },
+    addFavorite (fav) {
+      fav = true
     }
   }
 }
 </script>
 
 <style scoped>
+
+.col-12{
+  padding-bottom: 0px;
+}
 .card {
-  background: #ffffff;
+  border-color: white;
   padding: 2rem;
-  box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
-  border-radius: 2em;
-  margin-bottom: 2rem;
+  box-shadow: 0 2px 1px -1px white, 0 1px 1px 0 white, 0 1px 3px 0 white;
+  border-radius: 3em;
+  margin-bottom: 3rem;
+  background: linear-gradient(
+    to top,
+    #2A323D 0%,
+    #2A323D 74%,
+    white 74%,
+    white 75%,
+    paleturquoise 75%,
+    paleturquoise 100%
+  );
+}
+
+.dataView >>> .p-dataViewGridItem {
+  columns: 4;
+}
+
+.buttonView{
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
+}
+
+.buttonView:hover{
+  background-color: #8DD0FF;
+  border-color: #8DD0FF;
+  outline-color: #8DD0FF;
+  color: white;
+}
+
+.buttonView:focus {
+  box-shadow: 0 0 0 0.1em #8DD0FF;
+  background-color: #8DD0FF;
+  border-color: #8DD0FF;
+  outline-color: #8DD0FF;
+  color: white;
 }
 
 .p-dropdown {
@@ -487,6 +564,10 @@ export default {
   margin: 0 0 1rem 0;
 }
 
+.ui-rating {
+  color: yellow;
+}
+
 .product-category-icon {
   vertical-align: middle;
   margin-right: .5rem;
@@ -495,5 +576,43 @@ export default {
 .product-category {
   font-weight: 600;
   vertical-align: middle;
+}
+#favButtonGrid{
+  color: indianred;
+  background-color: #2A323D;
+  border-color: #2A323D;
+}
+
+#favButtonGrid:hover{
+  color: indianred;
+  background-color: #2A323D;
+  border-color: #2A323D;
+}
+
+#favButtonGrid:focus{
+  color: indianred;
+  background-color: #2A323D;
+  border-color: #2A323D;
+  box-shadow: 0 0 0 0.1em indianred;
+}
+
+#favButtonList{
+  color: indianred;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+#favButtonList:hover{
+  color: indianred;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+#favButtonList:focus{
+  color: indianred;
+  background-color: #6c757d;
+  border-color: #6c757d;
+  outline-color: #6c757d;
+  box-shadow: 0 0 0 0.1em indianred;
 }
 </style>

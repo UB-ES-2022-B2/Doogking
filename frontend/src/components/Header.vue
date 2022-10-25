@@ -6,8 +6,8 @@
       <nav class="navbar navbar-dark">
         <div class="container-fluid">
           <a class="navbar-brand" @click="goToHomepage" style="cursor: pointer">
-            <img src="@/assets/logoDog.png" alt="" width="30" height="24" class="d-inline-block align-top" style="color: #F06449;">
-            DoogKing
+            <img src="@/assets/logoDog.png" alt="" width="30" height="24" class="d-inline-block align-top" style="color: #8DD0FF;">
+            DOOGKING
           </a>
         </div>
       </nav>
@@ -17,19 +17,19 @@
       <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a v-if="this.$route.name ==='Homepage'" class="nav-link" @click="goToHomepage" style="color: #F06449; cursor: pointer">Homepage</a>
+            <a v-if="this.$route.name ==='Homepage'" class="nav-link" @click="goToHomepage" style="color: #8DD0FF; cursor: pointer">Homepage</a>
             <a v-else class="nav-link" @click="goToHomepage" style="cursor: pointer">Homepage</a>
           </li>
           <li class="nav-item">
-            <a v-if="this.$route.name ==='Help'" class="nav-link" style="color: #F06449; cursor: pointer">Support</a>
+            <a v-if="this.$route.name ==='Help'" class="nav-link" style="color: #8DD0FF; cursor: pointer">Support</a>
             <a v-else class="nav-link" style="cursor: pointer">Support</a>
           </li>
           <li class="nav-item">
-            <a v-if="this.$route.name ==='Property'" class="nav-link" style="color: #F06449; cursor: pointer">House registry</a>
+            <a v-if="this.$route.name ==='Property'" class="nav-link" style="color: #8DD0FF; cursor: pointer">House registry</a>
             <a v-else class="nav-link" style="cursor: pointer">House registry</a>
           </li>
           <li class="nav-item">
-            <a v-if="this.$route.name ==='AboutUs'" class="nav-link" style="color: #F06449; cursor: pointer"><fa :icon="['fas', 'circle-info'] " /></a>
+            <a v-if="this.$route.name ==='AboutUs'" class="nav-link" style="color: #8DD0FF; cursor: pointer"><fa :icon="['fas', 'circle-info'] " /></a>
             <a v-else class="nav-link" style="cursor: pointer"><fa :icon="['fas', 'circle-info'] " /></a>
           </li>
         </ul>
@@ -129,16 +129,16 @@ export default {
 
 <style scoped>
 .navbar-brand {
-  color: #F06449;
+  color: #8DD0FF;
 }
 .nav-item .nav-link {
   color: white;
 }
 .nav-item .nav-link:hover {
-  color: #F06449;
+  color: #8DD0FF;
 }
 
 .loginIcon:hover{
-  color: #F06449;
+  color: #8DD0FF;
 }
 </style>
