@@ -21,6 +21,11 @@
             <button class="btn btn-lg btn-block" @click="checkLogin" name="signIn">Login</button>
             <button class="btn btn-lg btn-block" @click="goToRegister" name="createAccount">Create account</button>
           </div>
+          <div>
+            <p class="forgot-password text-right">
+                <router-link to="forgot">Forgot password?</router-link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
