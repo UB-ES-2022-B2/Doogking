@@ -4,3 +4,5 @@ python-dotenv
 djangorestframework
 django-cors-headers
 whitenoise
+django-storages[azure]
+Pillow

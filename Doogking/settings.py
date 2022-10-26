@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
+    'storages',
     'doogkingapp',
 ]
 
@@ -155,3 +156,11 @@ WHITENOISE_ROOT = os.path.join(BASE_DIR, 'frontend/dist/')
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+AZURE_ACCOUNT_NAME = 'doogkingteststorage'
+AZURE_ACCOUNT_KEY = 'k32uxvGhd1R1QilbCLgqM1rLisfuvcSi627hEjLpdJyXLgVprgDWqiR7jFAyGGb1b6lnh4o2TdDl+ASt9YSbuQ=='
+AZURE_CONTAINER = 'media'
+AZURE_LOCATION = ''
+AZURE_CUSTOM_DOMAIN = 'doogkingteststorage.blob.core.windows.net'
