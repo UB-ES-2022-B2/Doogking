@@ -1,6 +1,10 @@
 <template>
   <form>
     <h3>Reset Password</h3>
+    <div class="form-group">
+        <label>Verification number</label>
+        <input type="password" class="form-control" placeholder="Verification Number"/>
+      </div>
       <div class="form-group">
         <label>Password</label>
         <input type="password" class="form-control" placeholder="Password"/>
