@@ -4,7 +4,6 @@ import Login from '@/components/Login.vue'
 import Homepage from '@/components/Homepage'
 import process from 'shelljs'
 import Register from '../components/Register'
-import Reset from '../components/Reset'
 import ForgotPassword from '../components/ForgotPassword'
 
 Vue.use(Router)
@@ -29,14 +28,9 @@ export default new Router({
       component: Register
     },
     {
-      path: '/forgot',
+      path: '/forgotPassword',
       name: 'ForgotPassword',
       component: ForgotPassword
     },
-    {
-      path: '/reset',
-      name: 'Reset',
-      component: Reset
-    }
   ]
 })
