@@ -1,53 +1,47 @@
 <template>
-  <div class="flex-wrapper">
-    <Header></Header>
-  <div id="app">
-    <div class="body">
-      <div id="container-login" class="container">
-        <div class="card" style="width: 30rem; color: white">
-          <h3>Create account</h3>
-          <h5>_____________________________________</h5>
-          <div class="form-label-group">
-            <label for="inputEmail">Email</label>
-            <input type="email" id="inputEmail" class="form-control"
-                   required autofocus v-model="addUserForm.email">
-          </div>
-          <div class="form-label-group">
-
-            <label for="inputUsername">Username</label>
-            <input type="username" id="inputUsername" class="form-control"
-
-                   required autofocus v-model="addUserForm.username">
-          </div>
-          <div class="form-label-group">
-            <label for="inputPassword">Password</label>
-            <input type="password" id="inputPassword" class="form-control"
-                   required v-model="addUserForm.password">
-          </div>
-          <div class="form-label-group">
-
-            <label for="inputStreet">Street</label>
-
-            <input type="street" id="inputStreet" class="form-control"
-                   required autofocus v-model="addUserForm.street">
-          </div>
-          <div class="form-label-group">
-
-            <label for="inputStreetNumber">Street number</label>
-            <input type="streetNumber" id="inputStreetNumber" class="form-control"
-            
-                   required autofocus v-model="addUserForm.streetNumber">
-          </div>
-          <div class="group-buttons">
-            <button class="btn btn-lg btn-block" @click="checkRegister" name="createAccount">Create account</button>
-            <button class="btn btn-lg btn-block" @click="goToLogin" name="goToLogIn">Login</button>
+  <form>
+    <div class="flex-wrapper">
+      <Header></Header>
+    <div id="app">
+      <div class="body">
+        <div id="container-login" class="container">
+          <div class="card" style="width: 30rem; color: white">
+            <h3>Create account</h3>
+            <h5>_____________________________________</h5>
+            <div class="form-label-group">
+              <label for="inputEmail">Email</label>
+              <input type="email" id="inputEmail" class="form-control"
+                     required autofocus v-model="addUserForm.email">
+            </div>
+            <div class="form-label-group">
+              <label for="inputUsername">Username</label>
+              <input type="username" id="inputUsername" class="form-control" autofocus v-model="addUserForm.username" aria-describedby="inputGroupPrepend2" required>
+            </div>
+            <div class="form-label-group">
+              <label for="inputPassword">Password</label>
+              <input type="password" id="inputPassword" class="form-control" v-model="addUserForm.password" aria-describedby="inputGroupPrepend2" required>
+            </div>
+            <div class="form-label-group">
+              <label for="inputStreet">Street</label>
+              <input type="street" id="inputStreet" class="form-control"
+                     autofocus v-model="addUserForm.street" aria-describedby="inputGroupPrepend2" required>
+            </div>
+            <div class="form-label-group">
+              <label for="inputStreetNumber">Street number</label>
+              <input type="streetNumber" id="inputStreetNumber" class="form-control"
+                     autofocus v-model="addUserForm.streetNumber" aria-describedby="inputGroupPrepend2" required>
+            </div>
+            <div class="group-buttons">
+              <button class="btn btn-lg btn-block" @click="checkRegister" name="createAccount">Create account</button>
+              <button class="btn btn-lg btn-block" @click="goToLogin" name="goToLogIn">Login</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-    <Footer></Footer>
-  </div>
+      <Footer></Footer>
+    </div>
+  </form>
 </template>
 
 <style scoped>
