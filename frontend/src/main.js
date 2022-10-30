@@ -25,13 +25,22 @@ import Panel from 'primevue/panel'
 import Dialog from 'primevue/dialog'
 import Rating from 'primevue/rating'
 import Tag from 'primevue/tag'
-import Galleria from 'primevue/galleria'
+import MultiSelect from 'primevue/MultiSelect'
+import Calendar from 'primevue/Calendar'
+import Divider from 'primevue/Divider'
+import Toast from 'primevue/toast'
+import ConfirmationService from 'primevue/confirmationservice'
+import ToastService from 'primevue/toastservice'
+import ConfirmDialog from 'primevue/confirmdialog'
 
 library.add(fas, fab)
 Vue.component('fa', FontAwesomeIcon)
 
 Vue.use(BootstrapVue)
 Vue.use(PrimeVue)
+Vue.use(ConfirmationService)
+Vue.use(ToastService)
+
 Vue.config.productionTip = false
 Vue.component('Button', Button)
 Vue.component('DataView', DataView)
@@ -43,7 +52,12 @@ Vue.component('Dropdown', Dropdown)
 Vue.component('Dialog', Dialog)
 Vue.component('Rating', Rating)
 Vue.component('Tag', Tag)
-Vue.component('Galleria', Galleria)
+Vue.component('MultiSelect', MultiSelect)
+Vue.component('Calendar', Calendar)
+Vue.component('Divider', Divider)
+Vue.component('Dialog ', Dialog)
+Vue.component('Toast', Toast)
+Vue.component('ConfirmDialog', ConfirmDialog)
 
 /* eslint-disable no-new */
 new Vue({

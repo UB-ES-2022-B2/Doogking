@@ -1,21 +1,43 @@
 <template>
   <div class="grid">
     <div class="col-12">
-        <DataView class="dataView" :value="houses" :layout="layout" :paginator="true" :rows="12" :columns="4" :sortOrder="sortOrder" :sortField="sortField">
+        <DataView class="dataView" :value="houses" :layout="layout" :paginator="true" :rows="12" :columns="4">
           <template #header>
             <div class="grid grid-nogutter">
               <div class="col-6 text-left">
-                <Dropdown v-model="sortKey" :options="sortOptions" optionLabel="label" placeholder="Sort By Price" @change="onSortChange($event)"/>
+                <MultiSelect v-model="selectedCities" :options="cities" optionLabel="name" placeholder="Select Countries" :filter="true" class="multiselect-custom"
+                             style="min-width: 20rem; max-width: 20rem;">
+                  <template #value="slotProps">
+                    <div class="country-item country-item-value" v-for="option of slotProps.value" :key="option.code">
+                      <div>{{option.name}}</div>
+                    </div>
+                    <template v-if="!slotProps.value || slotProps.value.length === 0">
+                      Select cities
+                    </template>
+                  </template>
+                  <template #option="slotProps">
+                    <div class="country-item">
+                      <div>{{slotProps.option.name}}</div>
+                    </div>
+                  </template>
+                </MultiSelect>
+                <Button type="button" icon="pi pi-search" style=""/>
               </div>
               <div class="col-6 text-right">
                 <DataViewLayoutOptions v-model="layout" />
               </div>
+              <Calendar class="calendarIcon" id="icon" placeholder="Check-in" v-model="checkInDate" :showIcon="true" style="width: 9.65rem; margin-top: 0.5em; margin-right: 0.5em;"/>
+              <Calendar class="calendarIcon" id="icon" placeholder="Check-out" v-model="checkOutDate" :showIcon="true" style="width: 9.65rem; margin-top: 0.5em; margin-right: 0.5em;"/>
+              <ConfirmDialog></ConfirmDialog>
+              <Toast/>
+              <Button @click="confirmRemoveFilters()" icon="pi pi-times" style="background-color: indianred; border-color: indianred; color: white; margin-top: 0.5em;"/>
             </div>
+            <Divider v-if="layout=='grid'"></Divider>
           </template>
           <template #list="slotProps">
             <div class="col-12">
               <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
-                <img src="@/assets/product/pexels-binyamin.jpg" :alt="slotProps.data.city" class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5" />
+                <img id="listImage" src="https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" :alt="slotProps.data.city" class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5" />
                 <div class="flex-1 text-center md:text-left">
                   <div class="font-bold text-2xl">{{slotProps.data.city}}</div>
                   <div class="mb-3">{{slotProps.data.street}},{{slotProps.data.street_number}},{{slotProps.data.floor}},{{slotProps.data.door}},{{slotProps.data.house_dimension}}</div>
@@ -32,12 +54,11 @@
                       <Button id="favButtonList" icon="pi pi-heart" @click="slotProps.data.favorite=true" class="p-button-rounded"/>
                   </span>
                   <span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end">{{slotProps.data.price}}€ day</span>
-                  <Button label="View house" iconPos="right" class="buttonView"/>
+                  <Button id="buttonViewList" label="View house" iconPos="right" class="buttonView"/>
                 </div>
               </div>
             </div>
           </template>
-
           <template #grid="slotProps">
             <div class="col-12 md:col-3">
                 <div class="card m-3 card1">
@@ -45,7 +66,7 @@
                     <div id="container-effect">
                       <img id="card-img" src="https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="las vegas">
                       <figcaption>
-                        <Button label="View house" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 20px;"/>
+                        <Button id="buttonViewGrid" label="View house" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
                       </figcaption>
                     </div>
                     <span id="favContainer" v-if="slotProps.data.favorite==true">
@@ -64,7 +85,7 @@
                         <Rating :value="slotProps.data.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
                       </div>
                   </div>
-                    <p>{{slotProps.data.street}},{{slotProps.data.street_number}},{{slotProps.data.floor}},{{slotProps.data.door}},{{slotProps.data.house_dimension}}</p>
+                    <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{slotProps.data.street}},{{slotProps.data.street_number}},{{slotProps.data.floor}},{{slotProps.data.door}},{{slotProps.data.house_dimension}}</p>
                   </div>
                 </div>
             </div>
@@ -84,7 +105,7 @@ export default {
         {
           city: 'Barcelona',
           street: 'street1',
-          street_number: 'street_number1',
+          street_number: 'street_number1sdfffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
           floor: 'floor1',
           door: 'door1',
           house_dimension: 'house_dimension1',
@@ -287,12 +308,23 @@ export default {
         }
       ],
       layout: 'grid',
-      sortKey: null,
-      sortOrder: null,
-      sortField: null,
-      sortOptions: [
-        {label: 'Price High to Low', value: '!price'},
-        {label: 'Price Low to High', value: 'price'}
+      checkInDate: null,
+      checkOutDate: null,
+      selectedCities: null,
+      cities: [
+        {name: 'Barcelona', code: 'BCN'},
+        {name: 'Girona', code: 'GI'},
+        {name: 'Tarragona', code: 'TR'},
+        {name: 'Lleida', code: 'LL'},
+        {name: 'Madrid', code: 'MA'},
+        {name: 'Valencia', code: 'VA'},
+        {name: 'Sevilla', code: 'SV'},
+        {name: 'Bilbao', code: 'BB'},
+        {name: 'Zaragoza', code: 'ZG'},
+        {name: 'Málaga', code: 'ML'},
+        {name: 'Palma de Mallorca', code: 'MLL'},
+        {name: 'Las Palmas de Gran Canaria', code: 'MLL'},
+        {name: 'Hospitalet de Llobregat', code: 'MLL'}
       ]
     }
   },
@@ -302,22 +334,21 @@ export default {
     console.log(this.houses)
   },
   methods: {
-    onSortChange (event) {
-      const value = event.value.value
-      const sortValue = event.value
-
-      if (value.indexOf('!') === 0) {
-        this.sortOrder = -1
-        this.sortField = value.substring(1, value.length)
-        this.sortKey = sortValue
-      } else {
-        this.sortOrder = 1
-        this.sortField = value
-        this.sortKey = sortValue
-      }
-    },
-    addFavorite (fav) {
-      fav = true
+    confirmRemoveFilters () {
+      this.$confirm.require({
+        message: 'Do you want to remove all current filters?',
+        header: 'Filter Confirmation',
+        icon: 'pi pi-info-circle',
+        acceptClass: 'p-button-danger',
+        accept: () => {
+          this.$toast.add({severity: 'info', summary: 'Confirmed', detail: 'Filters removed', life: 3000})
+          this.selectedCities = null
+          this.checkInDate = null
+          this.checkOutDate = null
+        },
+        reject: () => {
+        }
+      })
     }
   }
 }
@@ -337,6 +368,7 @@ export default {
   margin: 0;
   box-sizing: border-box;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #container-image{
@@ -443,25 +475,51 @@ export default {
   font-weight: 400;
 }
 
-.buttonView{
+#buttonViewList{
   background-color: #6c757d;
   border-color: #6c757d;
   color: white;
 }
 
-.buttonView:hover{
+#buttonViewGrid{
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
+}
+
+#buttonViewList:hover{
   background-color: #8DD0FF;
   border-color: #8DD0FF;
   outline-color: #8DD0FF;
   color: white;
 }
 
-.buttonView:focus {
+#buttonViewGrid:hover{
+  background-color: #8DD0FF;
+  border-color: #8DD0FF;
+  outline-color: #8DD0FF;
+  color: white;
+}
+
+#buttonViewList:focus {
   box-shadow: 0 0 0 0.1em #8DD0FF;
   background-color: #8DD0FF;
   border-color: #8DD0FF;
   outline-color: #8DD0FF;
   color: white;
+}
+
+#buttonViewGrid:focus {
+  box-shadow: 0 0 0 0.1em #8DD0FF;
+  background-color: #8DD0FF;
+  border-color: #8DD0FF;
+  outline-color: #8DD0FF;
+  color: white;
+}
+
+#listImage{
+  border-radius: 0.5em;
+  border: 3px solid #1c1b29;
 }
 
 .p-dropdown {
@@ -488,6 +546,15 @@ export default {
   vertical-align: middle;
 }
 
+.multiselect-custom >>> .country-item-value {
+  padding: .25rem .5rem;
+  border-radius: 3px;
+  display: inline-flex;
+  margin-right: .5rem;
+  background-color: #6c757d;
+  color: white;
+}
+
 #tagHost{
   position:absolute;
   top:1em;
@@ -509,6 +576,11 @@ export default {
 
 #priceContainer a{
   font-size: 1.5em;
+}
+
+#calendarIcon >>> p-calendar >>> p-calendar-w-btn{
+  bacground-color: white;
+  color: white;
 }
 
 #favButtonGrid{
