@@ -3,12 +3,18 @@
     <div class="flex-wrapper">
       <Header></Header>
       <div class="body">
+        <div class="col-lg-6 col-md-12 m-auto">
+          <b-alert v-model="showDismissibleAlert" variant="danger" dismissible>
+            <h4 class="alert-heading">Oops, something went wrong</h4>
+            <p>Please enter a valid email.</p>
+          </b-alert>
+        </div>
         <div id="container-forgotPassword" class="container">
           <div v-if="!forgotPassword" class="card" style="width: 30rem; background-color: #4f5050; color: white">
           <h3>Forgot password ?</h3>
             <div class="form-group">
               <label>Enter the email adress associated with your account</label>
-              <input type="email" name="email" class ="form-control" v-model="email" placeholder="Email"/>
+              <input type="email" name="email" class ="form-control" v-model="email" placeholder="Email"  aria-describedby="inputGroupPrepend2" required/>
             </div>
             <button class="btn btn-primary btn-block">Submit</button>
           </div>
@@ -50,7 +56,8 @@ export default {
     return {
       email: '',
       reset_password: '',
-      forgotPassword: false
+      forgotPassword: false,
+      showDismissibleAlert: false
     }
   },
   methods: {
@@ -63,6 +70,7 @@ export default {
       } catch (error) {
         // eslint-disable-next-line
         console.log({error})
+        this.showDismissibleAlert = true
       }
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({path: '/reset'})
