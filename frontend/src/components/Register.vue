@@ -21,7 +21,7 @@
           </div>
           <div class="form-label-group">
             <label for="inputPassword">Password</label>
-            <input type="password" id="inputPassword" class="form-control"
+            <input type="password" id="inputPassword" class="form-control" pattern="/^[a-zA-Z0-9!@#\$%\^\&*_=+-]{8,12}$/g"
                    required v-model="addUserForm.password">
           </div>
           <div class="form-label-group">
