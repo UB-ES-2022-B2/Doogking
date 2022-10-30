@@ -32,4 +32,5 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api/login/', obtain_auth_token),
     path('admin/', admin.site.urls),
+    path('api/reset/', views.ResetView.as_view()),    
 ]
