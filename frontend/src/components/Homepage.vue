@@ -1,8 +1,8 @@
 <template>
   <div class="flex-wrapper">
   <Header></Header>
-    <HouseView></HouseView>
-  <Footer></Footer>
+    <HouseView id="houseView"></HouseView>
+  <Footer id="footer"></Footer>
   </div>
 </template>
 <script>
@@ -42,10 +42,21 @@ export default {
 }
 
 .flex-wrapper {
+  background-color: #2A323D;
   display: flex;
   min-height: 100vh;
   flex-direction: column;
   justify-content: flex-start;
   overflow-x: hidden;
+  align-content: center;
+}
+
+#houseView{
+  flex: 1;
+  min-height: 0vh;
+}
+
+#footer{
+  flex: 1;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="grid">
     <div class="col-12">
-        <DataView class="dataView" :value="products" :layout="layout" :paginator="true" :rows="9" :columns="4" :sortOrder="sortOrder" :sortField="sortField">
+        <DataView class="dataView" :value="houses" :layout="layout" :paginator="true" :rows="12" :columns="4" :sortOrder="sortOrder" :sortField="sortField">
           <template #header>
             <div class="grid grid-nogutter">
               <div class="col-6 text-left">
@@ -15,15 +15,14 @@
           <template #list="slotProps">
             <div class="col-12">
               <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
-                <img src="@/assets/product/pexels-binyamin.jpg" :alt="slotProps.data.name" class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5" />
+                <img src="@/assets/product/pexels-binyamin.jpg" :alt="slotProps.data.city" class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5" />
                 <div class="flex-1 text-center md:text-left">
-                  <div class="font-bold text-2xl">{{slotProps.data.name}}</div>
-                  <div class="mb-3">{{slotProps.data.description}}</div>
+                  <div class="font-bold text-2xl">{{slotProps.data.city}}</div>
+                  <div class="mb-3">{{slotProps.data.street}},{{slotProps.data.street_number}},{{slotProps.data.floor}},{{slotProps.data.door}},{{slotProps.data.house_dimension}}</div>
                   <Rating :value="slotProps.data.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
                   <div class="flex align-items-center">
-                    <Tag value="Host: Pedro" icon="pi pi-user" style="color: white; background-color: #6c757d"></Tag>
+                    <Tag :value="slotProps.data.house_owner" icon="pi pi-user" style="color: white; background-color: #6c757d"></Tag>
                   </div>
-
                 </div>
                 <div class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
                   <span v-if="slotProps.data.favorite==true">
@@ -32,7 +31,7 @@
                   <span v-else>
                       <Button id="favButtonList" icon="pi pi-heart" @click="slotProps.data.favorite=true" class="p-button-rounded"/>
                   </span>
-                  <span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end">${{slotProps.data.price}}</span>
+                  <span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end">{{slotProps.data.price}}€ day</span>
                   <Button label="View house" iconPos="right" class="buttonView"/>
                 </div>
               </div>
@@ -40,30 +39,34 @@
           </template>
 
           <template #grid="slotProps">
-            <div class="col-12 md:col-4">
-              <div class="card m-3 border-1 surface-border">
-                <div class="flex align-items-center justify-content-between">
-                  <div class="flex align-items-center">
-                    <Tag value="Host: Pedro" icon="pi pi-user" style="color: white; background-color: #2A323D"></Tag>
+            <div class="col-12 md:col-3">
+                <div class="card m-3 card1">
+                  <div id ="container-image" class="container">
+                    <div id="container-effect">
+                      <img id="card-img" src="https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="las vegas">
+                      <figcaption>
+                        <Button label="View house" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 20px;"/>
+                      </figcaption>
+                    </div>
+                    <span id="favContainer" v-if="slotProps.data.favorite==true">
+                        <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="slotProps.data.favorite=false" class="p-button-rounded"/>
+                      </span>
+                    <span id="favContainer" v-else>
+                        <Button id="favButtonGrid" icon="pi pi-heart" @click="slotProps.data.favorite=true" class="p-button-rounded"/>
+                      </span>
+                    <span id="priceContainer" class="text font-semibold"><a>{{slotProps.data.price}}€</a> day</span>
                   </div>
-                  <span v-if="slotProps.data.favorite==true">
-                      <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="slotProps.data.favorite=false" class="p-button-rounded"/>
-                  </span>
-                  <span v-else>
-                      <Button id="favButtonGrid" icon="pi pi-heart" @click="slotProps.data.favorite=true" class="p-button-rounded"/>
-                  </span>
+                  <div id="card-details" class="details">
+                    <div class="flex align-items-center justify-content-between">
+                      <h6>{{slotProps.data.city}}</h6>
+                      <div class="flex align-items-center">
+                        <Tag id="tagHost" :value="slotProps.data.house_owner" icon="pi pi-user" style="color: white; background-color: #2A323D"></Tag>
+                        <Rating :value="slotProps.data.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
+                      </div>
+                  </div>
+                    <p>{{slotProps.data.street}},{{slotProps.data.street_number}},{{slotProps.data.floor}},{{slotProps.data.door}},{{slotProps.data.house_dimension}}</p>
+                  </div>
                 </div>
-                <div class="text-center">
-                  <img src="@/assets/product/pexels-binyamin.jpg" :alt="slotProps.data.name" class="w-9 shadow-2 my-3 mx-0"/>
-                  <div class="text-2xl font-bold">{{slotProps.data.name}}</div>
-                  <div class="mb-3">{{slotProps.data.description}}</div>
-                  <Rating :value="slotProps.data.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
-                </div>
-                <div class="flex align-items-center justify-content-between">
-                  <span class="text-2xl font-semibold">{{slotProps.data.price}}€ dia</span>
-                  <Button label="View house" iconPos="right" class="buttonView"/>
-                </div>
-              </div>
             </div>
           </template>
         </DataView>
@@ -72,401 +75,215 @@
 </template>
 
 <script>
-
+import axios from 'axios'
 export default {
   name: 'App',
   data () {
     return {
-      products: [
+      houses: [
         {
-          'id': '1000',
-          'code': 'f230fh0g3',
-          'name': 'Bamboo Watch',
-          'description': 'Product Description',
-          'image': 'bamboo-watch.jpg',
-          'price': 65,
-          'favorite': true,
-          'category': 'Accessories',
-          'quantity': 24,
-          'inventoryStatus': 'INSTOCK',
-          'rating': 5
+          city: 'Barcelona',
+          street: 'street1',
+          street_number: 'street_number1',
+          floor: 'floor1',
+          door: 'door1',
+          house_dimension: 'house_dimension1',
+          house_owner: 'house_owner1',
+          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+          price: '200',
+          rating: '3'
         },
         {
-          'id': '1001',
-          'code': 'nvklal433',
-          'name': 'Black Watch',
-          'description': 'Product Description',
-          'image': 'black-watch.jpg',
-          'price': 72,
-          'favorite': true,
-          'category': 'Accessories',
-          'quantity': 61,
-          'inventoryStatus': 'INSTOCK',
-          'rating': 4
+          city: 'Barcelona',
+          street: 'street1',
+          street_number: 'street_number1',
+          floor: 'floor1',
+          door: 'door1',
+          house_dimension: 'house_dimension1',
+          house_owner: 'house_owner1',
+          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+          price: '200',
+          rating: '3'
         },
         {
-          'id': '1002',
-          'code': 'zz21cz3c1',
-          'name': 'Blue Band',
-          'description': 'Product Description',
-          'image': 'blue-band.jpg',
-          'price': 79,
-          'favorite': false,
-          'category': 'Fitness',
-          'quantity': 2,
-          'inventoryStatus': 'LOWSTOCK',
-          'rating': 3
+          city: 'Barcelona',
+          street: 'street1',
+          street_number: 'street_number1',
+          floor: 'floor1',
+          door: 'door1',
+          house_dimension: 'house_dimension1',
+          house_owner: 'house_owner1',
+          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+          price: '200',
+          rating: '3'
         },
         {
-          'id': '1003',
-          'code': '244wgerg2',
-          'name': 'Blue T-Shirt',
-          'description': 'Product Description',
-          'image': 'blue-t-shirt.jpg',
-          'price': 29,
-          'favorite': false,
-          'category': 'Clothing',
-          'quantity': 25,
-          'inventoryStatus': 'INSTOCK',
-          'rating': 5
+          city: 'Barcelona',
+          street: 'street1',
+          street_number: 'street_number1',
+          floor: 'floor1',
+          door: 'door1',
+          house_dimension: 'house_dimension1',
+          house_owner: 'house_owner1',
+          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+          price: '200',
+          rating: '3'
         },
         {
-          'id': '1004',
-          'code': 'h456wer53',
-          'name': 'Bracelet',
-          'description': 'Product Description',
-          'image': 'bracelet.jpg',
-          'price': 15,
-          'favorite': false,
-          'category': 'Accessories',
-          'quantity': 73,
-          'inventoryStatus': 'INSTOCK',
-          'rating': 4
+          city: 'Barcelona',
+          street: 'street1',
+          street_number: 'street_number1',
+          floor: 'floor1',
+          door: 'door1',
+          house_dimension: 'house_dimension1',
+          house_owner: 'house_owner1',
+          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+          price: '200',
+          rating: '3'
         },
         {
-          'id': '1005',
-          'code': 'av2231fwg',
-          'name': 'Brown Purse',
-          'description': 'Product Description',
-          'image': 'brown-purse.jpg',
-          'price': 120,
-          'favorite': false,
-          'category': 'Accessories',
-          'quantity': 0,
-          'inventoryStatus': 'OUTOFSTOCK',
-          'rating': 4
+          city: 'Barcelona',
+          street: 'street1',
+          street_number: 'street_number1',
+          floor: 'floor1',
+          door: 'door1',
+          house_dimension: 'house_dimension1',
+          house_owner: 'house_owner1',
+          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+          price: '200',
+          rating: '3'
         },
         {
-          'id': '1006',
-          'code': 'bib36pfvm',
-          'name': 'Chakra Bracelet',
-          'description': 'Product Description',
-          'image': 'chakra-bracelet.jpg',
-          'price': 32,
-          'favorite': false,
-          'category': 'Accessories',
-          'quantity': 5,
-          'inventoryStatus': 'LOWSTOCK',
-          'rating': 3
+          city: 'Barcelona',
+          street: 'street1',
+          street_number: 'street_number1',
+          floor: 'floor1',
+          door: 'door1',
+          house_dimension: 'house_dimension1',
+          house_owner: 'house_owner1',
+          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+          price: '200',
+          rating: '3'
         },
         {
-          'id': '1007',
-          'code': 'mbvjkgip5',
-          'name': 'Galaxy Earrings',
-          'description': 'Product Description',
-          'image': 'galaxy-earrings.jpg',
-          'price': 34,
-          'favorite': false,
-          'category': 'Accessories',
-          'quantity': 23,
-          'inventoryStatus': 'INSTOCK',
-          'rating': 5
+          city: 'Barcelona',
+          street: 'street1',
+          street_number: 'street_number1',
+          floor: 'floor1',
+          door: 'door1',
+          house_dimension: 'house_dimension1',
+          house_owner: 'house_owner1',
+          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+          price: '200',
+          rating: '3'
         },
         {
-          'id': '1008',
-          'code': 'vbb124btr',
-          'name': 'Game Controller',
-          'description': 'Product Description',
-          'image': 'game-controller.jpg',
-          'price': 99,
-          'favorite': false,
-          'category': 'Electronics',
-          'quantity': 2,
-          'inventoryStatus': 'LOWSTOCK',
-          'rating': 4
+          city: 'Barcelona',
+          street: 'street1',
+          street_number: 'street_number1',
+          floor: 'floor1',
+          door: 'door1',
+          house_dimension: 'house_dimension1',
+          house_owner: 'house_owner1',
+          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+          price: '200',
+          rating: '3'
         },
         {
-          'id': '1009',
-          'code': 'cm230f032',
-          'name': 'Gaming Set',
-          'description': 'Product Description',
-          'image': 'gaming-set.jpg',
-          'price': 299,
-          'favorite': false,
-          'category': 'Electronics',
-          'quantity': 63,
-          'inventoryStatus': 'INSTOCK',
-          'rating': 3
+          city: 'Barcelona',
+          street: 'street1',
+          street_number: 'street_number1',
+          floor: 'floor1',
+          door: 'door1',
+          house_dimension: 'house_dimension1',
+          house_owner: 'house_owner1',
+          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+          price: '200',
+          rating: '3'
         },
         {
-          'id': '1010',
-          'code': 'plb34234v',
-          'name': 'Gold Phone Case',
-          'description': 'Product Description',
-          'image': 'gold-phone-case.jpg',
-          'price': 24,
-          'favorite': false,
-          'category': 'Accessories',
-          'quantity': 0,
-          'inventoryStatus': 'OUTOFSTOCK',
-          'rating': 4
+          city: 'Barcelona',
+          street: 'street1',
+          street_number: 'street_number1',
+          floor: 'floor1',
+          door: 'door1',
+          house_dimension: 'house_dimension1',
+          house_owner: 'house_owner1',
+          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+          price: '200',
+          rating: '3'
         },
         {
-          'id': '1011',
-          'code': '4920nnc2d',
-          'name': 'Green Earbuds',
-          'description': 'Product Description',
-          'image': 'green-earbuds.jpg',
-          'price': 89,
-          'favorite': false,
-          'category': 'Electronics',
-          'quantity': 23,
-          'inventoryStatus': 'INSTOCK',
-          'rating': 4
+          city: 'Barcelona',
+          street: 'street1',
+          street_number: 'street_number1',
+          floor: 'floor1',
+          door: 'door1',
+          house_dimension: 'house_dimension1',
+          house_owner: 'house_owner1',
+          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+          price: '200',
+          rating: '3'
         },
         {
-          'id': '1012',
-          'code': '250vm23cc',
-          'name': 'Green T-Shirt',
-          'description': 'Product Description',
-          'image': 'green-t-shirt.jpg',
-          'price': 49,
-          'favorite': false,
-          'category': 'Clothing',
-          'quantity': 74,
-          'inventoryStatus': 'INSTOCK',
-          'rating': 5
+          city: 'Barcelona',
+          street: 'street1',
+          street_number: 'street_number1',
+          floor: 'floor1',
+          door: 'door1',
+          house_dimension: 'house_dimension1',
+          house_owner: 'house_owner1',
+          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+          price: '200',
+          rating: '3'
         },
         {
-          'id': '1013',
-          'code': 'fldsmn31b',
-          'name': 'Grey T-Shirt',
-          'description': 'Product Description',
-          'image': 'grey-t-shirt.jpg',
-          'price': 48,
-          'favorite': false,
-          'category': 'Clothing',
-          'quantity': 0,
-          'inventoryStatus': 'OUTOFSTOCK',
-          'rating': 3
+          city: 'Barcelona',
+          street: 'street1',
+          street_number: 'street_number1',
+          floor: 'floor1',
+          door: 'door1',
+          house_dimension: 'house_dimension1',
+          house_owner: 'house_owner1',
+          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+          price: '200',
+          rating: '3'
         },
         {
-          'id': '1014',
-          'code': 'waas1x2as',
-          'name': 'Headphones',
-          'description': 'Product Description',
-          'image': 'headphones.jpg',
-          'price': 175,
-          'favorite': false,
-          'category': 'Electronics',
-          'quantity': 8,
-          'inventoryStatus': 'LOWSTOCK',
-          'rating': 5
+          city: 'Barcelona',
+          street: 'street1',
+          street_number: 'street_number1',
+          floor: 'floor1',
+          door: 'door1',
+          house_dimension: 'house_dimension1',
+          house_owner: 'house_owner1',
+          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+          price: '200',
+          rating: '3'
         },
         {
-          'id': '1015',
-          'code': 'vb34btbg5',
-          'name': 'Light Green T-Shirt',
-          'description': 'Product Description',
-          'image': 'light-green-t-shirt.jpg',
-          'price': 49,
-          'favorite': false,
-          'category': 'Clothing',
-          'quantity': 34,
-          'inventoryStatus': 'INSTOCK',
-          'rating': 4
+          city: 'Barcelona',
+          street: 'street1',
+          street_number: 'street_number1',
+          floor: 'floor1',
+          door: 'door1',
+          house_dimension: 'house_dimension1',
+          house_owner: 'house_owner1',
+          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+          price: '200',
+          rating: '3'
         },
         {
-          'id': '1016',
-          'code': 'k8l6j58jl',
-          'name': 'Lime Band',
-          'description': 'Product Description',
-          'image': 'lime-band.jpg',
-          'price': 79,
-          'favorite': false,
-          'category': 'Fitness',
-          'quantity': 12,
-          'inventoryStatus': 'INSTOCK',
-          'rating': 3
-        },
-        {
-          'id': '1017',
-          'code': 'v435nn85n',
-          'name': 'Mini Speakers',
-          'description': 'Product Description',
-          'image': 'mini-speakers.jpg',
-          'price': 85,
-          'favorite': false,
-          'category': 'Clothing',
-          'quantity': 42,
-          'inventoryStatus': 'INSTOCK',
-          'rating': 4
-        },
-        {
-          'id': '1018',
-          'code': '09zx9c0zc',
-          'name': 'Painted Phone Case',
-          'description': 'Product Description',
-          'image': 'painted-phone-case.jpg',
-          'price': 56,
-          'favorite': false,
-          'category': 'Accessories',
-          'quantity': 41,
-          'inventoryStatus': 'INSTOCK',
-          'rating': 5
-        },
-        {
-          'id': '1019',
-          'code': 'mnb5mb2m5',
-          'name': 'Pink Band',
-          'description': 'Product Description',
-          'image': 'pink-band.jpg',
-          'price': 79,
-          'favorite': false,
-          'category': 'Fitness',
-          'quantity': 63,
-          'inventoryStatus': 'INSTOCK',
-          'rating': 4
-        },
-        {
-          'id': '1020',
-          'code': 'r23fwf2w3',
-          'name': 'Pink Purse',
-          'description': 'Product Description',
-          'image': 'pink-purse.jpg',
-          'price': 110,
-          'favorite': false,
-          'category': 'Accessories',
-          'quantity': 0,
-          'inventoryStatus': 'OUTOFSTOCK',
-          'rating': 4
-        },
-        {
-          'id': '1021',
-          'code': 'pxpzczo23',
-          'name': 'Purple Band',
-          'description': 'Product Description',
-          'image': 'purple-band.jpg',
-          'price': 79,
-          'favorite': false,
-          'category': 'Fitness',
-          'quantity': 6,
-          'inventoryStatus': 'LOWSTOCK',
-          'rating': 3
-        },
-        {
-          'id': '1022',
-          'code': '2c42cb5cb',
-          'name': 'Purple Gemstone Necklace',
-          'description': 'Product Description',
-          'image': 'purple-gemstone-necklace.jpg',
-          'price': 45,
-          'favorite': false,
-          'category': 'Accessories',
-          'quantity': 62,
-          'inventoryStatus': 'INSTOCK',
-          'rating': 4
-        },
-        {
-          'id': '1023',
-          'code': '5k43kkk23',
-          'name': 'Purple T-Shirt',
-          'description': 'Product Description',
-          'image': 'purple-t-shirt.jpg',
-          'price': 49,
-          'favorite': false,
-          'category': 'Clothing',
-          'quantity': 2,
-          'inventoryStatus': 'LOWSTOCK',
-          'rating': 5
-        },
-        {
-          'id': '1024',
-          'code': 'lm2tny2k4',
-          'name': 'Shoes',
-          'description': 'Product Description',
-          'image': 'shoes.jpg',
-          'price': 64,
-          'favorite': false,
-          'category': 'Clothing',
-          'quantity': 0,
-          'inventoryStatus': 'INSTOCK',
-          'rating': 4
-        },
-        {
-          'id': '1025',
-          'code': 'nbm5mv45n',
-          'name': 'Sneakers',
-          'description': 'Product Description',
-          'image': 'sneakers.jpg',
-          'price': 78,
-          'favorite': false,
-          'category': 'Clothing',
-          'quantity': 52,
-          'inventoryStatus': 'INSTOCK',
-          'rating': 4
-        },
-        {
-          'id': '1026',
-          'code': 'zx23zc42c',
-          'name': 'Teal T-Shirt',
-          'description': 'Product Description',
-          'image': 'teal-t-shirt.jpg',
-          'price': 49,
-          'favorite': false,
-          'category': 'Clothing',
-          'quantity': 3,
-          'inventoryStatus': 'LOWSTOCK',
-          'rating': 3
-        },
-        {
-          'id': '1027',
-          'code': 'acvx872gc',
-          'name': 'Yellow Earbuds',
-          'description': 'Product Description',
-          'image': 'yellow-earbuds.jpg',
-          'price': 89,
-          'favorite': false,
-          'category': 'Electronics',
-          'quantity': 35,
-          'inventoryStatus': 'INSTOCK',
-          'rating': 3
-        },
-        {
-          'id': '1028',
-          'code': 'tx125ck42',
-          'name': 'Yoga Mat',
-          'description': 'Product Description',
-          'image': 'yoga-mat.jpg',
-          'price': 20,
-          'favorite': false,
-          'category': 'Fitness',
-          'quantity': 15,
-          'inventoryStatus': 'INSTOCK',
-          'rating': 5
-        },
-        {
-          'id': '1029',
-          'code': 'gwuby345v',
-          'name': 'Yoga Set',
-          'description': 'Product Description',
-          'image': 'yoga-set.jpg',
-          'price': 20,
-          'favorite': false,
-          'category': 'Fitness',
-          'quantity': 25,
-          'inventoryStatus': 'INSTOCK',
-          'rating': 8
+          city: 'Barcelona',
+          street: 'street1',
+          street_number: 'street_number1',
+          floor: 'floor1',
+          door: 'door1',
+          house_dimension: 'house_dimension1',
+          house_owner: 'house_owner1',
+          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+          price: '200',
+          rating: '3'
         }
       ],
       layout: 'grid',
@@ -480,6 +297,9 @@ export default {
     }
   },
   created () {
+    const pathHouses = 'http://127.0.0.1:8000/api/housing/'
+    axios.get(pathHouses).then(response => (this.houses = response.data))
+    console.log(this.houses)
   },
   methods: {
     onSortChange (event) {
@@ -508,25 +328,119 @@ export default {
 .col-12{
   padding-bottom: 0px;
 }
-.card {
-  border-color: white;
-  padding: 2rem;
-  box-shadow: 0 2px 1px -1px white, 0 1px 1px 0 white, 0 1px 3px 0 white;
-  border-radius: 3em;
-  margin-bottom: 3rem;
-  background: linear-gradient(
-    to top,
-    #2A323D 0%,
-    #2A323D 74%,
-    white 74%,
-    white 75%,
-    paleturquoise 75%,
-    paleturquoise 100%
-  );
+
+.card{
+  background-color: #1c1b29;
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.18);
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
-.dataView >>> .p-dataViewGridItem {
-  columns: 4;
+#container-image{
+  position: relative;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+#card-img{
+  clip-path: polygon(0 0,100% 0, 100% 85%, 0 100%);
+  width: 100%;
+  display: block;
+  border-radius: 20px 20px 0 0;
+}
+
+#container-effect {
+  background-color: #000;
+  display: inline-block;
+  overflow: hidden;
+  border-radius: 20px 20px 0 0;
+  clip-path: polygon(0 0,100% 0, 100% 85%, 0 100%);
+}
+
+#container-effect * {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: all 0.35s ease;
+  transition: all 0.35s ease;
+}
+
+#container-effect:before,
+#container-effect:after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  -webkit-transition: all 0.35s ease;
+  transition: all 0.35s ease;
+  background-color: #8DD0FF;
+  border-left: 3px solid #fff;
+  border-right: 3px solid #fff;
+  content: '';
+  opacity: 0.6;
+  z-index: 1;
+}
+
+#container-effect:before {
+  -webkit-transform: skew(45deg) translateX(-155%);
+  transform: skew(45deg) translateX(-155%);
+}
+
+#container-effect:after {
+  -webkit-transform: skew(45deg) translateX(155%);
+  transform: skew(45deg) translateX(155%);
+}
+
+#container-effect figcaption {
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  z-index: 2;
+  -webkit-transform: translate(-50%, -50%) scale(0.5);
+  transform: translate(-50%, -50%) scale(0.5);
+  opacity: 0;
+}
+
+#container-effect:hover > #card-img,
+#container-effect.hover > #card-img {
+  opacity: 0.5;
+}
+
+#container-effect:hover:before{
+  -webkit-transform: skew(45deg) translateX(-55%);
+  transform: skew(45deg) translateX(-55%);
+}
+
+#container-effect:hover:after,
+#container-effect.hover:after {
+  -webkit-transform: skew(45deg) translateX(55%);
+  transform: skew(45deg) translateX(55%);
+}
+
+#container-effect:hover figcaption,
+#container-effect.hover figcaption {
+  -webkit-transform: translate(-50%, -50%) scale(1);
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+#card-details{
+  padding: 20px 10px;
+}
+#card-details>h6{
+  color: #ffffff;
+  font-weight: 600;
+  margin: 10px 0 15px 0;
+}
+#card-details>p{
+  color: #a0a0a0;
+  font-size: 15px;
+  line-height: 30px;
+  font-weight: 400;
 }
 
 .buttonView{
@@ -564,10 +478,6 @@ export default {
   margin: 0 0 1rem 0;
 }
 
-.ui-rating {
-  color: yellow;
-}
-
 .product-category-icon {
   vertical-align: middle;
   margin-right: .5rem;
@@ -577,6 +487,30 @@ export default {
   font-weight: 600;
   vertical-align: middle;
 }
+
+#tagHost{
+  position:absolute;
+  top:1em;
+  left:1em;
+}
+
+#favContainer{
+  position:absolute;
+  top:0.5em;
+  right:0.5em;
+}
+
+#priceContainer{
+  position:absolute;
+  top:90%;
+  right:0.5em;
+  font-size: 1em;
+}
+
+#priceContainer a{
+  font-size: 1.5em;
+}
+
 #favButtonGrid{
   color: indianred;
   background-color: #2A323D;
@@ -598,21 +532,21 @@ export default {
 
 #favButtonList{
   color: indianred;
-  background-color: #6c757d;
-  border-color: #6c757d;
+  background-color: #1c1b29;
+  border-color: #1c1b29;
 }
 
 #favButtonList:hover{
   color: indianred;
-  background-color: #6c757d;
-  border-color: #6c757d;
+  background-color: #1c1b29;
+  border-color: #1c1b29;
 }
 
 #favButtonList:focus{
   color: indianred;
-  background-color: #6c757d;
-  border-color: #6c757d;
-  outline-color: #6c757d;
+  background-color: #1c1b29;
+  border-color: #1c1b29;
+  outline-color: #1c1b29;
   box-shadow: 0 0 0 0.1em indianred;
 }
 </style>

@@ -25,6 +25,7 @@ import Panel from 'primevue/panel'
 import Dialog from 'primevue/dialog'
 import Rating from 'primevue/rating'
 import Tag from 'primevue/tag'
+import Galleria from 'primevue/galleria'
 
 library.add(fas, fab)
 Vue.component('fa', FontAwesomeIcon)
@@ -42,6 +43,7 @@ Vue.component('Dropdown', Dropdown)
 Vue.component('Dialog', Dialog)
 Vue.component('Rating', Rating)
 Vue.component('Tag', Tag)
+Vue.component('Galleria', Galleria)
 
 /* eslint-disable no-new */
 new Vue({
