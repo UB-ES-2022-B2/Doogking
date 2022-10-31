@@ -19,7 +19,11 @@ url = "https://doogking-testing.azurewebsites.net/"
 class PlayerFormTest(LiveServerTestCase):
 
     def setUp(self):
-        driver = webdriver.Chrome(ChromeDriverManager().install())
+        options = webdriver.ChromeOptions()
+        options.add_argument("no-sandbox")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--headless")
+        driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=options)
         driver.get(url + "register")
         return driver
 
