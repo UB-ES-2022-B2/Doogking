@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.core.exceptions import PermissionDenied
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -34,7 +35,7 @@ class ResetView(APIView):
     queryset = Profile.objects.all()
 
     def get(self, request):
-        request_email = request.data['email']
+        request_email = request.query_params['email']
         otp = secrets.token_urlsafe(16)
 
         user = Profile.objects.get(email=request_email)
@@ -49,13 +50,17 @@ class ResetView(APIView):
         return Response({"message": "Password reset email sent!"})
 
     def post(self, request):
+        request_email = request.data['email']
         request_otp = request.data['otp']
         request_pass = request.data['password']
 
-        user = Profile.objects.get(otp=request_otp)
-        user.set_password(request_pass)
-        user.save()
-
-        return Response({"message": "Password successfully changed!"})
+        user = Profile.objects.get(email=request_email)
+        if secrets.compare_digest(request_otp, user.otp):
+            user.set_password(request_pass)
+            user.otp = ""
+            user.save()
+            return Response({"message": "Password successfully changed!"})
+        else:
+            raise PermissionDenied("Email and reset token do not match!")
 
 

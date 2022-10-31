@@ -45,7 +45,6 @@ margin: 0 auto;
 <script>
 import Header from './Header'
 import Footer from './Footer'
-import * as emailjs from 'emailjs-com'
 import axios from 'axios'
 export default {
   components: {
@@ -62,17 +61,10 @@ export default {
   methods: {
     sendEmail (e) {
       try {
-        emailjs.sendForm('service_doogking', 'template_6flombd', e.target,
-          'v_pteFmOs0hEWfD7U', {
-            email: this.email
-          })
-        this.$router.push({path: '/reset'})
         const headers = {'Access-Control-Allow-Origin': '*'}
-        const parameters = {
-          email: this.email
-        }
-        const path = 'AFEGIRENDPOINT'
-        axios.post(path, parameters, headers)
+        const path = 'https://doogking.azurewebsites.net/api/reset/?email=' + this.email
+        console.log(path)
+        axios.get(path, headers)
           .then((res) => {
             this.token = res.data.token
           })

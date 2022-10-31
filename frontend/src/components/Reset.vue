@@ -3,9 +3,13 @@
    <Header></Header>
   <form>
     <h3>Reset Password</h3>
-    <div class="form-group">
+     <div class="form-group">
+        <label>Email</label>
+        <input type="text" class="form-control" v-model="email" placeholder="Email" required/>
+      </div>
+     <div class="form-group">
         <label>Verification number</label>
-        <input type="password" class="form-control" v-model="verificationNumber" placeholder="Verification Number" required/>
+        <input type="text" class="form-control" v-model="verificationNumber" placeholder="Verification Number" required/>
       </div>
       <div class="form-group">
         <label>Password</label>
@@ -34,9 +38,10 @@ export default {
   name: 'ContactUs',
   data () {
     return {
-      verificationNumber: '',
-      password: ' ',
-      confirmPassword: ' '
+      email: this.$route.query.email,
+      verificationNumber: this.$route.query.otp,
+      password: '',
+      confirmPassword: ''
     }
   },
   methods: {
@@ -48,7 +53,7 @@ export default {
             verificationNumber: this.verificationNumber,
             password: this.password
           }
-          const path = 'AFEGIRENDPOINT'
+          const path = 'https://doogking.awurewebsites.net/api/reset/'
           axios.get(path, parameters, headers)
             .then((res) => {
               this.token = res.data.token
