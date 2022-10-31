@@ -18,17 +18,16 @@ class LogInTestCase(LiveServerTestCase):
         driver = webdriver.Chrome(ChromeDriverManager().install(),chrome_options=options)
         driver.get(url)
         return driver
-
-   ''' def testIcon(self):
+    ''' def testIcon(self):
         driver = self.setUp()
         icon = driver.find_element_by_id("icon")
         icon.click()
         driver.implicitly_wait(5)
         self.assertEqual(driver.current_url,url)
-        driver.close()'''
+        driver.close()
 
 
-        ''' def testLogIn(self):
+    def testLogIn(self):
         driver = self.setUp()
         login = driver.find_element_by_id("login")
         login.click()
@@ -40,4 +39,3 @@ class LogInTestCase(LiveServerTestCase):
         #register.click()
         driver.implicitly_wait(5)
         self.assertEqual(driver.current_url, url + "register")'''
-
