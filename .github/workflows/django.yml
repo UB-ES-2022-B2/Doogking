@@ -28,7 +28,6 @@ jobs:
         pip install -r requirements.txt
         pip install webdriver-manager
         pip install django-cors-headers
-        pip install url 
         pip install packaging 
         pip install selenium==3.141.0
     - name: Run Tests
