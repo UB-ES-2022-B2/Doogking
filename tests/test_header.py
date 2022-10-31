@@ -7,8 +7,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
-#url = "https://doogking-testing.azurewebsites.net/"
-url = "http://localhost:8080/"
+url = "https://doogking-testing.azurewebsites.net/"
+#url = "http://localhost:8080/"
 class LogInTestCase(LiveServerTestCase):
     def setUp(self):
         options = webdriver.ChromeOptions()
