@@ -32,4 +32,5 @@ jobs:
         pip install selenium==3.141.0
     - name: Run Tests
       run: |
+        cd test
         python manage.py test
