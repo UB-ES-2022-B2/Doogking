@@ -5,7 +5,7 @@
           <template #header>
             <div class="grid grid-nogutter">
               <div class="col-6 text-left">
-                <MultiSelect v-model="selectedCities" :options="cities" optionLabel="name" placeholder="Select Countries" :filter="true" class="multiselect-custom"
+                <MultiSelect id="multiSelectCities" v-model="selectedCities" :options="cities" optionLabel="name" placeholder="Select Countries" :filter="true" class="multiselect-custom"
                              style="min-width: 20rem; max-width: 20rem;">
                   <template #value="slotProps">
                     <div class="country-item country-item-value" v-for="option of slotProps.value" :key="option.code">
@@ -21,23 +21,23 @@
                     </div>
                   </template>
                 </MultiSelect>
-                <Button type="button" icon="pi pi-search" style=""/>
+                <Button id="searchButton" type="button" @click="onSearch" icon="pi pi-search" style=""/>
               </div>
               <div class="col-6 text-right">
                 <DataViewLayoutOptions v-model="layout" />
               </div>
               <Calendar class="calendarIcon" id="icon" placeholder="Check-in" v-model="checkInDate" :showIcon="true" style="width: 9.65rem; margin-top: 0.5em; margin-right: 0.5em;"/>
-              <Calendar class="calendarIcon" id="icon" placeholder="Check-out" v-model="checkOutDate" :showIcon="true" style="width: 9.65rem; margin-top: 0.5em; margin-right: 0.5em;"/>
-              <ConfirmDialog></ConfirmDialog>
+              <Calendar class="calendarIcon" id="icon" placeholder="Check-out" v-model="checkOutDate" @click="checkOutGreater()" :showIcon="true" style="width: 9.65rem; margin-top: 0.5em; margin-right: 0.5em;"/>
+              <ConfirmPopup id="confirmPopup" ></ConfirmPopup>
               <Toast/>
-              <Button @click="confirmRemoveFilters()" icon="pi pi-times" style="background-color: indianred; border-color: indianred; color: white; margin-top: 0.5em;"/>
+              <Button id="removeFiltersBtn" @click="confirmRemoveFilters($event)" icon="pi pi-times" style="background-color: indianred; border-color: indianred; color: white; margin-top: 0.5em;"/>
             </div>
-            <Divider v-if="layout=='grid'"></Divider>
+            <Divider id="gridDivider" v-if="layout=='grid'"></Divider>
           </template>
           <template #list="slotProps">
             <div class="col-12">
               <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
-                <img id="listImage" src="https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" :alt="slotProps.data.city" class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5" />
+                <img id="listImage" :src="slotProps.data.image" :alt="slotProps.data.city" class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5" />
                 <div class="flex-1 text-center md:text-left">
                   <div class="font-bold text-2xl">{{slotProps.data.city}}</div>
                   <div class="mb-3">{{slotProps.data.street}},{{slotProps.data.street_number}},{{slotProps.data.floor}},{{slotProps.data.door}},{{slotProps.data.house_dimension}}</div>
@@ -48,10 +48,10 @@
                 </div>
                 <div class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
                   <span v-if="slotProps.data.favorite==true">
-                      <Button id="favButtonList" icon="pi pi-heart-fill" @click="slotProps.data.favorite=false" class="p-button-rounded"/>
+                      <Button id="favButtonList" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
                   </span>
                   <span v-else>
-                      <Button id="favButtonList" icon="pi pi-heart" @click="slotProps.data.favorite=true" class="p-button-rounded"/>
+                      <Button id="favButtonList" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
                   </span>
                   <span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end">{{slotProps.data.price}}€ day</span>
                   <Button id="buttonViewList" label="View house" iconPos="right" class="buttonView"/>
@@ -64,16 +64,16 @@
                 <div class="card m-3 card1">
                   <div id ="container-image" class="container">
                     <div id="container-effect">
-                      <img id="card-img" src="https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="las vegas">
+                      <img id="card-img" :src="slotProps.data.image">
                       <figcaption>
                         <Button id="buttonViewGrid" label="View house" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
                       </figcaption>
                     </div>
                     <span id="favContainer" v-if="slotProps.data.favorite==true">
-                        <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="slotProps.data.favorite=false" class="p-button-rounded"/>
+                        <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
                       </span>
                     <span id="favContainer" v-else>
-                        <Button id="favButtonGrid" icon="pi pi-heart" @click="slotProps.data.favorite=true" class="p-button-rounded"/>
+                        <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
                       </span>
                     <span id="priceContainer" class="text font-semibold"><a>{{slotProps.data.price}}€</a> day</span>
                   </div>
@@ -101,212 +101,8 @@ export default {
   name: 'App',
   data () {
     return {
-      houses: [
-        {
-          city: 'Barcelona',
-          street: 'street1',
-          street_number: 'street_number1sdfffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-          floor: 'floor1',
-          door: 'door1',
-          house_dimension: 'house_dimension1',
-          house_owner: 'house_owner1',
-          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-          price: '200',
-          rating: '3'
-        },
-        {
-          city: 'Barcelona',
-          street: 'street1',
-          street_number: 'street_number1',
-          floor: 'floor1',
-          door: 'door1',
-          house_dimension: 'house_dimension1',
-          house_owner: 'house_owner1',
-          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-          price: '200',
-          rating: '3'
-        },
-        {
-          city: 'Barcelona',
-          street: 'street1',
-          street_number: 'street_number1',
-          floor: 'floor1',
-          door: 'door1',
-          house_dimension: 'house_dimension1',
-          house_owner: 'house_owner1',
-          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-          price: '200',
-          rating: '3'
-        },
-        {
-          city: 'Barcelona',
-          street: 'street1',
-          street_number: 'street_number1',
-          floor: 'floor1',
-          door: 'door1',
-          house_dimension: 'house_dimension1',
-          house_owner: 'house_owner1',
-          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-          price: '200',
-          rating: '3'
-        },
-        {
-          city: 'Barcelona',
-          street: 'street1',
-          street_number: 'street_number1',
-          floor: 'floor1',
-          door: 'door1',
-          house_dimension: 'house_dimension1',
-          house_owner: 'house_owner1',
-          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-          price: '200',
-          rating: '3'
-        },
-        {
-          city: 'Barcelona',
-          street: 'street1',
-          street_number: 'street_number1',
-          floor: 'floor1',
-          door: 'door1',
-          house_dimension: 'house_dimension1',
-          house_owner: 'house_owner1',
-          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-          price: '200',
-          rating: '3'
-        },
-        {
-          city: 'Barcelona',
-          street: 'street1',
-          street_number: 'street_number1',
-          floor: 'floor1',
-          door: 'door1',
-          house_dimension: 'house_dimension1',
-          house_owner: 'house_owner1',
-          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-          price: '200',
-          rating: '3'
-        },
-        {
-          city: 'Barcelona',
-          street: 'street1',
-          street_number: 'street_number1',
-          floor: 'floor1',
-          door: 'door1',
-          house_dimension: 'house_dimension1',
-          house_owner: 'house_owner1',
-          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-          price: '200',
-          rating: '3'
-        },
-        {
-          city: 'Barcelona',
-          street: 'street1',
-          street_number: 'street_number1',
-          floor: 'floor1',
-          door: 'door1',
-          house_dimension: 'house_dimension1',
-          house_owner: 'house_owner1',
-          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-          price: '200',
-          rating: '3'
-        },
-        {
-          city: 'Barcelona',
-          street: 'street1',
-          street_number: 'street_number1',
-          floor: 'floor1',
-          door: 'door1',
-          house_dimension: 'house_dimension1',
-          house_owner: 'house_owner1',
-          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-          price: '200',
-          rating: '3'
-        },
-        {
-          city: 'Barcelona',
-          street: 'street1',
-          street_number: 'street_number1',
-          floor: 'floor1',
-          door: 'door1',
-          house_dimension: 'house_dimension1',
-          house_owner: 'house_owner1',
-          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-          price: '200',
-          rating: '3'
-        },
-        {
-          city: 'Barcelona',
-          street: 'street1',
-          street_number: 'street_number1',
-          floor: 'floor1',
-          door: 'door1',
-          house_dimension: 'house_dimension1',
-          house_owner: 'house_owner1',
-          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-          price: '200',
-          rating: '3'
-        },
-        {
-          city: 'Barcelona',
-          street: 'street1',
-          street_number: 'street_number1',
-          floor: 'floor1',
-          door: 'door1',
-          house_dimension: 'house_dimension1',
-          house_owner: 'house_owner1',
-          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-          price: '200',
-          rating: '3'
-        },
-        {
-          city: 'Barcelona',
-          street: 'street1',
-          street_number: 'street_number1',
-          floor: 'floor1',
-          door: 'door1',
-          house_dimension: 'house_dimension1',
-          house_owner: 'house_owner1',
-          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-          price: '200',
-          rating: '3'
-        },
-        {
-          city: 'Barcelona',
-          street: 'street1',
-          street_number: 'street_number1',
-          floor: 'floor1',
-          door: 'door1',
-          house_dimension: 'house_dimension1',
-          house_owner: 'house_owner1',
-          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-          price: '200',
-          rating: '3'
-        },
-        {
-          city: 'Barcelona',
-          street: 'street1',
-          street_number: 'street_number1',
-          floor: 'floor1',
-          door: 'door1',
-          house_dimension: 'house_dimension1',
-          house_owner: 'house_owner1',
-          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-          price: '200',
-          rating: '3'
-        },
-        {
-          city: 'Barcelona',
-          street: 'street1',
-          street_number: 'street_number1',
-          floor: 'floor1',
-          door: 'door1',
-          house_dimension: 'house_dimension1',
-          house_owner: 'house_owner1',
-          image: 'https://images.pexels.com/photos/186077/pexels-photo-186077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-          price: '200',
-          rating: '3'
-        }
-      ],
+      logged: null,
+      houses: [{}],
       layout: 'grid',
       checkInDate: null,
       checkOutDate: null,
@@ -328,16 +124,11 @@ export default {
       ]
     }
   },
-  created () {
-    const pathHouses = 'http://127.0.0.1:8000/api/housing/'
-    axios.get(pathHouses).then(response => (this.houses = response.data))
-    console.log(this.houses)
-  },
   methods: {
-    confirmRemoveFilters () {
+    confirmRemoveFilters (event) {
       this.$confirm.require({
+        target: event.currentTarget,
         message: 'Do you want to remove all current filters?',
-        header: 'Filter Confirmation',
         icon: 'pi pi-info-circle',
         acceptClass: 'p-button-danger',
         accept: () => {
@@ -349,7 +140,32 @@ export default {
         reject: () => {
         }
       })
+    },
+    onSearch () {
+      if (this.checkOutDate !== null && this.checkInDate >= this.checkOutDate) {
+        this.checkOutDate = null
+        this.$toast.add({severity: 'error', summary: 'Error message', detail: 'Check-out date should be greater than check-in date', life: 2000})
+      }
+    },
+    goToLogin () {
+      // eslint-disable-next-line standard/object-curly-even-spacing
+      this.$router.push({ path: '/login'})
+    },
+    changeFavorite () {
+      if (this.logged === false) {
+        this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites', life: 2000})
+      }
+    },
+    getHouses () {
+      // const pathHouses = 'http://127.0.0.1:8000/api/housing/' localhost
+      const headers = {'Access-Control-Allow-Origin': '*'}
+      const pathHouses = 'https://doogking.azurewebsites.net/api/housing/'
+      axios.get(pathHouses, headers).then(response => (this.houses = response.data))
     }
+  },
+  created () {
+    this.logged = this.$route.query.logged === 'true'
+    this.getHouses()
   }
 }
 </script>
@@ -547,7 +363,8 @@ export default {
 }
 
 .multiselect-custom >>> .country-item-value {
-  padding: .25rem .5rem;
+  font-size: 0.8rem;
+  padding: 0.1rem;
   border-radius: 3px;
   display: inline-flex;
   margin-right: .5rem;

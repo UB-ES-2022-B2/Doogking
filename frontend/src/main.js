@@ -31,7 +31,7 @@ import Divider from 'primevue/Divider'
 import Toast from 'primevue/toast'
 import ConfirmationService from 'primevue/confirmationservice'
 import ToastService from 'primevue/toastservice'
-import ConfirmDialog from 'primevue/confirmdialog'
+import ConfirmPopup from 'primevue/confirmpopup'
 
 library.add(fas, fab)
 Vue.component('fa', FontAwesomeIcon)
@@ -57,7 +57,7 @@ Vue.component('Calendar', Calendar)
 Vue.component('Divider', Divider)
 Vue.component('Dialog ', Dialog)
 Vue.component('Toast', Toast)
-Vue.component('ConfirmDialog', ConfirmDialog)
+Vue.component('ConfirmPopup', ConfirmPopup)
 
 /* eslint-disable no-new */
 new Vue({

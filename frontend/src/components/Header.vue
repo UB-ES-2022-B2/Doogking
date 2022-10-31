@@ -2,7 +2,7 @@
   <div>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <!-- Icono de NAVBAR -->
+      <!-- Navbar icon and brand -->
       <nav class="navbar navbar-dark">
         <div class="container-fluid">
           <a class="navbar-brand" @click="goToHomepage" style="cursor: pointer">
@@ -14,6 +14,7 @@
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+      <!-- Navbar main links -->
       <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
@@ -34,7 +35,7 @@
           </li>
         </ul>
       </div>
-      <!-- USER DROPDOWN -->
+      <!-- User dropdown -->
       <ul class="nav navbar-nav navbar-right" v-if="logged===false">
         <div>
           <b-dropdown no-caret id="dropdown-right" border="transparent" right text="Right align" class="lang-dropdown">
