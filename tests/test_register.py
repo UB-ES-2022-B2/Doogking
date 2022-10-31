@@ -12,7 +12,7 @@ from selenium.webdriver.common.by import By
 # Create your tests here.
 from webdriver_manager.core.utils import ChromeType
 
-url = "https://doogking-testing.azurewebsites.net/"
+url = "https://doogking.azurewebsites.net/login"
 #url = "http://localhost:8080/"
 
 
