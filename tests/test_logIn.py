@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 
 
-url = "https://doogking.azurewebsites.net/login"
+url = "https://doogking.azurewebsites.net/"
 #url = "http://localhost:8080/"
 class LogInTestCase(LiveServerTestCase):
     def setUp(self):

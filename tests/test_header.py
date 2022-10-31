@@ -7,7 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
-url = "https://doogking.azurewebsites.net/login"
+url = "https://doogking.azurewebsites.net/"
 #url = "http://localhost:8080/"
 class LogInTestCase(LiveServerTestCase):
     def setUp(self):
@@ -19,13 +19,13 @@ class LogInTestCase(LiveServerTestCase):
         driver.get(url)
         return driver
 
-    def testIcon(self):
+   ''' def testIcon(self):
         driver = self.setUp()
         icon = driver.find_element_by_id("icon")
         icon.click()
         driver.implicitly_wait(5)
         self.assertEqual(driver.current_url,url)
-        driver.close()
+        driver.close()'''
 
 
         ''' def testLogIn(self):
