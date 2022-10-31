@@ -1,27 +1,21 @@
 <template>
   <div class="flex-wraper">
    <Header></Header>
-  <form>
-    <h3>Reset Password</h3>
-     <div class="form-group">
-        <label>Email</label>
-        <input type="text" class="form-control" v-model="email" placeholder="Email" required/>
+    <div id="app">
+    <div class="body">
+      <div id="container-reset" class="container">
+        <div class="card" style="width: 30rem; background-color: #4f5050; color: white;">
+          <h3>Reset password</h3>
+          <h4>Enter the new password</h4>
+          <h5>_____________________________________</h5>
+          <div class="form-label-group"><label for="inputPassword">Password</label> <input id="inputPassword" class="form-control" required="" type="password" /></div>
+          <div class="group-buttons"><button class="btn btn-lg btn-block" name="changePassword">Save</button></div>
+        </div>
       </div>
-     <div class="form-group">
-        <label>Verification number</label>
-        <input type="text" class="form-control" v-model="verificationNumber" placeholder="Verification Number" required/>
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" class="form-control" v-model="password" placeholder="Password" required/>
-      </div>
-    <div class="form-group">
-      <label>Password confirm</label>
-      <input type="password" class="form-control" v-model="confirmPassword" placeholder="Password confirm" required/>
     </div>
-    <button class="btn btn-primary btn-block" @click="resetPassword">Submit</button>
-  </form>
     </div>
+   <Footer></Footer>
+  </div>
 </template>
 
 <script>
