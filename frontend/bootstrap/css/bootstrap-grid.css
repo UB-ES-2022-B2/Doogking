@@ -137,7 +137,7 @@
 
 .row-cols-3 > * {
   flex: 0 0 auto;
-  width: 33.3333333333%;
+  width: 33.33333333%;
 }
 
 .row-cols-4 > * {
@@ -162,7 +162,7 @@
 
 .col-1 {
   flex: 0 0 auto;
-  width: 8.33333333%;
+  width: 8.333333%;
 }
 
 .col-2 {
