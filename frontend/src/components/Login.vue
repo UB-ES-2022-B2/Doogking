@@ -1,35 +1,42 @@
 <template>
+<form>
   <div class="flex-wrapper">
-    <Header></Header>
-    <div id="app">
-      <div class="body">
-        <div id="container-login" class="container">
-          <div v-if="!creatingAccount" class="card" style="width: 30rem; background-color: #4f5050; color: white">
-            <h3>Iniciar sesión</h3>
-            <h5>_____________________________________</h5>
-            <div class="form-label-group">
-              <label for="inputEmail">Username</label>
-              <input type="username" id="inputUsername" class="form-control"
-                     required autofocus v-model="addUserForm.username">
-            </div>
-            <div class="form-label-group">
-              <label for="inputPassword">Password</label>
-              <input type="password" id="inputPassword" class="form-control"
-                     required v-model="addUserForm.password">
-            </div>
-            <div class="group-buttons">
-              <button class="btn btn-lg btn-block" @click="checkLogin" name="signIn">Login</button>
-              <button class="btn btn-lg btn-block" @click="goToRegister" name="createAccount">Create account</button>
-            </div>
-            <div class="forgotPassword-button">
-              <button class="btn btn-lg btn-block" @click="goToForgotPassword" name="forgotPassword">Forgot Password</button>
+  <Header></Header>
+  <div id="app">
+    <div class="col-lg-6 col-md-12 m-auto">
+      <b-alert v-model="showDismissibleAlert" variant="danger" dismissible>
+        <h4 class="alert-heading">Oops, something went wrong</h4>
+        <p>Please enter a valid username/password.</p>
+      </b-alert>
+    </div>
+    <div class="body">
+      <div id="container-login" class="container">
+        <div v-if="!creatingAccount" class="card" style="width: 30rem; background-color: #4f5050; color: white">
+          <h3>Iniciar sesión</h3>
+          <hr>
+          <div class="form-label-group">
+            <label for="inputEmail">Username</label>
+            <input type="username" id="inputUsername" class="form-control"
+                   autofocus v-model="addUserForm.username" aria-describedby="inputGroupPrepend2" required>
+          </div>
+          <div class="form-label-group">
+            <label for="inputPassword">Password</label>
+            <input type="password" id="inputPassword" class="form-control" v-model="addUserForm.password" aria-describedby="inputGroupPrepend2" required>
+          </div>
+          <div class="group-buttons">
+            <button class="btn btn-lg btn-block" type="submit" @click="checkLogin" name="signIn">Login</button>
+            <button class="btn btn-lg btn-block" @click="goToRegister" name="createAccount">Create account</button>
+          </div>
+          <div class="forgotPassword-button">
+            <button class="btn btn-lg btn-block" @click="goToForgotPassword" name="forgotPassword">Forgot Password</button>
             </div>
           </div>
         </div>
       </div>
     </div>
     <Footer></Footer>
-  </div>
+    </div>
+  </form>
 </template>
 
 <style scoped>
@@ -109,7 +116,8 @@ export default {
       addUserForm: {
         username: null,
         password: null
-      }
+      },
+      showDismissibleAlert: false
     }
   },
   created () {
@@ -132,7 +140,7 @@ export default {
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error)
-          alert('Wrong username or password')
+          this.showDismissibleAlert = true
         })
     },
     goToRegister () {
