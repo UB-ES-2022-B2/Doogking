@@ -1,41 +1,64 @@
 <template>
   <div class="flex-wraper">
-   <Header></Header>
-  <form>
-    <h3>Reset Password</h3>
-    <div class="form-group">
-        <label>Verification number</label>
-        <input type="password" class="form-control" id="verificationPassword" v-model="verificationNumber" placeholder="Verification Number" required/>
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" class="form-control" id="password" v-model="password" placeholder="Password" required/>
-    <div id="app">
-    <div class="body">
-      <div id="container-reset" class="container">
-        <div class="card" style="width: 30rem; background-color: #4f5050; color: white;">
-          <h3>Reset password</h3>
-          <h4>Enter the new password</h4>
-          <h5>_____________________________________</h5>
-          <div class="form-label-group"><label for="inputPassword">Password</label> <input id="inputPassword" class="form-control" required="" type="password" /></div>
-          <div class="group-buttons"><button class="btn btn-lg btn-block" name="changePassword">Save</button></div>
+    <Header></Header>
+    <div id="container-reset" class="container">
+      <div class="card" style="width: 30rem; background-color: #4f5050; color: white;">
+        <h3>Reset Password</h3>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="text" class="form-control" v-model="email" placeholder="Email" required/>
+        </div>
+        <div class="form-group">
+          <label>Verification number</label>
+          <input type="text" class="form-control" v-model="verificationNumber" placeholder="Verification Number"
+                 required/>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" class="form-control" v-model="password" placeholder="Password" required/>
+        </div>
+        <div class="form-group">
+          <label>Password confirm</label>
+          <input type="password" class="form-control" v-model="confirmPassword" placeholder="Password confirm"
+                 required/>
+        </div>
+        <div class="submitButton">
+        <button class="btn btn-lg btn-block" @click="resetPassword">Submit</button>
         </div>
       </div>
-    <div class="form-group">
-      <label>Password confirm</label>
-      <input type="password" class="form-control" v-model="confirmPassword" id="passwordConfirm" placeholder="Password confirm" required/>
     </div>
-    </div>
-   <Footer></Footer>
+    <Footer></Footer>
   </div>
 </template>
-
+<style>
+.flex-wrapper {
+  display: flex;
+  min-height: 75vh;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+#container-forgotPassword {
+padding: 1em;
+text-align: center;
+}
+.card {
+padding: 2em;
+margin: 0 auto;
+}
+.submitButton > :first-child {
+  margin-top: 0.5em;
+  background-color: #4F5050;
+  border-color: #4F5050;
+  outline-style: none;
+  border: none;
+  color: white;
+}
+</style>
 <script>
-// import axios from "axios"
-
 import Header from './Header'
 import Footer from './Footer'
 import axios from 'axios'
+
 export default {
   components: {
     Header,
@@ -44,9 +67,10 @@ export default {
   name: 'ContactUs',
   data () {
     return {
-      verificationNumber: '',
-      password: ' ',
-      confirmPassword: ' '
+      email: this.$route.query.email,
+      verificationNumber: this.$route.query.otp,
+      password: '',
+      confirmPassword: ''
     }
   },
   methods: {
@@ -58,7 +82,7 @@ export default {
             verificationNumber: this.verificationNumber,
             password: this.password
           }
-          const path = 'AFEGIRENDPOINT'
+          const path = 'https://doogking.awurewebsites.net/api/reset/'
           axios.get(path, parameters, headers)
             .then((res) => {
               this.token = res.data.token
