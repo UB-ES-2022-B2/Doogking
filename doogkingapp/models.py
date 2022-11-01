@@ -7,7 +7,6 @@ from .managers import ProfileManager
 class Profile(AbstractUser):
     username = None
     email = models.EmailField('email address', unique=True)
-    otp = models.CharField(max_length=32, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
