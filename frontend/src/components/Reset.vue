@@ -10,14 +10,24 @@
       <div class="form-group">
         <label>Password</label>
         <input type="password" class="form-control" id="password" v-model="password" placeholder="Password" required/>
+    <div id="app">
+    <div class="body">
+      <div id="container-reset" class="container">
+        <div class="card" style="width: 30rem; background-color: #4f5050; color: white;">
+          <h3>Reset password</h3>
+          <h4>Enter the new password</h4>
+          <h5>_____________________________________</h5>
+          <div class="form-label-group"><label for="inputPassword">Password</label> <input id="inputPassword" class="form-control" required="" type="password" /></div>
+          <div class="group-buttons"><button class="btn btn-lg btn-block" name="changePassword">Save</button></div>
+        </div>
       </div>
     <div class="form-group">
       <label>Password confirm</label>
       <input type="password" class="form-control" v-model="confirmPassword" id="passwordConfirm" placeholder="Password confirm" required/>
     </div>
-    <button class="btn btn-primary btn-block" @click="resetPassword">Submit</button>
-  </form>
     </div>
+   <Footer></Footer>
+  </div>
 </template>
 
 <script>

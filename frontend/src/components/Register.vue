@@ -13,8 +13,10 @@
                    required autofocus v-model="addUserForm.email">
           </div>
           <div class="form-label-group">
+
             <label for="inputUsername">Username</label>
-            <input type="username" id=" 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" class="form-control"
+            <input type="username" id="inputUsername" class="form-control"
+
                    required autofocus v-model="addUserForm.username">
           </div>
           <div class="form-label-group">
@@ -23,13 +25,17 @@
                    required v-model="addUserForm.password">
           </div>
           <div class="form-label-group">
+
             <label for="inputStreet">Street</label>
+
             <input type="street" id="inputStreet" class="form-control"
                    required autofocus v-model="addUserForm.street">
           </div>
           <div class="form-label-group">
+
             <label for="inputStreetNumber">Street number</label>
             <input type="streetNumber" id="inputStreetNumber" class="form-control"
+            
                    required autofocus v-model="addUserForm.streetNumber">
           </div>
           <div class="group-buttons">
@@ -125,17 +131,17 @@ export default {
   methods: {
     checkLogin () {
       const parameters = {
-        username: this.addUserForm.username,
+        username: this.addUserForm.email,
         password: this.addUserForm.password
       }
       const headers = {'Access-Control-Allow-Origin': '*'}
       console.log(parameters)
-      const path = 'http://localhost:8000/api/login/'
+      const path = 'https://doogking.azurewebsites.net/api/login/'
       axios.post(path, parameters, headers)
         .then((res) => {
           this.logged = true
           this.token = res.data.token
-          this.$router.push({ path: '/', query: { username: this.addUserForm.username, logged: this.logged, token: this.token } })
+          this.$router.push({ path: '/', query: { username: this.addUserForm.email, logged: this.logged, token: this.token } })
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -144,15 +150,16 @@ export default {
         })
     },
     checkRegister () {
+      const headers = {'Access-Control-Allow-Origin': '*'}
       const parameters = {
         email: this.addUserForm.email,
-        username: this.addUserForm.username,
+        first_name: this.addUserForm.username,
         password: this.addUserForm.password,
         street: this.addUserForm.street,
-        streetNumber: this.addUserForm.streetNumber
+        street_number: this.addUserForm.streetNumber
       }
-      const path = 'http://localhost:5000/register'
-      axios.post(path, parameters)
+      const path = 'https://doogking.azurewebsites.net/api/profiles/'
+      axios.post(path, parameters, headers)
         .then((res) => {
           this.checkLogin()
         })

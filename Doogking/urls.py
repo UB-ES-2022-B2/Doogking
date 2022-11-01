@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import TemplateView
 from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
 from doogkingapp import views
@@ -32,4 +33,5 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api/login/', obtain_auth_token),
     path('admin/', admin.site.urls),
+    path('api/reset/', views.ResetView.as_view()),    
 ]
