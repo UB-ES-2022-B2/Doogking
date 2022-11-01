@@ -35,7 +35,6 @@
 
             <label for="inputStreetNumber">Street number</label>
             <input type="streetNumber" id="inputStreetNumber" class="form-control"
-
                    required autofocus v-model="addUserForm.streetNumber">
           </div>
           <div class="group-buttons">
