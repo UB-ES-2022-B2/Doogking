@@ -8,9 +8,9 @@
           <h3>Forgot password ?</h3>
             <div class="form-group">
               <label>Enter the email adress associated with your account</label>
-              <input type="email" name="email" class ="form-control" v-model="email" placeholder="Email" required/>
+              <input type="email" name="email" class ="form-control" id="inputEmail" v-model="email" placeholder="Email" required/>
             </div>
-            <button class="btn btn-primary btn-block">Submit</button>
+            <button class="btn btn-primary btn-block" id="Submit">Submit</button>
           </div>
         </div>
       </div>
@@ -69,12 +69,12 @@ export default {
           .then((res) => {
             this.token = res.data.token
           })
+        this.$router.push({path: '/reset'})
       } catch (error) {
         // eslint-disable-next-line
         console.log({error})
       }
       // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({path: '/reset'})
     }
   }
 }

@@ -5,15 +5,15 @@
     <h3>Reset Password</h3>
     <div class="form-group">
         <label>Verification number</label>
-        <input type="password" class="form-control" v-model="verificationNumber" placeholder="Verification Number" required/>
+        <input type="password" class="form-control" id="verificationPassword" v-model="verificationNumber" placeholder="Verification Number" required/>
       </div>
       <div class="form-group">
         <label>Password</label>
-        <input type="password" class="form-control" v-model="password" placeholder="Password" required/>
+        <input type="password" class="form-control" id="password" v-model="password" placeholder="Password" required/>
       </div>
     <div class="form-group">
       <label>Password confirm</label>
-      <input type="password" class="form-control" v-model="confirmPassword" placeholder="Password confirm" required/>
+      <input type="password" class="form-control" v-model="confirmPassword" id="passwordConfirm" placeholder="Password confirm" required/>
     </div>
     <button class="btn btn-primary btn-block" @click="resetPassword">Submit</button>
   </form>
