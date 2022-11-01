@@ -1,34 +1,31 @@
 <template>
   <div class="flex-wrapper">
-    <Header></Header>
-    <div id="app">
-      <div class="body">
-        <div id="container-login" class="container">
-          <div v-if="!creatingAccount" class="card" style="width: 30rem; background-color: #4f5050; color: white">
-            <h3>Iniciar sesión</h3>
-            <h5>_____________________________________</h5>
-            <div class="form-label-group">
-              <label for="inputEmail">Username</label>
-              <input type="username" id="inputUsername" class="form-control"
-                     required autofocus v-model="addUserForm.username">
-            </div>
-            <div class="form-label-group">
-              <label for="inputPassword">Password</label>
-              <input type="password" id="inputPassword" class="form-control"
-                     required v-model="addUserForm.password">
-            </div>
-            <div class="group-buttons">
-              <button class="btn btn-lg btn-block" @click="checkLogin" name="signIn">Login</button>
-              <button class="btn btn-lg btn-block" @click="goToRegister" name="createAccount">Create account</button>
-            </div>
-            <div class="forgotPassword-button">
-              <button class="btn btn-lg btn-block" @click="goToForgotPassword" name="forgotPassword">Forgot Password</button>
-            </div>
+  <Header></Header>
+  <div id="app">
+    <div class="body">
+      <div id="container-login" class="container">
+        <div v-if="!creatingAccount" class="card" style="width: 30rem; background-color: #4f5050; color: white">
+          <h3>Iniciar sesión</h3>
+          <h5>_____________________________________</h5>
+          <div class="form-label-group">
+            <label for="inputEmail">Username</label>
+            <input type="username" id="inputUsername" class="form-control"
+                   required autofocus v-model="addUserForm.username">
+          </div>
+          <div class="form-label-group">
+            <label for="inputPassword">Password</label>
+            <input type="password" id="inputPassword" class="form-control"
+                   required v-model="addUserForm.password">
+          </div>
+          <div class="group-buttons">
+            <button class="btn btn-lg btn-block" @click="checkLogin" name="signIn">Login</button>
+            <button class="btn btn-lg btn-block" @click="goToRegister" name="createAccount">Create account</button>
           </div>
         </div>
       </div>
     </div>
-    <Footer></Footer>
+  </div>
+  <Footer></Footer>
   </div>
 </template>
 
@@ -58,7 +55,7 @@
   margin-top: 0;
 }
 .group-buttons > :not(:first-child) {
-  margin-top: 1em;
+  margin-top: 0;
   background-color: #6c757d;
   border-color: #6c757d;
   outline-style: none;
@@ -66,17 +63,9 @@
   color: white;
 }
 .group-buttons > :first-child {
-  margin-top: 1em;
+  margin-top: 0;
   background-color: #6c757d;
   border-color: #6c757d;
-  outline-style: none;
-  border: none;
-  color: white;
-}
-.forgotPassword-button > :first-child {
-  margin-top: 0.5em;
-  background-color: #4F5050;
-  border-color: #4F5050;
   outline-style: none;
   border: none;
   color: white;
@@ -138,10 +127,6 @@ export default {
     goToRegister () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/register'})
-    },
-    goToForgotPassword () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/forgotPassword'})
     }
   }
 }
