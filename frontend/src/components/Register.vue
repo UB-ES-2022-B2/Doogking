@@ -110,15 +110,15 @@ export default {
       email: null,
       username: null,
       password: null,
-      street: null,
-      streetNumber: null,
+      // street: null,
+      // streetNumber: null,
       token: null,
       addUserForm: {
         email: null,
         username: null,
-        password: null,
-        street: null,
-        streetNumber: null
+        password: null
+        // street: null,
+        // streetNumber: null
       }
     }
   },
@@ -135,7 +135,7 @@ export default {
         .then((res) => {
           this.logged = true
           this.token = res.data.token
-          this.$router.push({ path: '/', query: { username: this.addUserForm.email, logged: this.logged, token: this.token } })
+          this.$router.push({ path: '/', query: { username: this.addUserForm.username, logged: this.logged, token: this.token } })
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -148,9 +148,9 @@ export default {
       const parameters = {
         email: this.addUserForm.email,
         first_name: this.addUserForm.username,
-        password: this.addUserForm.password,
-        street: this.addUserForm.street,
-        street_number: this.addUserForm.streetNumber
+        password: this.addUserForm.password
+        // street: this.addUserForm.street,
+        // street_number: this.addUserForm.streetNumber
       }
       const path = 'https://doogking.azurewebsites.net/api/profiles/'
       axios.post(path, parameters, headers)
@@ -167,8 +167,8 @@ export default {
       this.addUserForm.email = null
       this.addUserForm.username = null
       this.addUserForm.password = null
-      this.addUserForm.street = null
-      this.addUserForm.streetNumber = null
+      // this.addUserForm.street = null
+      // this.addUserForm.streetNumber = null
     },
     goToLogin () {
       // eslint-disable-next-line standard/object-curly-even-spacing

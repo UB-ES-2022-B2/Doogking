@@ -47,11 +47,9 @@
                 Account
               </span>
             </template>
-
-            <b-dropdown-item id="login"  @click="goToLogin"><fa :icon="['fas', 'right-to-bracket']" /> Login</b-dropdown-item>
+            <b-dropdown-item id="login" @click="goToLogin"><fa :icon="['fas', 'right-to-bracket']" /> Login</b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item @click="goToRegister"><fa :icon="['fas', 'user']" /> Create account</b-dropdown-item>
-
+            <b-dropdown-item id="registrer" @click="goToRegister"><fa :icon="['fas', 'user']" /> Create account</b-dropdown-item
           </b-dropdown>
         </div>
       </ul>
