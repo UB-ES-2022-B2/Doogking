@@ -3,7 +3,7 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
       <!-- Icono de NAVBAR -->
-      <nav class="navbar navbar-dark">
+      <nav class="navbar navbar-dark" id = "icon">
         <div class="container-fluid">
           <a class="navbar-brand" @click="goToHomepage" style="cursor: pointer">
             <img src="@/assets/logoDog.png" alt="" width="30" height="24" class="d-inline-block align-top" style="color: #F06449;">
@@ -47,9 +47,11 @@
                 Account
               </span>
             </template>
-            <b-dropdown-item @click="goToLogin"><fa :icon="['fas', 'right-to-bracket']" /> Login</b-dropdown-item>
+
+            <b-dropdown-item id="login"  @click="goToLogin"><fa :icon="['fas', 'right-to-bracket']" /> Login</b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
             <b-dropdown-item @click="goToRegister"><fa :icon="['fas', 'user']" /> Create account</b-dropdown-item>
+
           </b-dropdown>
         </div>
       </ul>
