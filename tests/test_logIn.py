@@ -6,10 +6,16 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 
 
+url = "https://doogking.azurewebsites.net/"
+#url = "http://localhost:8080/"
 class LogInTestCase(LiveServerTestCase):
     def setUp(self):
-        driver = webdriver.Chrome(ChromeDriverManager().install())
-        driver.get("https://doogking-testing.azurewebsites.net/login")
+        options = webdriver.ChromeOptions()
+        options.add_argument("no-sandbox")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--headless")
+        driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=options)
+        driver.get(url + "login")
 
         username = driver.find_element_by_id("inputUsername")
         password = driver.find_element_by_id("inputPassword")
@@ -22,7 +28,7 @@ class LogInTestCase(LiveServerTestCase):
         password.send_keys("password123")
         driver.find_element_by_name("signIn").click()
         driver.implicitly_wait(5)
-        assert driver.current_url,"https://doogking-testing.azurewebsites.net/?username=aura&logged=true&token"
+        assert driver.current_url,url + "?username=aura&logged=true&token"
         driver.close()
 
     def test_incorrectLogin(self):
@@ -32,7 +38,7 @@ class LogInTestCase(LiveServerTestCase):
         driver.find_element_by_name("signIn").click()
         waiter = WebDriverWait(driver, 10)
         alert = waiter.until(EC.alert_is_present())
-        assert "Usuari o contraseña incorrecte" in alert.text
+        assert 'Wrong username or password' in alert.text
         alert.accept()
         driver.close()
 
@@ -40,4 +46,4 @@ class LogInTestCase(LiveServerTestCase):
         driver, username, password = self.setUp()
         driver.find_element_by_name("createAccount").click()
         driver.implicitly_wait(5)
-        assert driver.current_url, "https://doogking-testing.azurewebsites.net/register"
+        assert driver.current_url, url + "register"

@@ -51,3 +51,4 @@ class HousingTestCase(TestCase):
         client = Client()
         response = client.get('/api/housing/', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
