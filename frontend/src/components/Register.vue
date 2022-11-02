@@ -13,8 +13,8 @@
                    required autofocus v-model="addUserForm.email">
           </div>
           <div class="form-label-group">
-            <label for="inputUsername">Username</label>
-            <input type="username" id=" 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" class="form-control"
+            <label for="inputPassword">Username</label>
+            <input type="username" id="inputUsername" class="form-control"
                    required autofocus v-model="addUserForm.username">
           </div>
           <div class="form-label-group">
@@ -135,7 +135,7 @@ export default {
         .then((res) => {
           this.logged = true
           this.token = res.data.token
-          this.$router.push({ path: '/', query: { username: this.addUserForm.email, logged: this.logged, token: this.token } })
+          this.$router.push({ path: '/', query: { username: this.addUserForm.username, logged: this.logged, token: this.token } })
         })
         .catch((error) => {
           // eslint-disable-next-line
