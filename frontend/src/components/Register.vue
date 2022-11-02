@@ -1,47 +1,47 @@
 <template>
-  <div class="flex-wrapper">
-    <Header></Header>
-  <div id="app">
-    <div class="body">
-      <div id="container-login" class="container">
-        <div class="card" style="width: 30rem; color: white">
-          <h3>Create account</h3>
-          <h5>_____________________________________</h5>
-          <div class="form-label-group">
-            <label for="inputEmail">Email</label>
-            <input type="email" id="inputEmail" class="form-control"
-                   required autofocus v-model="addUserForm.email">
-          </div>
-          <div class="form-label-group">
-            <label for="inputUsername">Username</label>
-            <input type="username" id=" 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" class="form-control"
-                   required autofocus v-model="addUserForm.username">
-          </div>
-          <div class="form-label-group">
-            <label for="inputPassword">Password</label>
-            <input type="password" id="inputPassword" class="form-control"
-                   required v-model="addUserForm.password">
-          </div>
-          <div class="form-label-group">
-            <label for="inputStreet">Street</label>
-            <input type="street" id="inputStreet" class="form-control"
-                   required autofocus v-model="addUserForm.street">
-          </div>
-          <div class="form-label-group">
-            <label for="inputStreetNumber">Street number</label>
-            <input type="streetNumber" id="inputStreetNumber" class="form-control"
-                   required autofocus v-model="addUserForm.streetNumber">
-          </div>
-          <div class="group-buttons">
-            <button class="btn btn-lg btn-block" @click="checkRegister" name="createAccount">Create account</button>
-            <button class="btn btn-lg btn-block" @click="goToLogin" name="goToLogIn">Login</button>
+  <form>
+    <div class="flex-wrapper">
+      <Header></Header>
+    <div id="app">
+      <div class="body">
+        <div id="container-login" class="container">
+          <div class="card" style="width: 30rem; color: white">
+            <h3>Create account</h3>
+            <h5>_____________________________________</h5>
+            <div class="form-label-group">
+              <label for="inputEmail">Email</label>
+              <input type="email" id="inputEmail" class="form-control"
+                     required autofocus v-model="addUserForm.email">
+            </div>
+            <div class="form-label-group">
+              <label for="inputUsername">Username</label>
+              <input type="username" id="inputUsername" class="form-control" autofocus v-model="addUserForm.username" aria-describedby="inputGroupPrepend2" required>
+            </div>
+            <div class="form-label-group">
+              <label for="inputPassword">Password</label>
+              <input type="password" id="inputPassword" class="form-control" v-model="addUserForm.password" aria-describedby="inputGroupPrepend2" required>
+            </div>
+            <div class="form-label-group">
+              <label for="inputStreet">Street</label>
+              <input type="street" id="inputStreet" class="form-control"
+                     autofocus v-model="addUserForm.street" aria-describedby="inputGroupPrepend2" required>
+            </div>
+            <div class="form-label-group">
+              <label for="inputStreetNumber">Street number</label>
+              <input type="streetNumber" id="inputStreetNumber" class="form-control"
+                     autofocus v-model="addUserForm.streetNumber" aria-describedby="inputGroupPrepend2" required>
+            </div>
+            <div class="group-buttons">
+              <button class="btn btn-lg btn-block" @click="checkRegister" name="createAccount">Create account</button>
+              <button class="btn btn-lg btn-block" @click="goToLogin" name="goToLogIn">Login</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-    <Footer></Footer>
-  </div>
+      <Footer></Footer>
+    </div>
+  </form>
 </template>
 
 <style scoped>
@@ -110,15 +110,15 @@ export default {
       email: null,
       username: null,
       password: null,
-      street: null,
-      streetNumber: null,
+      // street: null,
+      // streetNumber: null,
       token: null,
       addUserForm: {
         email: null,
         username: null,
-        password: null,
-        street: null,
-        streetNumber: null
+        password: null
+        // street: null,
+        // streetNumber: null
       }
     }
   },
@@ -135,7 +135,7 @@ export default {
         .then((res) => {
           this.logged = true
           this.token = res.data.token
-          this.$router.push({ path: '/', query: { username: this.addUserForm.email, logged: this.logged, token: this.token } })
+          this.$router.push({ path: '/', query: { username: this.addUserForm.username, logged: this.logged, token: this.token } })
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -148,9 +148,9 @@ export default {
       const parameters = {
         email: this.addUserForm.email,
         first_name: this.addUserForm.username,
-        password: this.addUserForm.password,
-        street: this.addUserForm.street,
-        street_number: this.addUserForm.streetNumber
+        password: this.addUserForm.password
+        // street: this.addUserForm.street,
+        // street_number: this.addUserForm.streetNumber
       }
       const path = 'https://doogking.azurewebsites.net/api/profiles/'
       axios.post(path, parameters, headers)
@@ -167,8 +167,8 @@ export default {
       this.addUserForm.email = null
       this.addUserForm.username = null
       this.addUserForm.password = null
-      this.addUserForm.street = null
-      this.addUserForm.streetNumber = null
+      // this.addUserForm.street = null
+      // this.addUserForm.streetNumber = null
     },
     goToLogin () {
       // eslint-disable-next-line standard/object-curly-even-spacing
