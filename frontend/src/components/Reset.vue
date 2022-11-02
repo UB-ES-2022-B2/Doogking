@@ -77,12 +77,16 @@ export default {
     resetPassword () {
       try {
         if (this.password === this.confirmPassword) {
-          const headers = {'Access-Control-Allow-Origin': '*'}
+          const headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json'
+          }
           const parameters = {
-            verificationNumber: this.verificationNumber,
+            email: this.email,
+            otp: this.verificationNumber,
             password: this.password
           }
-          const path = 'https://doogking.awurewebsites.net/api/reset/'
+          const path = 'https://doogking.azurewebsites.net/api/reset/'
           axios.post(path, parameters, headers)
             .then((res) => {
               this.token = res.data.token
