@@ -60,7 +60,7 @@
 .card {
   padding: 2em;
   margin: 0 auto;
-  background-color: #4f5050;
+  background-color: #4f5051;
 }
 .form-label-group {
   text-align: left;
