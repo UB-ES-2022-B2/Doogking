@@ -1,5 +1,5 @@
 <template>
-<form>
+<div>
   <div class="flex-wrapper">
   <Header></Header>
   <div id="app">
@@ -35,8 +35,8 @@
       </div>
     </div>
     <Footer></Footer>
-    </div>
-  </form>
+  </div>
+</div>
 </template>
 
 <style scoped>
@@ -46,7 +46,6 @@
   flex-direction: column;
   justify-content: flex-start;
 }
-
 #container-login {
   padding: 2em;
   text-align: center;

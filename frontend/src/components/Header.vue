@@ -104,6 +104,7 @@ export default {
       }
     },
     logOut () {
+      this.logged = false
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/'})
     },
