@@ -17,5 +17,5 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 class HousingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Housing
-        fields = ['url', 'house_id', 'city', 'street', 'street_number', 'floor', 'door', 'house_dimension', 'house_owner']
+        fields = ['url', 'house_id', 'city', 'street', 'street_number', 'floor', 'door', 'house_dimension', 'house_owner', 'house_owner_name', 'price', 'rating', 'image']
         
