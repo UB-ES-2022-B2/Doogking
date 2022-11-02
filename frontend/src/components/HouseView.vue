@@ -43,7 +43,7 @@
                   <div class="mb-3">{{slotProps.data.street}},{{slotProps.data.street_number}},{{slotProps.data.floor}},{{slotProps.data.door}},{{slotProps.data.house_dimension}}</div>
                   <Rating :value="slotProps.data.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
                   <div class="flex align-items-center">
-                    <Tag :value="slotProps.data.house_owner" icon="pi pi-user" style="color: white; background-color: #6c757d"></Tag>
+                    <Tag :value="slotProps.data.house_owner_name" icon="pi pi-user" style="color: white; background-color: #6c757d"></Tag>
                   </div>
                 </div>
                 <div class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
@@ -64,7 +64,7 @@
                 <div class="card m-3 card1">
                   <div id ="container-image" class="container">
                     <div id="container-effect">
-                      <img id="card-img" :src="slotProps.data.image">
+                      <img id="card-img" :src="slotProps.data.image" alt="las vegas">
                       <figcaption>
                         <Button id="buttonViewGrid" label="View house" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
                       </figcaption>
@@ -81,7 +81,7 @@
                     <div class="flex align-items-center justify-content-between">
                       <h6>{{slotProps.data.city}}</h6>
                       <div class="flex align-items-center">
-                        <Tag id="tagHost" :value="slotProps.data.house_owner" icon="pi pi-user" style="color: white; background-color: #2A323D"></Tag>
+                        <Tag id="tagHost" :value="slotProps.data.house_owner_name" icon="pi pi-user" style="color: white; background-color: #2A323D"></Tag>
                         <Rating :value="slotProps.data.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
                       </div>
                   </div>
@@ -157,7 +157,7 @@ export default {
       }
     },
     getHouses () {
-      // const pathHouses = 'http://127.0.0.1:8000/api/housing/' localhost
+      // const pathHouses = 'http://127.0.0.1:8000/api/housing/'
       const headers = {'Access-Control-Allow-Origin': '*'}
       const pathHouses = 'https://doogking.azurewebsites.net/api/housing/'
       axios.get(pathHouses, headers).then(response => (this.houses = response.data))

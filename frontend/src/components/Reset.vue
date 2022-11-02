@@ -83,7 +83,7 @@ export default {
             password: this.password
           }
           const path = 'https://doogking.awurewebsites.net/api/reset/'
-          axios.get(path, parameters, headers)
+          axios.post(path, parameters, headers)
             .then((res) => {
               this.token = res.data.token
             })
