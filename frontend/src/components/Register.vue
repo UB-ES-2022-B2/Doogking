@@ -22,7 +22,7 @@
             <input type="password" id="inputPassword" class="form-control"
                    required v-model="addUserForm.password">
           </div>
-          <div class="form-label-group">
+          <!--<div class="form-label-group">
             <label for="inputStreet">Street</label>
             <input type="street" id="inputStreet" class="form-control"
                    required autofocus v-model="addUserForm.street">
@@ -31,7 +31,7 @@
             <label for="inputStreetNumber">Street number</label>
             <input type="streetNumber" id="inputStreetNumber" class="form-control"
                    required autofocus v-model="addUserForm.streetNumber">
-          </div>
+          </div>-->
           <div class="group-buttons">
             <button class="btn btn-lg btn-block" @click="checkRegister" name="createAccount">Create account</button>
             <button class="btn btn-lg btn-block" @click="goToLogin" name="goToLogIn">Login</button>
@@ -110,15 +110,15 @@ export default {
       email: null,
       username: null,
       password: null,
-      street: null,
-      streetNumber: null,
+      // street: null,
+      // streetNumber: null,
       token: null,
       addUserForm: {
         email: null,
         username: null,
-        password: null,
-        street: null,
-        streetNumber: null
+        password: null
+        // street: null,
+        // streetNumber: null
       }
     }
   },
@@ -148,9 +148,9 @@ export default {
       const parameters = {
         email: this.addUserForm.email,
         first_name: this.addUserForm.username,
-        password: this.addUserForm.password,
-        street: this.addUserForm.street,
-        street_number: this.addUserForm.streetNumber
+        password: this.addUserForm.password
+        // street: this.addUserForm.street,
+        // street_number: this.addUserForm.streetNumber
       }
       const path = 'https://doogking.azurewebsites.net/api/profiles/'
       axios.post(path, parameters, headers)
@@ -167,8 +167,8 @@ export default {
       this.addUserForm.email = null
       this.addUserForm.username = null
       this.addUserForm.password = null
-      this.addUserForm.street = null
-      this.addUserForm.streetNumber = null
+      // this.addUserForm.street = null
+      // this.addUserForm.streetNumber = null
     },
     goToLogin () {
       // eslint-disable-next-line standard/object-curly-even-spacing
