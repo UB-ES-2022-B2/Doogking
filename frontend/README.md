@@ -13,6 +13,10 @@ npm i --save @fortawesome/vue-fontawesome
 npm i --save @fortawesome/free-solid-svg-icons
 npm i --save @fortawesome/free-brands-svg-icons
 
+npm install primevue@^2.9.2
+npm install primeflex
+npm install primeicons
+
 # serve with hot reload at localhost:8080
 npm run dev
 

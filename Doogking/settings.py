@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-p@$48v*0kqkyg(y=frq8#ukxjat31xd4=gy*zd2%s@m-y6pm!p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '.azurewebsites.net']
+ALLOWED_HOSTS = ['localhost', '.azurewebsites.net', 'http://127.0.0.1:8000/', '127.0.0.1']
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS  = [
     "http://localhost:8080",
     "http://localhost:8000",
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
+    'storages',
     'doogkingapp',
 ]
 
@@ -155,3 +157,11 @@ WHITENOISE_ROOT = os.path.join(BASE_DIR, 'frontend/dist/')
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+AZURE_ACCOUNT_NAME = 'doogkingteststorage'
+AZURE_ACCOUNT_KEY = 'k32uxvGhd1R1QilbCLgqM1rLisfuvcSi627hEjLpdJyXLgVprgDWqiR7jFAyGGb1b6lnh4o2TdDl+ASt9YSbuQ=='
+AZURE_CONTAINER = 'media'
+AZURE_LOCATION = ''
+AZURE_CUSTOM_DOMAIN = 'doogkingteststorage.blob.core.windows.net'
