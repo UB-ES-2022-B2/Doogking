@@ -6,6 +6,7 @@ import process from 'shelljs'
 import Register from '../components/Register'
 import ForgotPassword from '../components/ForgotPassword'
 import Reset from '../components/Reset'
+import AboutUs from '../components/AboutUs'
 
 Vue.use(Router)
 
@@ -37,6 +38,11 @@ export default new Router({
       path: '/reset',
       name: 'ResetPassword',
       component: Reset
+    },
+    {
+      path: '/aboutUs',
+      name: 'AboutUs',
+      component: AboutUs
     }
   ]
 })

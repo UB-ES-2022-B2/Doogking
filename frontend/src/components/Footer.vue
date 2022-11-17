@@ -5,7 +5,7 @@
         <div class="footer-col">
           <h4>DoogKing</h4>
           <ul>
-            <li><a href="#">About us</a></li>
+            <li><a href="#" @click="goToAboutUs">About Us</a></li>
             <li><a href="#">Services</a></li>
             <li><a href="#">Privacy policy</a></li>
             <li><a href="#">Register</a></li>
@@ -60,6 +60,10 @@ export default {
     login () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.logged = true
+    },
+    goToAboutUs () {
+      // eslint-disable-next-line standard/object-curly-even-spacing
+      this.$router.push({ path: '/aboutUs'})
     }
   },
   created () {
