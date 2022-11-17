@@ -7,13 +7,36 @@
             <img  class = featuredImage--desktopOnly wp-post-image src="@/assets/aboutUs.png">
           </div>
           <div class="container">
-            <div class="page-header"><h1 class="h2">About Us</h1></div>
+            <div class="page-header"><h1 class="h1">About Us</h1></div>
+            <p></p>
+            <div class="page-header" style="margin-top:50px"><h4 class="h4"> Our Story <hr></h4></div>
+            <p></p>
             <div class="page__entryContent">
-              <p>Doogking was born in 2022 when a group of 6 computer science students where
-                creating a web for one of theire assignments, and has since grown to over 1 thousend
-                Hosts who have welcomed more than 1 million guest arrivals in almost every Spain city.
-                Every day, Hosts offer unique stays and experiences that make it possible for guests to
-                connect with communities in a more authentic way.</p>
+              <p>
+                We’re Doogking, a national, pet-loving community on a mission to create a
+                world where pets enjoy their owners’ vacations just as much as they do!
+
+                Founded in 2022 when a group of 6 computer science students where
+                creating a web for one of their assignments, and has since grown to over 1 thousand
+                Hosts who have welcomed more than half million pets arrivals in almost every Spain city.
+                We've connected thousands of pet owners and pet sitters worldwide
+                through their mutual trust and love of animals. Which means when it comes to pet
+                sitting, we’ve got it covered.
+              </p>
+            </div>
+            <p></p>
+            <div class="page-header" style="margin-top:50px"><h4 class="h4"> Brought together by a love of pets <hr></h4></div>
+            <p>
+
+            </p>
+            <div class="page__entryContent">
+              <p>
+                Our community of pet lovers help each other by offering unlimited pet and
+                home care in exchange for a free place to stay. Pet owners can travel with
+                confidence knowing they’ve secured the very best care for their best friend.
+                While sitters get to stay in unique homes around the world and enjoy the company
+                of pets. It’s a win-win for everyone… especially for the pets!
+              </p>
             </div>
           </div>
         </div>
