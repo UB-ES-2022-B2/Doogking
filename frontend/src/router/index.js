@@ -1,11 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/components/Login.vue'
-import Homepage from '@/components/Homepage'
+import Login from '../components/Login'
+import Homepage from '../components/Homepage'
 import process from 'shelljs'
 import Register from '../components/Register'
 import ForgotPassword from '../components/ForgotPassword'
 import Reset from '../components/Reset'
+import HouseRegistry from '../components/HouseRegistry'
 
 Vue.use(Router)
 
@@ -37,6 +38,11 @@ export default new Router({
       path: '/reset',
       name: 'ResetPassword',
       component: Reset
+    },
+    {
+      path: '/houseregistry',
+      name: 'HouseRegistry',
+      component: HouseRegistry
     }
   ]
 })
