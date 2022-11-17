@@ -32,6 +32,9 @@ import Toast from 'primevue/toast'
 import ConfirmationService from 'primevue/confirmationservice'
 import ToastService from 'primevue/toastservice'
 import ConfirmPopup from 'primevue/confirmpopup'
+import Password from 'primevue/password'
+import InputText from 'primevue/inputtext'
+import Checkbox from 'primevue/checkbox'
 
 library.add(fas, fab)
 Vue.component('fa', FontAwesomeIcon)
@@ -58,6 +61,9 @@ Vue.component('Divider', Divider)
 Vue.component('Dialog ', Dialog)
 Vue.component('Toast', Toast)
 Vue.component('ConfirmPopup', ConfirmPopup)
+Vue.component('Password', Password)
+Vue.component('InputText', InputText)
+Vue.component('Checkbox', Checkbox)
 
 /* eslint-disable no-new */
 new Vue({
