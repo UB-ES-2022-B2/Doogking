@@ -64,7 +64,7 @@
                 <div class="card m-3 card1">
                   <div id ="container-image" class="container">
                     <div id="container-effect">
-                      <img id="card-img" :src="slotProps.data.image" alt="las vegas">
+                      <img id="card-img" :src="slotProps.data.image" alt="img">
                       <figcaption>
                         <Button id="buttonViewGrid" label="View house" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
                       </figcaption>
@@ -196,9 +196,11 @@ export default {
 
 #card-img{
   clip-path: polygon(0 0,100% 0, 100% 85%, 0 100%);
-  width: 100%;
   display: block;
   border-radius: 20px 20px 0 0;
+  width: 20rem;
+  height: 12rem;
+  overflow: hidden;
 }
 
 #container-effect {
