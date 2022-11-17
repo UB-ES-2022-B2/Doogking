@@ -79,18 +79,6 @@
               </div>
               <small v-if="(v$.password.$invalid && submitted) || v$.password.$pending.$response" class="p-error">{{v$.password.required.$message.replace('Value', 'Password')}}</small>
             </div>
-            <div class="field">
-              <div class="p-float-label">
-                <Calendar id="date" v-model="date" :showIcon="true" />
-                <label for="date">Birthday</label>
-              </div>
-            </div>
-            <div class="field">
-              <div class="p-float-label">
-                <Dropdown id="city" v-model="city" :options="cities" optionLabel="name"/>
-                <label for="city">City</label>
-              </div>
-            </div>
             <div class="field-checkbox">
               <Checkbox style="margin-left: 1rem;" id="accept" name="accept" value="Accept" v-model="v$.accept.$model" :class="{'p-invalid':v$.accept.$invalid && submitted}" />
               <label for="accept" :class="{'p-error': v$.accept.$invalid && submitted}">I agree to the terms and conditions*</label>
@@ -129,8 +117,6 @@ export default {
       username: '',
       email: '',
       password: '',
-      date: null,
-      city: null,
       accept: null,
       submitted: false,
       cities: [
@@ -240,8 +226,6 @@ export default {
       this.username = ''
       this.email = ''
       this.password = ''
-      this.date = null
-      this.city = null
       this.accept = null
       this.submitted = false
     }
