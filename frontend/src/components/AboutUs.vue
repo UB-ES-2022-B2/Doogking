@@ -12,7 +12,7 @@
             <div class="page-header" style="margin-top:50px"><h4 class="h4"> Our Story <hr></h4></div>
             <p></p>
             <div class="page__entryContent">
-              <p>
+              <p class="info-aboutUs">
                 We’re Doogking, a national, pet-loving community on a mission to create a
                 world where pets enjoy their owners’ vacations just as much as they do!
 
@@ -30,7 +30,7 @@
 
             </p>
             <div class="page__entryContent">
-              <p>
+              <p class="info-aboutUs">
                 Our community of pet lovers help each other by offering unlimited pet and
                 home care in exchange for a free place to stay. Pet owners can travel with
                 confidence knowing they’ve secured the very best care for their best friend.
@@ -58,6 +58,16 @@ export default {
 </script>
 
 <style>
+
+.flex-wrapper {
+  background-color: #2A323D;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow-x: hidden;
+  align-content: center;
+}
 
 .pageFeaturedImage {
   height: 0;
@@ -88,6 +98,15 @@ img {
   padding-left: 80px;
   text-rendering: optimizeLegibility;
   text-align: left;
+  text-color:#bbbbbb;
+}
+
+.page-header{
+  color:#bbbbbb;
+}
+
+.info-aboutUs{
+  color:#bbbbbb;
 }
 
 </style>
