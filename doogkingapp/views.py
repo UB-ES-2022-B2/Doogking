@@ -1,9 +1,12 @@
 from django.shortcuts import render, get_object_or_404
+from django.views import View
 from django.core.exceptions import PermissionDenied
+from django.conf import settings
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import permissions
+from azure.storage.blob import BlobServiceClient
 from .models import Profile, Housing
 from .serializers import ProfileSerializer, HousingSerializer
 import secrets
@@ -63,4 +66,17 @@ class ResetView(APIView):
         else:
             raise PermissionDenied("Email and reset token do not match!")
 
+
+class UploaderView(APIView):
+
+    def post(self, request):
+        file = request.FILES['file']
+        credential = {"account_name": settings.AZURE_ACCOUNT_NAME, "account_key": settings.AZURE_ACCOUNT_KEY}
+
+        blob_service_client = BlobServiceClient("https://" + settings.AZURE_CUSTOM_DOMAIN, credential)
+
+        blob_client = blob_service_client.get_blob_client(container=settings.AZURE_CONTAINER, blob=file.name)
+        blob_client.upload_blob(file.read())
+
+        return Response({"message": "success", "uploaded_name": file.name})
 

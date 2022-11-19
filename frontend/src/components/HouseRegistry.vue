@@ -18,6 +18,7 @@
 import Header from './Header'
 import Footer from './Footer'
 import HouseView from './HouseView'
+import axios from 'axios'
 
 export default {
   components: {
@@ -32,6 +33,13 @@ export default {
   methods: {
     myUploader (event) {
       alert(event.files[0].objectURL)
+      const formData = new FormData()
+      formData.append('file', event.files[0])
+      axios
+        .post('http://localhost:8000/api/upload/', formData)
+        .then(() => {
+          console.log('SUCCESS')
+        })
       this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 })
     }
   }

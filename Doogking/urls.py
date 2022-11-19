@@ -32,6 +32,7 @@ router.register(r'housing', views.HousingViewSet)
 urlpatterns = [
     path('api/', include(router.urls)),
     path('api/login/', obtain_auth_token),
+    path('api/upload/', views.UploaderView.as_view()),
     path('admin/', admin.site.urls),
     path('api/reset/', views.ResetView.as_view()),
     url(r'^.*$', TemplateView.as_view(template_name='index.html')),
