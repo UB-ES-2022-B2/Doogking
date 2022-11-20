@@ -7,7 +7,7 @@
           <ul>
             <li><a href="#">About us</a></li>
             <li><a href="#">Services</a></li>
-            <li><a href="#">Privacy policy</a></li>
+            <li><a href="#" @click="goToPrivacyPolicy">Privacy policy</a></li>
             <li><a href="#">Register</a></li>
           </ul>
         </div>
@@ -60,6 +60,10 @@ export default {
     login () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.logged = true
+    },
+    goToPrivacyPolicy () {
+      // eslint-disable-next-line standard/object-curly-even-spacing
+      this.$router.push({ path: '/privacyPolicy'})
     }
   },
   created () {
