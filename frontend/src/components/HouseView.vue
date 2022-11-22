@@ -54,7 +54,7 @@
                       <Button id="favButtonList" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
                   </span>
                   <span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end">{{slotProps.data.price}}€ day</span>
-                  <Button id="buttonViewList" label="View house" iconPos="right" class="buttonView"/>
+                  <Button id="buttonViewList" label="View house" @click="seeHouseDetails(slotProps.data.house_id)" iconPos="right" class="buttonView"/>
                 </div>
               </div>
             </div>
@@ -66,7 +66,7 @@
                     <div id="container-effect">
                       <img id="card-img" :src="slotProps.data.image" alt="img">
                       <figcaption>
-                        <Button id="buttonViewGrid" label="View house" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
+                        <Button id="buttonViewGrid" label="View house" @click="seeHouseDetails(slotProps.data.house_id)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
                       </figcaption>
                     </div>
                     <span id="favContainer" v-if="slotProps.data.favorite==true">
@@ -102,6 +102,8 @@ export default {
   data () {
     return {
       logged: null,
+      username: null,
+      token: null,
       houses: [{}],
       layout: 'grid',
       checkInDate: null,
@@ -151,6 +153,10 @@ export default {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/login'})
     },
+    // eslint-disable-next-line camelcase
+    seeHouseDetails (house_id) {
+      this.$router.push({ path: '/housedetails', query: {username: this.username, logged: this.logged, token: this.token, house_id: house_id} })
+    },
     changeFavorite () {
       if (this.logged === false) {
         this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites', life: 2000})
@@ -165,6 +171,11 @@ export default {
   },
   created () {
     this.logged = this.$route.query.logged === 'true'
+    this.username = this.$route.query.username
+    this.token = this.$route.query.token
+    if (this.logged === undefined) {
+      this.logged = false
+    }
     this.getHouses()
   }
 }

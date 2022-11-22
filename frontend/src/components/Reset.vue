@@ -20,9 +20,9 @@
       <Dialog :visible="showErrorMessage" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
         <div class="flex align-items-center flex-column pt-6 px-3">
           <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
-          <h5 style="margin-top: 1em">New password Error!</h5>
+          <h5 style="margin-top: 1em">Mail or verification number Error!</h5>
           <p style="text-align: center">
-            Please enter a valid password and verification number
+            Please enter a valid mail and verification number
           </p>
         </div>
         <template #footer>
@@ -153,7 +153,8 @@ export default {
       showSuccessMessage: false,
       showErrorMessage: false,
       showPasswordMismatch: false,
-      submitted: false
+      submitted: false,
+      error: ''
     }
   },
   validations () {
@@ -190,8 +191,13 @@ export default {
           axios.post(path, parameters, headers)
             .then((res) => {
               this.token = res.data.token
+              this.showSuccessMessage = true
             })
-          this.showSuccessMessage = true
+            .catch((error) => {
+              // eslint-disable-next-line
+              this.error = error
+              this.showErrorMessage = true
+            })
         } else {
           this.showPasswordMismatch = true
         }
@@ -215,7 +221,7 @@ export default {
       this.showSuccessMessage = !this.showSuccessMessage
 
       if (!this.showSuccessMessage) {
-        this.$router.push({path: '/'})
+        this.goToLogin()
         this.resetForm()
       }
     },
@@ -223,14 +229,16 @@ export default {
       this.showErrorMessage = !this.showErrorMessage
 
       if (!this.showErrorMessage) {
-        this.resetForm()
+        this.email = ''
+        this.verificationNumber = ''
       }
     },
     toggleDialogMismatch () {
       this.showPasswordMismatch = !this.showPasswordMismatch
 
       if (!this.showPasswordMismatch) {
-        this.resetForm()
+        this.password = ''
+        this.confirmPassword = ''
       }
     },
     resetForm () {

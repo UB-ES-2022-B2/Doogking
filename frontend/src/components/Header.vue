@@ -35,7 +35,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right" v-else>
         <div>
-          <SplitButton :label="this.username" icon="pi pi-plus" :model="itemsLogged"></SplitButton>
+          <SplitButton :label="this.username" icon="pi pi-user" :model="itemsLogged" class="p-button-secondary mb-2"></SplitButton>
         </div>
       </ul>
     </div>
