@@ -27,13 +27,13 @@
 
             <p class="info-pp">We use the information we collect in various ways, including to:
 
-            <p class="info-pp">Provide, operate, and maintain our website
-              Improve, personalize, and expand our website
-              Understand and analyze how you use our website
-              Develop new products, services, features, and functionality
-              Communicate with you, either directly or through one of our partners, including for customer service, to provide you with updates and other information relating to the website, and for marketing and promotional purposes
-              Send you emails
-              Find and prevent fraud </p>
+            <p class="info-pp">&emsp; · Provide, operate, and maintain our website</p>
+            <p class="info-pp">&emsp; · Improve, personalize, and expand our website</p>
+            <p class="info-pp">&emsp; · Understand and analyze how you use our website</p>
+            <p class="info-pp">&emsp; · Develop new products, services, features, and functionality</p>
+            <p class="info-pp">&emsp; · Communicate with you, either directly or through one of our partners, including for customer service, to provide you with updates and other information relating to the website, and for marketing and promotional purposes</p>
+            <p class="info-pp">&emsp; · Send you emails</p>
+            <p class="info-pp">&emsp; · Find and prevent fraud </p>
 
             <div class="page-header"><h4>Log Files</h4></div>
 
@@ -145,6 +145,11 @@ export default {
 
 .info-pp{
   color:#bbbbbb;
+}
+
+.tab4 {
+  tab-size: 8;
+  color: #bbbbbb;
 }
 
 </style>
