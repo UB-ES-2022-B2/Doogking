@@ -5,7 +5,7 @@
         <div class="footer-col">
           <h4>DoogKing</h4>
           <ul>
-            <li><a href="#">About us</a></li>
+            <li><a href="#" @click="goToAboutUs">About Us</a></li>
             <li><a href="#">Services</a></li>
             <li><a href="#" @click="goToPrivacyPolicy">Privacy policy</a></li>
             <li><a href="#">Register</a></li>
@@ -61,9 +61,15 @@ export default {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.logged = true
     },
+
     goToPrivacyPolicy () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/privacyPolicy'})
+
+    goToAboutUs () {
+      // eslint-disable-next-line standard/object-curly-even-spacing
+      this.$router.push({ path: '/aboutUs'})
+
     }
   },
   created () {
