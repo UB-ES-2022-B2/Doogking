@@ -32,6 +32,11 @@ import Toast from 'primevue/toast'
 import ConfirmationService from 'primevue/confirmationservice'
 import ToastService from 'primevue/toastservice'
 import ConfirmPopup from 'primevue/confirmpopup'
+import Password from 'primevue/password'
+import InputText from 'primevue/inputtext'
+import Checkbox from 'primevue/checkbox'
+import SplitButton from 'primevue/splitbutton'
+import SpeedDial from 'primevue/speeddial'
 
 library.add(fas, fab)
 Vue.component('fa', FontAwesomeIcon)
@@ -58,6 +63,11 @@ Vue.component('Divider', Divider)
 Vue.component('Dialog ', Dialog)
 Vue.component('Toast', Toast)
 Vue.component('ConfirmPopup', ConfirmPopup)
+Vue.component('Password', Password)
+Vue.component('InputText', InputText)
+Vue.component('Checkbox', Checkbox)
+Vue.component('SplitButton', SplitButton)
+Vue.component('SpeedDial', SpeedDial)
 
 /* eslint-disable no-new */
 new Vue({
