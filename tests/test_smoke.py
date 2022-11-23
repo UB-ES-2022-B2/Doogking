@@ -1,6 +1,7 @@
 import pytest as pytest
 from doogkingapp.models import Profile, Housing
 import requests
+from django.urls import reverse
 
 ...
 import os
@@ -38,3 +39,7 @@ def test_views_reset():
 @pytest.mark.django_db  #
 def test_database_housing():
     assert not Housing.objects.exists()
+
+@pytest.mark.django_db  #
+def test_database_profile():
+    assert not Profile.objects.exists()
