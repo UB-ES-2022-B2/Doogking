@@ -61,15 +61,13 @@ export default {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.logged = true
     },
-
     goToPrivacyPolicy () {
       // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/privacyPolicy'})
-
+      this.$router.push({path: '/privacyPolicy'})
+    },
     goToAboutUs () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/aboutUs'})
-
     }
   },
   created () {

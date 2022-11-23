@@ -9,7 +9,6 @@ import Reset from '../components/Reset'
 import PrivacyPolicy from '../components/PrivacyPolicy'
 import AboutUs from '../components/AboutUs'
 
-
 Vue.use(Router)
 
 export default new Router({
@@ -46,7 +45,8 @@ export default new Router({
       path: '/privacyPolicy',
       name: 'privacyPolicy',
       component: PrivacyPolicy
-
+    },
+    {
       path: '/aboutUs',
       name: 'AboutUs',
       component: AboutUs
