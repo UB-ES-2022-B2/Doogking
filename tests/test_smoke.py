@@ -1,5 +1,5 @@
 import pytest as pytest
-from doogkingapp.models import Housing,Profile
+import sqlite3
 from django.urls import reverse
 from rest_framework.authtoken.views import obtain_auth_token
 from django.test import Client
@@ -35,10 +35,16 @@ def test_views_reset():
     response = c.get("http://127.0.0.1:8000/reset")
     assert response.status_code == 200
 
-@pytest.mark.django_db  #
+@pytest.mark.count_queries  #
 def test_database_housing():
-    assert Housing.objects.all().exists()
+    con = sqlite3.connect("db.sqlite3")
+    cur = con.cursor()
+    res = cur.execute("SELECT * FROM doogkingapp_housing")
+    assert res.fetchone()
 
 @pytest.mark.django_db  #
 def test_database_profile():
-    assert Profile.objects.all().exists()
+    con = sqlite3.connect("db.sqlite3")
+    cur = con.cursor()
+    res = cur.execute("SELECT * FROM doogkingapp_profile")
+    assert res.fetchone()
