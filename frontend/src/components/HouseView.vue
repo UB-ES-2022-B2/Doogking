@@ -196,6 +196,7 @@ export default {
   box-sizing: border-box;
   overflow: hidden;
   text-overflow: ellipsis;
+  width: 19rem;
 }
 
 #container-image{
@@ -209,9 +210,9 @@ export default {
   clip-path: polygon(0 0,100% 0, 100% 85%, 0 100%);
   display: block;
   border-radius: 20px 20px 0 0;
-  width: 20rem;
-  height: 12rem;
   overflow: hidden;
+  width: 19rem;
+  height: 12rem;
 }
 
 #container-effect {
