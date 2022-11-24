@@ -35,15 +35,15 @@
                   <div class="p-float-label">
                     <Calendar id="checkInDate" :showIcon="true" v-model="v$.checkInDate.$model" :class="{'p-invalid':v$.checkInDate.$invalid && submitted}"/>
                     <label for="checkOutDate" :class="{'p-error':v$.checkInDate.$invalid && submitted}">Check-in*</label>
-                    <small v-if="(v$.checkInDate.$invalid && submitted) || v$.checkInDate.$pending.$response" class="p-error">{{v$.checkInDate.required.$message.replace('Value', 'Name')}}</small>
                   </div>
+                  <small v-if="(v$.checkInDate.$invalid && submitted) || v$.checkInDate.$pending.$response" class="p-error">{{v$.checkInDate.required.$message.replace('Value', 'Check-in')}}</small>
                 </div>
                 <div class="field">
                   <div class="p-float-label">
                     <Calendar id="checkOutDate" :showIcon="true" v-model="v$.checkOutDate.$model" :class="{'p-invalid':v$.checkOutDate.$invalid && submitted}"/>
                     <label for="checkOutDate" :class="{'p-error':v$.checkOutDate.$invalid && submitted}">Check-out*</label>
-                    <small v-if="(v$.checkOutDate.$invalid && submitted) || v$.checkOutDate.$pending.$response" class="p-error">{{v$.checkOutDate.required.$message.replace('Value', 'Name')}}</small>
                   </div>
+                  <small v-if="(v$.checkOutDate.$invalid && submitted) || v$.checkOutDate.$pending.$response" class="p-error">{{v$.checkOutDate.required.$message.replace('Value', 'Check-out')}}</small>
                 </div>
                 <div class="field">
                   <Button id="submitButton" type="submit" label="Reserve" class="mt-2"/>
