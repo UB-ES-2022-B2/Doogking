@@ -8,7 +8,7 @@
             <i class="pi pi-check-circle" :style="{fontSize: '5rem', color: 'var(--green-500)' }"></i>
             <h5 style="margin-top: 1em">Login Successful!</h5>
             <p style="text-align: center">
-              Your account is logged in under username <b>{{ this.username }}</b>
+              Your account is logged in under username <b>{{ this.email }}</b>
             </p>
           </div>
           <template #footer>
@@ -23,7 +23,7 @@
             <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
             <h5 style="margin-top: 1em">Login Error!</h5>
             <p style="text-align: center">
-              Please enter a valid username/password
+              Please enter a valid email/password
             </p>
           </div>
           <template #footer>
@@ -38,12 +38,17 @@
             <h5 class="text-center" style="margin-bottom: -2rem; padding-top: 1rem">Login</h5>
             <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
               <div class="field">
-                <hr style="margin-bottom: 1.5rem;" class="solid"/>
-                <div class="p-float-label">
-                  <InputText id="username" v-model="v$.username.$model" :class="{'p-invalid':v$.username.$invalid && submitted}" />
-                  <label for="username" :class="{'p-error':v$.username.$invalid && submitted}">Username*</label>
+                <div class="p-float-label p-input-icon-right">
+                  <i class="pi pi-envelope" />
+                  <InputText id="email" v-model="v$.email.$model" :class="{'p-invalid':v$.email.$invalid && submitted}" aria-describedby="email-error"/>
+                  <label for="email" :class="{'p-error':v$.email.$invalid && submitted}">Email*</label>
                 </div>
-                <small v-if="(v$.username.$invalid && submitted) || v$.username.$pending.$response" class="p-error">{{v$.username.required.$message.replace('Value', 'Name')}}</small>
+                <span v-if="v$.email.$error && submitted">
+                            <span id="email-error" v-for="(error, index) of v$.email.$errors" :key="index">
+                            <small class="p-error">{{error.$message}}</small>
+                            </span>
+                        </span>
+                <small v-else-if="(v$.email.$invalid && submitted) || v$.email.$pending.$response" class="p-error">{{v$.email.required.$message.replace('Value', 'Email')}}</small>
               </div>
               <div class="field">
                 <div class="p-float-label">
@@ -89,7 +94,7 @@
 import Header from './Header'
 import Footer from './Footer'
 import axios from 'axios'
-import { required } from '@vuelidate/validators'
+import { email, required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 
 export default {
@@ -102,7 +107,7 @@ export default {
     return {
       logged: false,
       token: null,
-      username: '',
+      email: '',
       password: '',
       submitted: false,
       showSuccessMessage: false,
@@ -112,8 +117,9 @@ export default {
   },
   validations () {
     return {
-      username: {
-        required
+      email: {
+        required,
+        email
       },
       password: {
         required
@@ -133,7 +139,7 @@ export default {
     toggleDialogSuccess () {
       this.showSuccessMessage = !this.showSuccessMessage
       if (!this.showSuccessMessage) {
-        this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token } })
+        this.$router.push({ path: '/', query: { username: this.email, logged: this.logged, token: this.token } })
         this.resetForm()
       }
     },
@@ -145,13 +151,13 @@ export default {
       }
     },
     resetForm () {
-      this.username = ''
+      this.email = ''
       this.password = ''
       this.submitted = false
     },
     checkLogin () {
       const parameters = {
-        username: this.username,
+        username: this.email,
         password: this.password
       }
       const headers = {'Access-Control-Allow-Origin': '*'}
