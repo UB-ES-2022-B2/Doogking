@@ -48,3 +48,18 @@ def test_database_profile():
     cur = con.cursor()
     res = cur.execute("SELECT * FROM doogkingapp_profile")
     assert res.fetchone()
+
+@pytest.mark.django_db  #
+def test_database_master():
+    con = sqlite3.connect("db.sqlite3")
+    cur = con.cursor()
+    res = cur.execute("SELECT * FROM sqlite_master")
+    assert res.fetchone()
+
+@pytest.mark.django_db  #
+def test_database_sequence():
+    con = sqlite3.connect("db.sqlite3")
+    cur = con.cursor()
+    res = cur.execute("SELECT * FROM sqlite_sequence")
+    assert res.fetchone()
+
