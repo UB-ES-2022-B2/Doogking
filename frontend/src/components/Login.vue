@@ -38,6 +38,7 @@
             <h5 class="text-center" style="margin-bottom: -2rem; padding-top: 1rem">Login</h5>
             <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
               <div class="field">
+                <hr style="margin-bottom: 1.5rem;" class="solid"/>
                 <div class="p-float-label p-input-icon-right">
                   <i class="pi pi-envelope" />
                   <InputText id="email" v-model="v$.email.$model" :class="{'p-invalid':v$.email.$invalid && submitted}" aria-describedby="email-error"/>
