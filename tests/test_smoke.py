@@ -1,6 +1,5 @@
 import pytest as pytest
-from doogkingapp.models import Profile, Housing
-import requests
+from doogkingapp.models import Housing,Profile
 from django.urls import reverse
 from rest_framework.authtoken.views import obtain_auth_token
 from django.test import Client
@@ -38,8 +37,8 @@ def test_views_reset():
 
 @pytest.mark.django_db  #
 def test_database_housing():
-    assert not Housing.objects.exists()
+    assert Housing.objects.all().exists()
 
 @pytest.mark.django_db  #
 def test_database_profile():
-    assert not Profile.objects.exists()
+    assert Profile.objects.all().exists()
