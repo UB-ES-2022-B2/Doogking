@@ -17,7 +17,7 @@
           </template>
           <template #caption="{item}">
             <h4 style="margin-bottom: .5rem;">{{house.city}}</h4>
-            <p>{{house.street}},{{house.street_number}},{{house.floor}},{{house.door}},{{house.house_dimension}}</p>
+            <p>{{house.street}}, {{house.street_number}}, {{house.floor}}, {{house.door}}, {{house.house_dimension}}</p>
           </template>
         </Galleria>
       </div>
@@ -25,9 +25,27 @@
         <div class="form-demo">
           <div class="flex justify-content-center">
             <div class="card">
-              <label class="text-center" style="margin-top: 1em; font-weight: 600; font-size: 20px;">{{ house.city}} <a style="text-decoration: none; font-size: 15px; color: #a0a0a0;">{{house.street}}, {{house.street_number}}, {{house.floor}}, {{house.door}}, {{house.house_dimension}}</a></label>
+              <h5 class="text-center" style="margin-top: 1em;">{{ house.city}}</h5>
+              <a class="text-center" style="text-decoration: none; font-size: 15px; color: #a0a0a0;">{{house.street}}, {{house.street_number}}, {{house.floor}}, {{house.door}}, {{house.house_dimension}}</a>
               <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
-                <div class="field" style="margin-top: -1em">
+                <div class="field">
+                  <hr style="margin-top: -1em;" class="solid"/>
+                </div>
+                <div class="field">
+                  <div class="p-float-label">
+                    <Calendar id="checkInDate" :showIcon="true" v-model="v$.checkInDate.$model" :class="{'p-invalid':v$.checkInDate.$invalid && submitted}"/>
+                    <label for="checkOutDate" :class="{'p-error':v$.checkInDate.$invalid && submitted}">Check-in*</label>
+                    <small v-if="(v$.checkInDate.$invalid && submitted) || v$.checkInDate.$pending.$response" class="p-error">{{v$.checkInDate.required.$message.replace('Value', 'Name')}}</small>
+                  </div>
+                </div>
+                <div class="field">
+                  <div class="p-float-label">
+                    <Calendar id="checkOutDate" :showIcon="true" v-model="v$.checkOutDate.$model" :class="{'p-invalid':v$.checkOutDate.$invalid && submitted}"/>
+                    <label for="checkOutDate" :class="{'p-error':v$.checkOutDate.$invalid && submitted}">Check-out*</label>
+                    <small v-if="(v$.checkOutDate.$invalid && submitted) || v$.checkOutDate.$pending.$response" class="p-error">{{v$.checkOutDate.required.$message.replace('Value', 'Name')}}</small>
+                  </div>
+                </div>
+                <div class="field">
                   <Button id="submitButton" type="submit" label="Reserve" class="mt-2"/>
                 </div>
                 <div class="field" style="margin-top: -1em">
@@ -48,6 +66,7 @@ import Header from './Header'
 import Footer from './Footer'
 import axios from 'axios'
 import { useVuelidate } from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
 
 export default {
   name: 'HouseDetails',
@@ -62,7 +81,17 @@ export default {
       username: null,
       token: null,
       house_id: null,
-      house: null,
+      checkInDate: null,
+      checkOutDate: null,
+      dates2: null,
+      house: {
+        'city': 'City',
+        'street': 'street',
+        'street_number': 'street_number',
+        'floor': 'floor',
+        'door': 'door',
+        'house_dimension': 'house_dimension'
+      },
       submitted: false,
       images: [
         {
@@ -102,6 +131,12 @@ export default {
   },
   validations () {
     return {
+      checkInDate: {
+        required
+      },
+      checkOutDate: {
+        required
+      }
     }
   },
   methods: {
@@ -171,7 +206,7 @@ export default {
 .form-demo .card {
   margin-top: 1.5rem;
   border-radius: 1rem;
-  min-width: 35rem;
+  width: 35rem;
   background-color: #3d4755;
   color: white;
   margin-bottom: 1.5rem;

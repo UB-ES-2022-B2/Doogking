@@ -27,7 +27,7 @@
               <DataViewLayoutOptions v-model="layout" />
             </div>
             <Calendar class="calendarIcon" id="icon" placeholder="Check-in" v-model="checkInDate" :showIcon="true" style="width: 9.65rem; margin-top: 0.5em; margin-right: 0.5em;"/>
-            <Calendar class="calendarIcon" id="icon" placeholder="Check-out" v-model="checkOutDate" @click="checkOutGreater()" :showIcon="true" style="width: 9.65rem; margin-top: 0.5em; margin-right: 0.5em;"/>
+            <Calendar class="calendarIcon" id="icon" placeholder="Check-out" v-model="checkOutDate" :showIcon="true" style="width: 9.65rem; margin-top: 0.5em; margin-right: 0.5em;"/>
             <ConfirmPopup id="confirmPopup" ></ConfirmPopup>
             <Toast/>
             <Button id="removeFiltersBtn" @click="confirmRemoveFilters($event)" icon="pi pi-times" style="background-color: indianred; border-color: indianred; color: white; margin-top: 0.5em;"/>
