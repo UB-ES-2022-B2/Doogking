@@ -90,7 +90,7 @@
                 <div class="field" style="margin-top: -1em;">
                   <Button id="submitButton" type="submit" label="Reserve" class="mt-2"/>
                 </div>
-                <div class="field" style="margin-top: -1em">
+                <div class="field" style="margin-top: -1em" v-if="this.logged===false">
                   <label>Want to reserve? <a class="link" @click="goToLogin" style="cursor: pointer; color: #8DD0FF; text-decoration: none; margin-top: -1em">Login now!</a></label>
                 </div>
               </form>
@@ -204,7 +204,6 @@ export default {
     handleSubmit (isFormValid) {
       this.submitted = true
       if (isFormValid && this.checkOutDate !== null && this.checkInDate < this.checkOutDate) {
-        alert('Reserve not implemented yet')
       }
     },
     goToLogin () {
