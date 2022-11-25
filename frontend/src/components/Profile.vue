@@ -1,41 +1,41 @@
 <template>
   <form>
     <div class="flex-wrapper">
-        <Header></Header>
-    <div id="app">
-      <div class="body">
-        <div class="d-flex flex-row">
-          <div class="p-2" style="margin-left:50px">
-          <img class="mx-auto rounded-circle" src="@/assets/avatar.png" style="width:200px">
-            <div class="profileButton-button">
-              <button class="btn btn-lg btn-block" @click="goToUploadPhoto" name="forgotPassword"><u>Uploado Photo</u></button>
+      <Header></Header>
+      <div id="app">
+        <div class="body">
+          <div class="d-flex flex-row">
+            <div class="p-2" style="margin-left:50px">
+              <img class="mx-auto rounded-circle" src="@/assets/avatar.png" style="width:200px">
+              <div class="profileButton-button">
+                <button class="btn btn-lg btn-block" @click="goToUploadPhoto" name="forgotPassword"><u>Uploado Photo</u></button>
+              </div>
             </div>
-          </div>
-          <div class="p-2" style="margin-right:300px">
-            <div class="info-containter" ><h2>{{username}}</h2>
+            <div class="p-2" style="margin-right:300px">
+              <div class="info-containter" ><h2>{{username}}</h2>
                 <div class="reviewButton">
                   <fa :icon="['fas', 'star']"/>
                   <button class="btn btn-lg btn-block" @click="goToReviews" name="goToLogIn">num. Reviews</button>
-                  </div>
-              <div class="about-me"><h7>About me:</h7></div>
-              <div class="row">
-                <div class="col"><fa :icon="['fas', 'location-dot']"/>      Location</div>
-                <div class="w-100"></div>
-                <div class="col"><fa :icon="['fas', 'envelope']"/>      {{email}}</div>
-                <div class="w-100"></div>
-                <div class="col"><fa :icon="['fas', 'house']"/>Num houses</div>
+                </div>
+                <div class="about-me"><h7>About me:</h7></div>
+                <div class="row">
+                  <div class="col"><fa :icon="['fas', 'location-dot']"/>      Location</div>
+                  <div class="w-100"></div>
+                  <div class="col"><fa :icon="['fas', 'envelope']"/>          {{username}}</div>
+                  <div class="w-100"></div>
+                  <div class="col"><fa :icon="['fas', 'house']"/>Num houses</div>
+                </div>
               </div>
             </div>
+            <div class="profile2Button-button" align-content="left">
+              <button class="btn btn-lg btn-block" type="submit" @click="goToEditProfile" name="editProfile" aria-label="Left Align"><fa :icon="['fas', 'pen-to-square']"/><h6>Edit Profile</h6></button>
+              <button class="btn btn-lg btn-block" type="submit" @click="logOut" name="editProfile" aria-label="Left Align"><fa :icon="['fas', 'right-from-bracket']"/><h6>Log out</h6></button>
+            </div>
+            <br>
           </div>
-          <div class="profile2Button-button" align-content="left">
-            <button class="btn btn-lg btn-block" type="submit" @click="goToEditProfile" name="editProfile" aria-label="Left Align"><fa :icon="['fas', 'pen-to-square']"/><h6>Edit Profile</h6></button>
-            <button class="btn btn-lg btn-block" type="submit" @click="logOut" name="editProfile" aria-label="Left Align"><fa :icon="['fas', 'right-from-bracket']"/><h6>Log out</h6></button>
-          </div>
-          <br>
+          <hr>
         </div>
-        <hr>
       </div>
-    </div>
       <Footer></Footer>
     </div>
   </form>
@@ -52,11 +52,11 @@ export default {
   },
   data () {
     return {
-      logged: null,
+      email: null,
       username: null,
+      password: null,
       token: null,
-      street: null,
-      email: null
+      logged: false
     }
   },
   methods: {
@@ -66,8 +66,7 @@ export default {
       this.$router.push({path: '/'})
     },
     goToEditProfile () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/editProfile'})
+      this.$router.push({ path: '/editProfile', query: {username: this.username, logged: this.logged, token: this.token} })
     }
   },
   created () {
@@ -75,7 +74,6 @@ export default {
     this.username = this.$route.query.username
     this.email = this.$route.query.email
     this.token = this.$route.query.token
-    this.street = this.$route.query.street
     if (this.logged === undefined) {
       this.logged = false
     }

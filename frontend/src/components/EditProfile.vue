@@ -1,7 +1,7 @@
 <template>
   <form>
     <div class="flex-wrapper">
-        <Header></Header>
+      <Header></Header>
       <div id="app">
         <div class="body">
           <div class="d-flex flex-row">
@@ -11,24 +11,22 @@
                 <button class="btn btn-lg btn-block" @click="goToUploadPhoto" name="forgotPassword"><u>Uploado Photo</u></button>
               </div>
             </div>
-              <div class="p-2" style="margin-right:300px">
-                <div class="info-containter" >
-                  <div>
-                    <label for="inputEmail">Email</label>
-                    <input type="email" id="inputEmail" class="form-control"
-                           required autofocus>
-                  </div>
-                  <div>
-                    <label for="inputUsername" style="margin-top:20px">Username</label>
-                    <input type="email" id="inputEmail" class="form-control"
-                           required autofocus>
-                  </div>
-                  <div class="group-buttons">
-                    <button class="btn btn-lg btn-block" type="submit" @click="goToUpdateInfo" name="editProfile" aria-label="Left Align">
-                      <h6>Update info</h6></button>
-                  </div>
+            <div class="p-2" style="margin-right:300px">
+              <div class="info-containter" >
+                <div>
+                  <label for="inputEmail">Email</label>
+                  <input type="email" id="inputEmail" class="form-control">
+                </div>
+                <div>
+                  <label for="inputUsername" style="margin-top:20px">Username</label>
+                  <input type="email" id="inputEmail" class="form-control">
+                </div>
+                <div class="group-buttons">
+                  <button class="btn btn-lg btn-block" type="submit" @click="goToUpdateInfo" name="editProfile">
+                    Update info</button>
                 </div>
               </div>
+            </div>
             <div class="changePassword-button" align-content="left">
               <button class="btn btn-lg btn-block" type="submit" @click="goToChangePassword" name="changePassword" aria-label="Left Align"><fa :icon="['fas', 'unlock-alt']"/><h6>Change Password</h6></button>
             </div>
@@ -38,7 +36,7 @@
           </div>
         </div>
       </div>
-        <Footer></Footer>
+      <Footer></Footer>
     </div>
   </form>
 </template>
@@ -47,6 +45,7 @@
 
 import Header from './Header'
 import Footer from './Footer'
+
 export default {
   components: {
     Header,
@@ -54,14 +53,21 @@ export default {
   },
   data () {
     return {
-      addUserForm: {
-        email: null,
-        username: null
-      }
+      email: null,
+      username: null,
+      password: null,
+      token: null,
+      logged: false
     }
   },
-  methods: {
-
+  created () {
+    this.logged = this.$route.query.logged === 'true'
+    this.username = this.$route.query.username
+    this.email = this.$route.query.email
+    this.token = this.$route.query.token
+    if (this.logged === undefined) {
+      this.logged = false
+    }
   }
 }
 </script>
