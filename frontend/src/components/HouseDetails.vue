@@ -39,7 +39,17 @@
                   <hr style="margin-top: -1em;" class="solid"/>
                 </div>
                 <div class="field" style="margin-top: -1em">
-                  <span id="priceContainer" class="text font-semibold"><a>{{house.price}}€</a> day</span>
+                  <div id="fieldRowContainer">
+                    <div id="fieldRow" style="margin-right: 1em">
+                      <span id="priceContainer" class="text font-semibold"><a>{{house.price}}€</a> day</span>
+                    </div>
+                    <div id="fieldRow" style="margin-top: 0.5em;position:absolute;right: 1em;">
+                      <Rating :value="house.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating"></Rating>
+                    </div>
+                  </div>
+                </div>
+                <div class="field">
+                  <hr style="margin-top: -1em;" class="solid"/>
                 </div>
                 <div class="field">
                   <div class="p-float-label">
@@ -50,12 +60,34 @@
                 </div>
                 <div class="field">
                   <div class="p-float-label">
-                    <Calendar id="checkOutDate" :showIcon="true" v-model="v$.checkOutDate.$model" :class="{'p-invalid':v$.checkOutDate.$invalid && submitted}"/>
+                    <Calendar id="checkOutDate" :showIcon="true" v-model="v$.checkOutDate.$model" :class="{'p-invalid':v$.checkOutDate.$invalid && submitted || (checkOutDate !== null && checkInDate >= checkOutDate)}"/>
                     <label for="checkOutDate" :class="{'p-error':v$.checkOutDate.$invalid && submitted}">Check-out*</label>
                   </div>
                   <small v-if="(v$.checkOutDate.$invalid && submitted) || v$.checkOutDate.$pending.$response" class="p-error">{{v$.checkOutDate.required.$message.replace('Value', 'Check-out')}}</small>
+                  <small v-if="checkOutDate !== null && checkInDate >= checkOutDate" class="p-error">Check-out date should be greater than check-in date</small>
+                </div>
+                <div class="field" style="margin-top: -1em;">
+                  <Accordion :multiple="true" :activeIndex="[]">
+                    <AccordionTab header="Description">
+                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                        ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                    </AccordionTab>
+                  </Accordion>
                 </div>
                 <div class="field">
+                  <div id="fieldRowContainer">
+                    <div id="fieldRow" style="margin-right: 1em">
+                      <a>Total</a>
+                    </div>
+                    <div id="fieldRow" style="position:absolute; right: 1em;">
+                      <a>{{totalPrice}}€</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="field">
+                  <hr style="margin-top: -1em;" class="solid"/>
+                </div>
+                <div class="field" style="margin-top: -1em;">
                   <Button id="submitButton" type="submit" label="Reserve" class="mt-2"/>
                 </div>
                 <div class="field" style="margin-top: -1em">
@@ -94,6 +126,7 @@ export default {
       checkInDate: null,
       checkOutDate: null,
       dates2: null,
+      totalPrice: 0,
       house: {
         'city': 'City',
         'street': 'street',
@@ -139,6 +172,19 @@ export default {
       ]
     }
   },
+  watch: {
+    // whenever checkInDate or checkOutDateChenge, these functions will run
+    checkInDate () {
+      if (this.checkOutDate != null) {
+        this.getTotalPrice()
+      }
+    },
+    checkOutDate () {
+      if (this.checkInDate != null) {
+        this.getTotalPrice()
+      }
+    }
+  },
   validations () {
     return {
       checkInDate: {
@@ -157,12 +203,28 @@ export default {
     },
     handleSubmit (isFormValid) {
       this.submitted = true
-      if (isFormValid) {
+      if (isFormValid && this.checkOutDate !== null && this.checkInDate < this.checkOutDate) {
+        alert('Reserve not implemented yet')
       }
     },
     goToLogin () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/login'})
+    },
+    getTotalPrice () {
+      if (this.checkInDate < this.checkOutDate) {
+        var date1 = new Date(this.checkInDate)
+        var date2 = new Date(this.checkOutDate)
+        var differenceInTime = date2.getTime() - date1.getTime()
+        // To calculate the no. of days between two dates
+        var differenceInDays = differenceInTime / (1000 * 3600 * 24)
+        this.totalPrice = differenceInDays * this.house.price
+        if (isNaN(this.totalPrice)) {
+          this.totalPrice = 0
+        }
+      } else {
+        this.totalPrice = 0
+      }
     }
   },
   created () {
@@ -181,10 +243,19 @@ export default {
 <style scoped>
 #houseContainer {
   display: flex;
+  margin-left: 2em;
 }
 
 .houseDetails {
   flex: 1;
+}
+
+#fieldRowContainer {
+  display: flex;
+}
+
+#fieldRow {
+  float: left;
 }
 
 .houseDetails:first-child {
@@ -201,7 +272,7 @@ export default {
 }
 
 #imageHouse{
-  height: 25em;
+  height: 26em;
   border-radius: 2em 2em 0 0;
   border: 5px solid #1c1b29;
 }
@@ -267,14 +338,11 @@ export default {
 
 #tagHost{
   position:absolute;
-  top:18em;
-  left:10em;
+  top:1em;
+  left:1.5em;
 }
 
 #priceContainer{
-  position:absolute;
-  top:1em;
-  left:1.5em;
   font-size: 1em;
 }
 

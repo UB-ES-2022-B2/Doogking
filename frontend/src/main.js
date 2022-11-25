@@ -33,6 +33,8 @@ import ConfirmationService from 'primevue/confirmationservice'
 import ToastService from 'primevue/toastservice'
 import ConfirmPopup from 'primevue/confirmpopup'
 import Galleria from 'primevue/galleria'
+import Accordion from 'primevue/accordion'
+import AccordionTab from 'primevue/accordiontab'
 
 library.add(fas, fab)
 Vue.component('fa', FontAwesomeIcon)
@@ -60,6 +62,8 @@ Vue.component('Dialog ', Dialog)
 Vue.component('Toast', Toast)
 Vue.component('ConfirmPopup', ConfirmPopup)
 Vue.component('Galleria', Galleria)
+Vue.component('Accordion', Accordion)
+Vue.component('AccordionTab', AccordionTab)
 
 /* eslint-disable no-new */
 new Vue({
