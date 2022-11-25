@@ -25,11 +25,21 @@
         <div class="form-demo">
           <div class="flex justify-content-center">
             <div class="card">
-              <h5 class="text-center" style="margin-top: 1em;">{{ house.city}}</h5>
+              <h5 class="text-center" style="margin-top: 1.5em;">{{ house.city}}</h5>
               <a class="text-center" style="text-decoration: none; font-size: 15px; color: #a0a0a0;">{{house.street}}, {{house.street_number}}, {{house.floor}}, {{house.door}}, {{house.house_dimension}}</a>
+              <span id="favContainer" v-if="house.favorite==true">
+                        <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
+                      </span>
+              <span id="favContainer" v-else>
+                        <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
+                      </span>
+              <Tag id="tagHost" :value="house.house_owner_name" icon="pi pi-user" style="color: white; background-color: #2A323D"></Tag>
               <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
                 <div class="field">
                   <hr style="margin-top: -1em;" class="solid"/>
+                </div>
+                <div class="field" style="margin-top: -1em">
+                  <span id="priceContainer" class="text font-semibold"><a>{{house.price}}€</a> day</span>
                 </div>
                 <div class="field">
                   <div class="p-float-label">
@@ -204,7 +214,7 @@ export default {
 }
 
 .form-demo .card {
-  margin-top: 1.5rem;
+  margin-top: 1rem;
   border-radius: 1rem;
   width: 35rem;
   background-color: #3d4755;
@@ -228,5 +238,47 @@ export default {
   .card {
     width: 80%;
   }
+}
+
+#favContainer{
+  position:absolute;
+  top: 0.7em;
+  right: 1em;
+}
+
+#favButtonGrid{
+  color: indianred;
+  background-color: #2A323D;
+  border-color: #2A323D;
+}
+
+#favButtonGrid:hover{
+  color: indianred;
+  background-color: #2A323D;
+  border-color: #2A323D;
+}
+
+#favButtonGrid:focus{
+  color: indianred;
+  background-color: #2A323D;
+  border-color: #2A323D;
+  box-shadow: 0 0 0 0.1em indianred;
+}
+
+#tagHost{
+  position:absolute;
+  top:18em;
+  left:10em;
+}
+
+#priceContainer{
+  position:absolute;
+  top:1em;
+  left:1.5em;
+  font-size: 1em;
+}
+
+#priceContainer a{
+  font-size: 1.5em;
 }
 </style>
