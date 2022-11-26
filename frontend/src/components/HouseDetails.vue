@@ -249,7 +249,7 @@ export default {
     this.showLoader()
     setTimeout(() => {
       this.hideLoader()
-    }, 1000)
+    }, 800)
   }
 }
 </script>
