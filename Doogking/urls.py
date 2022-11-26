@@ -28,11 +28,13 @@ from django.views.static import serve
 router = routers.DefaultRouter()
 router.register(r'profiles', views.ProfileViewSet)
 router.register(r'housing', views.HousingViewSet)
+router.register(r'housing_images', views.HousingImageViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),
     path('api/login/', obtain_auth_token),
     path('admin/', admin.site.urls),
     path('api/reset/', views.ResetView.as_view()),
+    url(r'^api/housing_images/housing/(?P<housing_id>[0-9]+)/$', views.HousingImageViewSet.as_view({'get': 'select'})),
     url(r'^.*$', TemplateView.as_view(template_name='index.html')),
 ]

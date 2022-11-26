@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.exceptions import PermissionDenied
 from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import permissions
-from .models import Profile, Housing
-from .serializers import ProfileSerializer, HousingSerializer
+from .models import Profile, Housing, HousingImage
+from .serializers import ProfileSerializer, HousingSerializer, HousingImageSerializer
 import secrets
 import requests
 
@@ -30,6 +31,30 @@ class HousingViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
+
+class HousingImageViewSet(viewsets.ModelViewSet):
+    queryset = HousingImage.objects.all()
+    serializer_class = HousingImageSerializer
+
+
+    """
+    Definition of a new action which will be associated with the "api/housing_images/housing/<housing_id> endpoint.
+     It will be used to get only the images that belong to a house with a certain <housing_id>.
+    """
+    @action(detail=False)
+    def select(self, request, housing_id=None):
+        queryset = HousingImage.objects.all().filter(housing__house_id=housing_id)
+        serializer = HousingImageSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
+    
+    def get_permissions(self):
+        if self.action == 'list' or self.action == 'retrieve' or self.action == 'select':
+            permission_classes = [permissions.AllowAny]
+        else:
+            permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+    
 
 class ResetView(APIView):
     queryset = Profile.objects.all()
