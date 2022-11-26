@@ -35,6 +35,7 @@ import ConfirmPopup from 'primevue/confirmpopup'
 import Galleria from 'primevue/galleria'
 import Accordion from 'primevue/accordion'
 import AccordionTab from 'primevue/accordiontab'
+import ProgressSpinner from 'primevue/progressspinner'
 
 library.add(fas, fab)
 Vue.component('fa', FontAwesomeIcon)
@@ -64,6 +65,7 @@ Vue.component('ConfirmPopup', ConfirmPopup)
 Vue.component('Galleria', Galleria)
 Vue.component('Accordion', Accordion)
 Vue.component('AccordionTab', AccordionTab)
+Vue.component('ProgressSpinner', ProgressSpinner)
 
 /* eslint-disable no-new */
 new Vue({

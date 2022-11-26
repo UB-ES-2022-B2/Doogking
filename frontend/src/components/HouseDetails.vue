@@ -1,7 +1,9 @@
 <template>
   <div class="flex-wrapper">
     <Header></Header>
-    <div id="houseContainer">
+    <div v-if="loaderActive===true" style="position: absolute; top: 24%; left: 49%">
+        <LoadingSpinner :active="true"/></div>
+    <div id="houseContainer" v-else>
       <div id="galleriaContainer" class="houseDetails">
         <Galleria id="galleriaHouse" :value="images" :responsiveOptions="responsiveOptions" :numVisible="3"
                   :showItemNavigators="true" :showItemNavigatorsOnHover="true"
@@ -106,6 +108,7 @@
 <script>
 import Header from './Header'
 import Footer from './Footer'
+import LoadingSpinner from './LoadingSpinner'
 import axios from 'axios'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
@@ -114,7 +117,8 @@ export default {
   name: 'HouseDetails',
   components: {
     Header,
-    Footer
+    Footer,
+    LoadingSpinner
   },
   setup: () => ({ v$: useVuelidate() }),
   data () {
@@ -127,6 +131,7 @@ export default {
       checkOutDate: null,
       dates2: null,
       totalPrice: 0,
+      loaderActive: false,
       house: {
         'city': 'City',
         'street': 'street',
@@ -224,6 +229,12 @@ export default {
       } else {
         this.totalPrice = 0
       }
+    },
+    showLoader () {
+      this.loaderActive = true
+    },
+    hideLoader () {
+      this.loaderActive = false
     }
   },
   created () {
@@ -235,6 +246,10 @@ export default {
       this.logged = false
     }
     this.getHouse()
+    this.showLoader()
+    setTimeout(() => {
+      this.hideLoader()
+    }, 1000)
   }
 }
 </script>

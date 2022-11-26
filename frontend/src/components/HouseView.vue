@@ -76,6 +76,7 @@
                         <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
                       </span>
                 <span id="priceContainer" class="text font-semibold"><a>{{slotProps.data.price}}€</a> day</span>
+                <span id="loaderContainer" v-if="loaderActive===true"><LoadingSpinnerGrid :active="true"/></span>
               </div>
               <div id="card-details" class="details">
                 <div class="flex align-items-center justify-content-between">
@@ -97,18 +98,24 @@
 
 <script>
 import axios from 'axios'
+import LoadingSpinnerGrid from './LoadingSpinnerGrid'
+
 export default {
   name: 'App',
+  components: {
+    LoadingSpinnerGrid
+  },
   data () {
     return {
       logged: null,
       username: null,
       token: null,
-      houses: [{}],
+      houses: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
       layout: 'grid',
       checkInDate: null,
       checkOutDate: null,
-      selectedCities: null,
+      loaderActive: false,
+      selectedCities: [],
       cities: [
         {name: 'Barcelona', code: 'BCN'},
         {name: 'Girona', code: 'GI'},
@@ -167,6 +174,12 @@ export default {
       const headers = {'Access-Control-Allow-Origin': '*'}
       const pathHouses = 'https://doogking.azurewebsites.net/api/housing/'
       axios.get(pathHouses, headers).then(response => (this.houses = response.data))
+    },
+    showLoader () {
+      this.loaderActive = true
+    },
+    hideLoader () {
+      this.loaderActive = false
     }
   },
   created () {
@@ -177,6 +190,10 @@ export default {
       this.logged = false
     }
     this.getHouses()
+    this.showLoader()
+    setTimeout(() => {
+      this.hideLoader()
+    }, 500)
   }
 }
 </script>
@@ -396,6 +413,12 @@ export default {
   position:absolute;
   top:0.5em;
   right:0.5em;
+}
+
+#loaderContainer{
+  position:absolute;
+  top:45%;
+  left:45%;
 }
 
 #priceContainer{
