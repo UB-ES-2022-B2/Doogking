@@ -107,6 +107,7 @@ export default {
       checkInDate: null,
       checkOutDate: null,
       selectedCities: null,
+      h: [],
       cities: [
         {name: 'Barcelona', code: 'BCN'},
         {name: 'Girona', code: 'GI'},
@@ -146,6 +147,18 @@ export default {
         this.checkOutDate = null
         this.$toast.add({severity: 'error', summary: 'Error message', detail: 'Check-out date should be greater than check-in date', life: 2000})
       }
+      if (this.selectedCities.length !== 0) {
+        for (let i = 0; i < this.selectedCities.length; i++) {
+          for (let j = 0; j < this.houses.length; j++) {
+            if (this.selectedCities[i].name === this.houses[j].city) {
+              this.h.push(this.houses[j])
+            }
+          }
+        } this.houses = this.h
+      } else {
+        this.houses.length = 0
+        this.getHouses()
+      } this.selectedCities.length = 0
     },
     goToLogin () {
       // eslint-disable-next-line standard/object-curly-even-spacing
