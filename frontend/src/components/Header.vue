@@ -5,8 +5,8 @@
       <!-- Navbar main links -->
       <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <a class="navbar-brand" @click="goToHomepage" style="cursor: pointer; font-family: 'Brush Script MT'; font-size: 1.5em;">
-            <img src="@/assets/logoDog.png" alt="" width="30" height="24" class="d-inline-block align-top" style="color: #8DD0FF;">
+          <a class="navbar-brand" @click="goToHomepage" id="main_homepage" style="cursor: pointer; font-family: 'Brush Script MT'; font-size: 1.5em;">
+            <img src="@/assets/logoDog.png" id="main_logo" alt="" width="30" height="24" class="d-inline-block align-top" style="color: #8DD0FF;">
             Doogking
           </a>
           <li class="nav-item">

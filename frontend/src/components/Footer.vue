@@ -5,9 +5,9 @@
         <div class="footer-col">
           <h4>DoogKing</h4>
           <ul>
-            <li><a href="#" @click="goToAboutUs">About Us</a></li>
+            <li><a href="#" @click="goToAboutUs" id="aboutUs" target="about_us_window">About Us</a></li>
             <li><a href="#">Services</a></li>
-            <li><a href="#" @click="goToPrivacyPolicy">Privacy policy</a></li>
+            <li><a href="#" @click="goToPrivacyPolicy" id="privacyPolicy">Privacy policy</a></li>
             <li><a href="#">Register</a></li>
           </ul>
         </div>
