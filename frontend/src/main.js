@@ -36,6 +36,10 @@ import Galleria from 'primevue/galleria'
 import Accordion from 'primevue/accordion'
 import AccordionTab from 'primevue/accordiontab'
 import ProgressSpinner from 'primevue/progressspinner'
+import Password from 'primevue/password'
+import InputText from 'primevue/inputtext'
+import Checkbox from 'primevue/checkbox'
+import SplitButton from 'primevue/splitbutton'
 
 library.add(fas, fab)
 Vue.component('fa', FontAwesomeIcon)
@@ -66,6 +70,10 @@ Vue.component('Galleria', Galleria)
 Vue.component('Accordion', Accordion)
 Vue.component('AccordionTab', AccordionTab)
 Vue.component('ProgressSpinner', ProgressSpinner)
+Vue.component('Password', Password)
+Vue.component('InputText', InputText)
+Vue.component('Checkbox', Checkbox)
+Vue.component('SplitButton', SplitButton)
 
 /* eslint-disable no-new */
 new Vue({

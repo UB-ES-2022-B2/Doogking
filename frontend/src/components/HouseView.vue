@@ -70,11 +70,11 @@
                   </figcaption>
                 </div>
                 <span id="favContainer" v-if="slotProps.data.favorite==true">
-                        <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
-                      </span>
+                      <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
+                </span>
                 <span id="favContainer" v-else>
                         <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
-                      </span>
+                </span>
                 <span id="priceContainer" class="text font-semibold"><a>{{slotProps.data.price}}€</a> day</span>
                 <span id="loaderContainer" v-if="loaderActive===true">
                   <LoadingSpinnerGrid :active="true"/>

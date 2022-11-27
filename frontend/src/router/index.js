@@ -7,6 +7,8 @@ import Register from '../components/Register'
 import ForgotPassword from '../components/ForgotPassword'
 import Reset from '../components/Reset'
 import HouseDetails from '../components/HouseDetails'
+import PrivacyPolicy from '../components/PrivacyPolicy'
+import AboutUs from '../components/AboutUs'
 
 Vue.use(Router)
 
@@ -43,6 +45,16 @@ export default new Router({
       path: '/housedetails',
       name: 'HouseDetails',
       component: HouseDetails
+    },
+    {
+      path: '/privacyPolicy',
+      name: 'privacyPolicy',
+      component: PrivacyPolicy
+    },
+    {
+      path: '/aboutUs',
+      name: 'AboutUs',
+      component: AboutUs
     }
   ]
 })

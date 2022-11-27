@@ -6,3 +6,8 @@ django-cors-headers
 whitenoise
 django-storages[azure]
 Pillow
+webdriver-manager
+packaging
+selenium==3.141.0
+pytest-django
+flake8
