@@ -2,19 +2,19 @@
   <div class="flex-wrapper">
     <Header></Header>
     <div v-if="loaderActive===true" style="position: absolute; top: 24%; left: 49%">
-        <LoadingSpinner :active="true"/></div>
+      <LoadingSpinner :active="true"/></div>
     <div id="houseContainer" v-else>
       <div id="galleriaContainer" class="houseDetails">
-        <Galleria id="galleriaHouse" :value="images" :responsiveOptions="responsiveOptions" :numVisible="3"
+        <Galleria id="galleriaHouse" :value="houseImages" :responsiveOptions="responsiveOptions" :numVisible="3"
                   :showItemNavigators="true" :showItemNavigatorsOnHover="true"
                   :circular="true" :autoPlay="true" :transitionInterval="3000"
                   style="max-width: 39em; margin:1em;">
           <template #item="{item}">
-            <img id="imageHouse" :src="item.itemImageSrc" :alt="item.alt" style="width: 100%; display: block;" />
+            <img id="imageHouse" :src="item.image" :alt="item.alt" style="width: 100%; display: block;" />
           </template>
           <template #thumbnail="{item}">
             <div class="grid grid-nogutter justify-content-center">
-              <img id="thumbnailImage" :src="item.thumbnailImageSrc" :alt="item.alt" style="display: block;" />
+              <img id="thumbnailImage" :src="item.image" :alt="item.alt" style="display: block;" />
             </div>
           </template>
           <template #caption="{item}">
@@ -25,6 +25,36 @@
       </div>
       <div id="detailsContainer" class="houseDetails">
         <div class="form-demo">
+          <Dialog :visible="showSuccessMessage" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
+            <div class="flex align-items-center flex-column pt-6 px-3">
+              <i class="pi pi-check-circle" :style="{fontSize: '5rem', color: 'var(--green-500)' }"></i>
+              <h5 style="margin-top: 1em">Reservation Successful!</h5>
+              <p style="text-align: center">
+                Reservation created with Start date: <b>{{ this.checkInDate }}</b> and End date: <b>{{ this.checkOutDate }}</b>
+              </p>
+            </div>
+            <template #footer>
+              <div class="flex justify-content-center">
+                <Button label="OK" @click="toggleDialogSuccess" class="p-button-text" />
+              </div>
+            </template>
+          </Dialog>
+
+          <Dialog :visible="showErrorMessage" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
+            <div class="flex align-items-center flex-column pt-6 px-3">
+              <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
+              <h5 style="margin-top: 1em">Reservation Error!</h5>
+              <p style="text-align: center">
+                There's a conflicting reservation in this date. Please enter a valid Check-in and Check-out date
+              </p>
+            </div>
+            <template #footer>
+              <div class="flex justify-content-center">
+                <Button label="OK" @click="toggleDialogError" class="p-button-text" />
+              </div>
+            </template>
+          </Dialog>
+
           <div class="flex justify-content-center">
             <div class="card">
               <h5 class="text-center" style="margin-top: 1.5em;">{{ house.city}}</h5>
@@ -74,8 +104,7 @@
                 <div class="field" style="margin-top: -1em;">
                   <Accordion :multiple="true" :activeIndex="[]">
                     <AccordionTab header="Description">
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                        ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                      <p>{{house.description}}</p>
                     </AccordionTab>
                   </Accordion>
                 </div>
@@ -137,6 +166,10 @@ export default {
       validInDate: true,
       validOutDate: true,
       loaderActive: false,
+      submitted: false,
+      showSuccessMessage: false,
+      showErrorMessage: false,
+      error: '',
       house: {
         'city': 'City',
         'street': 'street',
@@ -145,27 +178,7 @@ export default {
         'door': 'door',
         'house_dimension': 'house_dimension'
       },
-      submitted: false,
-      images: [
-        {
-          'itemImageSrc': 'https://doogkingteststorage.blob.core.windows.net/media/01niu-refugi_NoQaX10.jpg',
-          'thumbnailImageSrc': 'https://doogkingteststorage.blob.core.windows.net/media/01niu-refugi_NoQaX10.jpg',
-          'alt': 'Description for Image 1',
-          'title': 'Title 1'
-        },
-        {
-          'itemImageSrc': 'https://doogkingteststorage.blob.core.windows.net/media/L_015738_hotel-rural-catalunya.jpg',
-          'thumbnailImageSrc': 'https://doogkingteststorage.blob.core.windows.net/media/L_015738_hotel-rural-catalunya.jpg',
-          'alt': 'Description for Image 1',
-          'title': 'Title 1'
-        },
-        {
-          'itemImageSrc': 'https://doogkingteststorage.blob.core.windows.net/media/15206073607515_9DjC83v.jpg',
-          'thumbnailImageSrc': 'https://doogkingteststorage.blob.core.windows.net/media/15206073607515_9DjC83v.jpg',
-          'alt': 'Description for Image 2',
-          'title': 'Title 2'
-        }
-      ],
+      houseImages: [{}],
       responsiveOptions: [
         {
           breakpoint: '1024px',
@@ -213,9 +226,34 @@ export default {
       const pathHouses = 'https://doogking.azurewebsites.net/api/housing/' + this.house_id + '/'
       axios.get(pathHouses, headers).then(response => (this.house = response.data))
     },
+    getHouseImages () {
+      const headers = {'Access-Control-Allow-Origin': '*'}
+      const pathImageHouses = 'https://doogking.azurewebsites.net/api/housing_images/housing/' + this.house_id + '/'
+      axios.get(pathImageHouses, headers).then(response => (this.houseImages = response.data))
+    },
+    makeReservation () {
+      const headers = {'Access-Control-Allow-Origin': '*'}
+      const parameters = {
+        housing: this.house_id,
+        client: this.username,
+        start_date: new Date(this.checkInDate),
+        end_date: new Date(this.checkInDate)
+      }
+      const path = 'https://doogking.azurewebsites.net/api/reservations/'
+      axios.post(path, parameters, headers)
+        .then((res) => {
+          this.showSuccessMessage = true
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          this.error = error
+          this.showErrorMessage = true
+        })
+    },
     handleSubmit (isFormValid) {
       this.submitted = true
       if (isFormValid && this.checkOutDate !== null && this.checkInDate < this.checkOutDate) {
+        this.makeReservation()
       }
     },
     goToLogin () {
@@ -265,6 +303,22 @@ export default {
       if (this.logged === false) {
         this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites', life: 2000})
       }
+    },
+    resetForm () {
+      this.checkOutDate = null
+      this.checkInDate = null
+    },
+    toggleDialogSuccess () {
+      this.showSuccessMessage = !this.showSuccessMessage
+      if (!this.showSuccessMessage) {
+        this.resetForm()
+      }
+    },
+    toggleDialogError () {
+      this.showErrorMessage = !this.showErrorMessage
+      if (!this.showErrorMessage) {
+        this.resetForm()
+      }
     }
   },
   created () {
@@ -276,6 +330,7 @@ export default {
       this.logged = false
     }
     this.getHouse()
+    this.getHouseImages()
     this.showLoader()
     setTimeout(() => {
       this.hideLoader()
