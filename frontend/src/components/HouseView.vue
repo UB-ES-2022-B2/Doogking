@@ -76,7 +76,9 @@
                         <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
                       </span>
                 <span id="priceContainer" class="text font-semibold"><a>{{slotProps.data.price}}€</a> day</span>
-                <span id="loaderContainer" v-if="loaderActive===true"><LoadingSpinnerGrid :active="true"/></span>
+                <span id="loaderContainer" v-if="loaderActive===true">
+                  <LoadingSpinnerGrid :active="true"/>
+                </span>
               </div>
               <div id="card-details" class="details">
                 <div class="flex align-items-center justify-content-between">
@@ -417,7 +419,7 @@ export default {
 
 #loaderContainer{
   position:absolute;
-  top:45%;
+  top:40%;
   left:45%;
 }
 

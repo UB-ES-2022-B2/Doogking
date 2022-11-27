@@ -29,6 +29,7 @@
             <div class="card">
               <h5 class="text-center" style="margin-top: 1.5em;">{{ house.city}}</h5>
               <a class="text-center" style="text-decoration: none; font-size: 15px; color: #a0a0a0;">{{house.street}}, {{house.street_number}}, {{house.floor}}, {{house.door}}, {{house.house_dimension}}</a>
+              <Toast/>
               <span id="favContainer" v-if="house.favorite==true">
                         <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
                       </span>
@@ -55,18 +56,20 @@
                 </div>
                 <div class="field">
                   <div class="p-float-label">
-                    <Calendar id="checkInDate" :showIcon="true" v-model="v$.checkInDate.$model" :class="{'p-invalid':v$.checkInDate.$invalid && submitted}"/>
+                    <Calendar id="checkInDate" :showIcon="true" v-model="v$.checkInDate.$model" :class="{'p-invalid':v$.checkInDate.$invalid && submitted || (checkInDate !== null && !validInDate)}"/>
                     <label for="checkOutDate" :class="{'p-error':v$.checkInDate.$invalid && submitted}">Check-in*</label>
                   </div>
                   <small v-if="(v$.checkInDate.$invalid && submitted) || v$.checkInDate.$pending.$response" class="p-error">{{v$.checkInDate.required.$message.replace('Value', 'Check-in')}}</small>
+                  <small v-if="checkInDate !== null && !validInDate" class="p-error">Check-in date has to be greater or equal than current date.</small>
                 </div>
                 <div class="field">
                   <div class="p-float-label">
-                    <Calendar id="checkOutDate" :showIcon="true" v-model="v$.checkOutDate.$model" :class="{'p-invalid':v$.checkOutDate.$invalid && submitted || (checkOutDate !== null && checkInDate >= checkOutDate)}"/>
+                    <Calendar id="checkOutDate" :showIcon="true" v-model="v$.checkOutDate.$model" :class="{'p-invalid':v$.checkOutDate.$invalid && submitted || (checkOutDate !== null && checkInDate >= checkOutDate) || (checkOutDate !== null && !validOutDate)}"/>
                     <label for="checkOutDate" :class="{'p-error':v$.checkOutDate.$invalid && submitted}">Check-out*</label>
                   </div>
                   <small v-if="(v$.checkOutDate.$invalid && submitted) || v$.checkOutDate.$pending.$response" class="p-error">{{v$.checkOutDate.required.$message.replace('Value', 'Check-out')}}</small>
-                  <small v-if="checkOutDate !== null && checkInDate >= checkOutDate" class="p-error">Check-out date should be greater than check-in date</small>
+                  <small v-if="checkOutDate !== null && checkInDate >= checkOutDate" class="p-error">Check-out date should be greater than check-in date.</small>
+                  <small v-if="checkOutDate !== null && !validOutDate" class="p-error">Check-out date has to be greater or equal than current date.</small>
                 </div>
                 <div class="field" style="margin-top: -1em;">
                   <Accordion :multiple="true" :activeIndex="[]">
@@ -93,7 +96,7 @@
                   <Button id="submitButton" type="submit" label="Reserve" class="mt-2"/>
                 </div>
                 <div class="field" style="margin-top: -1em" v-if="this.logged===false">
-                  <label>Want to reserve? <a class="link" @click="goToLogin" style="cursor: pointer; color: #8DD0FF; text-decoration: none; margin-top: -1em">Login now!</a></label>
+                  <label>Want to reserve? <a id="loginLink" class="link" @click="goToLogin" style="cursor: pointer; color: #8DD0FF; text-decoration: none; margin-top: -1em">Login now!</a></label>
                 </div>
               </form>
             </div>
@@ -131,6 +134,8 @@ export default {
       checkOutDate: null,
       dates2: null,
       totalPrice: 0,
+      validInDate: true,
+      validOutDate: true,
       loaderActive: false,
       house: {
         'city': 'City',
@@ -183,11 +188,13 @@ export default {
       if (this.checkOutDate != null) {
         this.getTotalPrice()
       }
+      this.checkInDateValid()
     },
     checkOutDate () {
       if (this.checkInDate != null) {
         this.getTotalPrice()
       }
+      this.checkOutDateValid()
     }
   },
   validations () {
@@ -215,6 +222,24 @@ export default {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/login'})
     },
+    checkInDateValid () {
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      if (this.checkInDate < today) {
+        this.validInDate = false
+      } else {
+        this.validInDate = true
+      }
+    },
+    checkOutDateValid () {
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      if (this.checkOutDate < today) {
+        this.validOutDate = false
+      } else {
+        this.validOutDate = true
+      }
+    },
     getTotalPrice () {
       if (this.checkInDate < this.checkOutDate) {
         var date1 = new Date(this.checkInDate)
@@ -235,6 +260,11 @@ export default {
     },
     hideLoader () {
       this.loaderActive = false
+    },
+    changeFavorite () {
+      if (this.logged === false) {
+        this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites', life: 2000})
+      }
     }
   },
   created () {
