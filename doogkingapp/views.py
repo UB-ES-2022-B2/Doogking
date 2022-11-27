@@ -5,8 +5,10 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import permissions
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
 from .models import Profile, Housing, HousingImage, Reservation
-from .serializers import ProfileSerializer, HousingSerializer, HousingImageSerializer, ReservationSerializer, CustomerReservationSerializer
+from .serializers import ProfileSerializer, CurrentProfileSerializer, HousingSerializer, HousingImageSerializer, ReservationSerializer, CustomerReservationSerializer
 import secrets
 import requests
 
@@ -126,3 +128,9 @@ class ResetView(APIView):
         else:
             raise PermissionDenied("Email and reset token do not match!")
 
+class ObtainAuthTokenUser(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        response = super(ObtainAuthTokenUser, self).post(request, *args, **kwargs)
+        token = Token.objects.get(key=response.data['token'])
+        user = Profile.objects.get(id=token.user_id)
+        return Response({'token': token.key, 'profile': CurrentProfileSerializer(user).data })

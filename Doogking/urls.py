@@ -33,7 +33,7 @@ router.register(r'reservations', views.ReservationViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('api/login/', obtain_auth_token),
+    path('api/login/', views.ObtainAuthTokenUser.as_view()),
     path('admin/', admin.site.urls),
     path('api/reset/', views.ResetView.as_view()),
     url(r'^api/housing_images/housing/(?P<housing_id>[0-9]+)/$', views.HousingImageViewSet.as_view({'get': 'select'})),

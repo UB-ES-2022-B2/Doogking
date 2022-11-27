@@ -14,6 +14,11 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
         user.save()
         return user
 
+class CurrentProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['id', 'email', 'first_name', 'last_name']
+
 class HousingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Housing
