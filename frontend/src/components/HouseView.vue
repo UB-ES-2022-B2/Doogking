@@ -147,7 +147,11 @@ export default {
         this.checkOutDate = null
         this.$toast.add({severity: 'error', summary: 'Error message', detail: 'Check-out date should be greater than check-in date', life: 2000})
       }
+      if (this.houses.length !== 15) {
+        this.getHouses()
+      }
       if (this.selectedCities.length !== 0) {
+        this.h.length = 0
         for (let i = 0; i < this.selectedCities.length; i++) {
           for (let j = 0; j < this.houses.length; j++) {
             if (this.selectedCities[i].name === this.houses[j].city) {
