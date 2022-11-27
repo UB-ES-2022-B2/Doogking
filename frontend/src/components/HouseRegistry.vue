@@ -2,6 +2,26 @@
   <div class="flex-wrapper">
     <Header></Header>
     <Toast />
+    <div>
+        <b-form >
+          <b-form-group
+            location="b-form-group"
+            label="Location"
+            label-for="input-1"
+          >
+            <b-form-input
+              id="input-1"
+              v-model="location"
+              type="location"
+              placeholder="Introduce la ubicación"
+              required
+            ></b-form-input>
+          </b-form-group>
+
+          <b-button type="submit" variant="primary">Post</b-button>
+          <b-button type="reset" variant="danger">Cancel</b-button>
+        </b-form>
+    </div>
     <FileUpload name="demo[]" :customUpload="true" @uploader="myUploader($event)" :multiple="true" accept="image/*" :maxFileSize="1000000">
       <template #empty>
         <div class="flex align-items-center justify-content-center flex-column">
