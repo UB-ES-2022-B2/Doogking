@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.exceptions import PermissionDenied
 from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import permissions
-from .models import Profile, Housing
-from .serializers import ProfileSerializer, HousingSerializer
+from .models import Profile, Housing, HousingImage, Reservation
+from .serializers import ProfileSerializer, HousingSerializer, HousingImageSerializer, ReservationSerializer, CustomerReservationSerializer
 import secrets
 import requests
 
@@ -30,6 +31,68 @@ class HousingViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
+
+class HousingImageViewSet(viewsets.ModelViewSet):
+    queryset = HousingImage.objects.all()
+    serializer_class = HousingImageSerializer
+
+
+    """
+    Definition of a new action which will be associated with the "api/housing_images/housing/<housing_id> endpoint.
+     It will be used to get only the images that belong to a house with a certain <housing_id>.
+    """
+    @action(detail=False)
+    def select(self, request, housing_id=None):
+        queryset = HousingImage.objects.all().filter(housing__house_id=housing_id)
+        serializer = HousingImageSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
+    
+    def get_permissions(self):
+        if self.action == 'list' or self.action == 'retrieve' or self.action == 'select':
+            permission_classes = [permissions.AllowAny]
+        else:
+            permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+class ReservationViewSet(viewsets.ModelViewSet):
+    queryset = Reservation.objects.all()
+    serializer_class = ReservationSerializer
+
+    def get_permissions(self):
+        if self.action == 'list' or self.action == 'retrieve':
+            permission_classes = [permissions.AllowAny]
+        else:
+            permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+    def get_queryset(self):
+        queryset = Reservation.objects.all()
+
+        housing_id = self.request.query_params.get('housing')
+        owner_id = self.request.query_params.get('owner')
+        customer_id = self.request.query_params.get('customer')
+
+        # Filter by housing if
+        if housing_id:
+            queryset = queryset.filter(housing__house_id=housing_id)
+        
+        # Filter by owner id
+        if owner_id:
+            # If the authenticated user is the owner, show client datails in each reservation
+            if str(self.request.user.id) == owner_id: 
+                self.serializer_class = CustomerReservationSerializer
+            queryset = queryset.filter(housing__house_owner__id=owner_id)
+
+        # Filter by customer id (you can only query your own reservations) 
+        if customer_id:
+            # Check if the authenticated user id is the same as the query id
+            if str(self.request.user.id) == customer_id: 
+                self.serializer_class = CustomerReservationSerializer
+                queryset = queryset.filter(customer__id=customer_id)
+            else:
+                raise PermissionDenied("You can't access other customers reservations!")
+        return queryset
+    
 
 class ResetView(APIView):
     queryset = Profile.objects.all()
@@ -62,5 +125,4 @@ class ResetView(APIView):
             return Response({"message": "Password successfully changed!"})
         else:
             raise PermissionDenied("Email and reset token do not match!")
-
 

@@ -30,8 +30,8 @@ class Housing(models.Model):
     house_dimension = models.IntegerField()
     price = models.IntegerField(default=0)
     rating = models.IntegerField(default=-1)
+    description = models.TextField(blank=True)
     house_owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    image = models.ImageField(storage=AzureStorage, default='default.svg')
 
     def __str__(self):
         return " ".join([self.city, self.street, self.street_number])
@@ -39,6 +39,10 @@ class Housing(models.Model):
     @property
     def house_owner_name(self):
         return " ".join([self.house_owner.first_name, self.house_owner.last_name])
+
+    @property 
+    def image(self):
+        return str(HousingImage.objects.filter(housing=self).get(index=0).image.url)
 
     class Meta:
         constraints = [
@@ -51,3 +55,24 @@ class Housing(models.Model):
                 name="Price must be a positive integer",
             )
         ]
+
+class HousingImage(models.Model):
+    id = models.AutoField(primary_key=True)
+    housing = models.ForeignKey(Housing, on_delete=models.CASCADE)
+    index = models.IntegerField(default=0)
+    image = models.ImageField(storage=AzureStorage, default='default.svg')
+
+    def __str__(self):
+        return " ".join([str(self.housing), str(self.index), str(self.image)])
+
+
+class Reservation(models.Model):
+    id = models.AutoField(primary_key=True)
+    customer = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    housing = models.ForeignKey(Housing, on_delete=models.CASCADE)
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+    def __str__(self):
+        return " ".join([str(self.housing), str(self.start_date), "--", str(self.end_date)])
+

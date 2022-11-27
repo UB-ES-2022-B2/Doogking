@@ -6,6 +6,7 @@ import process from 'shelljs'
 import Register from '../components/Register'
 import ForgotPassword from '../components/ForgotPassword'
 import Reset from '../components/Reset'
+import HouseDetails from '../components/HouseDetails'
 import PrivacyPolicy from '../components/PrivacyPolicy'
 import AboutUs from '../components/AboutUs'
 
@@ -41,7 +42,11 @@ export default new Router({
       component: Reset
     },
     {
-
+      path: '/housedetails',
+      name: 'HouseDetails',
+      component: HouseDetails
+    },
+    {
       path: '/privacyPolicy',
       name: 'privacyPolicy',
       component: PrivacyPolicy
@@ -50,7 +55,6 @@ export default new Router({
       path: '/aboutUs',
       name: 'AboutUs',
       component: AboutUs
-
     }
   ]
 })

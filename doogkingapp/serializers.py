@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Profile, Housing
+from .models import Profile, Housing, HousingImage, Reservation
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -18,4 +18,18 @@ class HousingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Housing
         fields = ['url', 'house_id', 'city', 'street', 'street_number', 'floor', 'door', 'house_dimension', 'house_owner', 'house_owner_name', 'price', 'rating', 'image']
-        
+       
+class HousingImageSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = HousingImage
+        fields = ['housing', 'image', 'index']
+
+class ReservationSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Reservation
+        fields = ['housing', 'start_date', 'end_date']
+
+class CustomerReservationSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Reservation
+        fields = ['housing', 'customer', 'start_date', 'end_date']
