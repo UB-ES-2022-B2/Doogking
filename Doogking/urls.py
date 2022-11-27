@@ -34,5 +34,6 @@ urlpatterns = [
     path('api/login/', obtain_auth_token),
     path('admin/', admin.site.urls),
     path('api/reset/', views.ResetView.as_view()),
+    path('api/delete/<int:id>', views. ProfileViewSet.delete, name='delete'),
     url(r'^.*$', TemplateView.as_view(template_name='index.html')),
 ]

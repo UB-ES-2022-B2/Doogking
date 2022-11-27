@@ -18,7 +18,15 @@ class ProfileViewSet(viewsets.ModelViewSet):
             permission_classes = [permissions.AllowAny]
         else:
             permission_classes = [permissions.IsAdminUser]
-        return [permission() for permission in permission_classes]
+        return [permission() for permission in permission_classes]\
+
+    @api_view(('DELETE',))
+    def delete(request, id):
+        profile = Profile.objects.get(id=id)
+        if profile:
+            profile.delete()
+            return Response({"message": "Profile deleted"})
+
 
 class HousingViewSet(viewsets.ModelViewSet):
     queryset = Housing.objects.all()
