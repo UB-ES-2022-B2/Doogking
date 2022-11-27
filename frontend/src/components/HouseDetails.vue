@@ -45,7 +45,7 @@
               <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
               <h5 style="margin-top: 1em">Reservation Error!</h5>
               <p style="text-align: center">
-                There's a conflicting reservation in this date. Please enter a valid Check-in and Check-out date
+                There's a conflicting reservation with this date. Please enter a valid Check-in and Check-out date
               </p>
             </div>
             <template #footer>
@@ -101,13 +101,15 @@
                   <small v-if="checkOutDate !== null && checkInDate >= checkOutDate" class="p-error">Check-out date should be greater than check-in date.</small>
                   <small v-if="checkOutDate !== null && !validOutDate" class="p-error">Check-out date has to be greater or equal than current date.</small>
                 </div>
-                <div class="field" style="margin-top: -1em;">
+                <div class="field" style="margin-top:-0.2em;">
                   <Accordion :multiple="true" :activeIndex="[]">
                     <AccordionTab header="Description">
                       <p>{{house.description}}</p>
                     </AccordionTab>
                   </Accordion>
                 </div>
+                <div class="field" style="margin-top: 3.2em" v-if="this.logged===true"></div>
+                <div class="field" style="margin-top: -0.5em" v-else></div>
                 <div class="field">
                   <div id="fieldRowContainer">
                     <div id="fieldRow" style="margin-right: 1em">
@@ -196,7 +198,7 @@ export default {
     }
   },
   watch: {
-    // whenever checkInDate or checkOutDateChenge, these functions will run
+    // whenever checkInDate or checkOutDate change, these functions will run
     checkInDate () {
       if (this.checkOutDate != null) {
         this.getTotalPrice()
@@ -232,7 +234,8 @@ export default {
       axios.get(pathImageHouses, headers).then(response => (this.houseImages = response.data))
     },
     makeReservation () {
-      const headers = {'Access-Control-Allow-Origin': '*'}
+      const headers = {'Access-Control-Allow-Origin': '*',
+        'Authentication': 'Token ' + this.token}
       const parameters = {
         housing: this.house_id,
         client: this.username,
