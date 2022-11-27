@@ -29,6 +29,7 @@ router = routers.DefaultRouter()
 router.register(r'profiles', views.ProfileViewSet)
 router.register(r'housing', views.HousingViewSet)
 router.register(r'housing_images', views.HousingImageViewSet)
+router.register(r'reservations', views.ReservationViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),

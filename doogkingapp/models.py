@@ -64,3 +64,15 @@ class HousingImage(models.Model):
 
     def __str__(self):
         return " ".join([str(self.housing), str(self.index), str(self.image)])
+
+
+class Reservation(models.Model):
+    id = models.AutoField(primary_key=True)
+    customer = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    housing = models.ForeignKey(Housing, on_delete=models.CASCADE)
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+    def __str__(self):
+        return " ".join([str(self.housing), str(self.start_date), "--", str(self.end_date)])
+
