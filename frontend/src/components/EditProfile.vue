@@ -13,13 +13,15 @@
             </div>
             <div class="p-2" style="margin-right:300px">
               <div class="info-containter" >
-                <div>
+                <div class="form-label-group">
                   <label for="inputEmail">Email</label>
-                  <input type="email" id="inputEmail" class="form-control">
+                  <input type="username" id="inputUsername" class="form-control"
+                         autofocus v-model="addUserForm.email" aria-describedby="inputGroupPrepend2" >
                 </div>
-                <div>
-                  <label for="inputUsername" style="margin-top:20px">Username</label>
-                  <input type="email" id="inputEmail" class="form-control">
+                <div class="form-label-group">
+                  <label for="inputEmail">Username</label>
+                  <input type="username" id="inputUsername" class="form-control"
+                         autofocus v-model="addUserForm.username" aria-describedby="inputGroupPrepend2" >
                 </div>
                 <div class="group-buttons">
                   <button class="btn btn-lg btn-block" type="submit" @click="goToUpdateInfo" name="editProfile">
@@ -57,12 +59,25 @@ export default {
       username: null,
       password: null,
       token: null,
-      logged: false
+      logged: false,
+      addUserForm: {
+        email: null,
+        password: null
+      }
     }
+  },
+  methods: {
+    goToUpdateInfo () {
+      console.log(this.username)
+      this.$router.push({ path: '/profile', query: { username: this.username, logged: this.logged, token: this.token } })
+    },
+    goToChangePassword () {},
+    goToDeleteAccount () {}
   },
   created () {
     this.logged = this.$route.query.logged === 'true'
     this.username = this.$route.query.username
+    console.log(this.username)
     this.email = this.$route.query.email
     this.token = this.$route.query.token
     if (this.logged === undefined) {
