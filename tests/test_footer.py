@@ -3,24 +3,31 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium import webdriver
 
+
 class MySeleniumTests(StaticLiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         options = webdriver.ChromeOptions()
-        options.add_argument("no-sandbox")
-        options.add_argument("--disable-gpu")
         options.add_argument("--headless")
         cls.selenium = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=options)
-        cls.selenium.implicitly_wait(10)
+        cls.selenium.maximize_window()
+        cls.selenium.implicitly_wait(500)
 
     @classmethod
     def tearDownClass(cls):
         cls.selenium.quit()
         super().tearDownClass()
 
-    def test_login(self):
+    def test_about_us(self):
         self.selenium.get(self.live_server_url)
-        username_input = self.selenium.find_element(By.ID, "footer")
-        assert username_input.is_displayed()
+        about_us = self.selenium.find_element(By.LINK_TEXT, "About Us")
+        firstDisplay = about_us.is_displayed()
+        self.selenium.get(self.live_server_url+"/aboutUs")
+        self.selenium.implicitly_wait(10)
+        info_about_us = self.selenium.find_element(By.ID, "info_about_us")
+        assert info_about_us.is_displayed() and firstDisplay
+
+    def test_privacy_policy(self):
+        return 0
