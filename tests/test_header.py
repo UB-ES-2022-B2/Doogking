@@ -1,41 +1,33 @@
-from django.test import LiveServerTestCase
-import unittest
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.keys import Keys
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium import webdriver
 
-url = "https://doogking.azurewebsites.net/"
-#url = "http://localhost:8080/"
-class LogInTestCase(LiveServerTestCase):
-    def setUp(self):
+
+class HeaderTest(StaticLiveServerTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
         options = webdriver.ChromeOptions()
-        options.add_argument("no-sandbox")
-        options.add_argument("--disable-gpu")
         options.add_argument("--headless")
-        driver = webdriver.Chrome(ChromeDriverManager().install(),chrome_options=options)
-        driver.get(url)
-        return driver
-    ''' def testIcon(self):
-        driver = self.setUp()
-        icon = driver.find_element_by_id("icon")
-        icon.click()
-        driver.implicitly_wait(5)
-        self.assertEqual(driver.current_url,url)
-        driver.close()
+        cls.selenium = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=options)
+        cls.selenium.maximize_window()
+        cls.selenium.implicitly_wait(500)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.selenium.quit()
+        super().tearDownClass()
+
+    def test_icon(self):
+        self.selenium.get(self.live_server_url)
+        logo = self.selenium.find_element(By.ID, "main_logo")
+        assert logo.is_enabled()
+
+    def test_homepage_link(self):
+        self.selenium.get(self.live_server_url)
+        homepage = self.selenium.find_element(By.ID,"main_homepage")
+        assert homepage.is_enabled()
 
 
-    def testLogIn(self):
-        driver = self.setUp()
-        login = driver.find_element_by_id("login")
-        login.click()
-        driver.implicitly_wait(5)
-        self.assertEqual(driver.current_url, url +"login")
-    def testRegiter(self):
-        driver = self.setUp()
-        register = driver.find_element_by_id("registrer")
-        #register.click()
-        driver.implicitly_wait(5)
-        self.assertEqual(driver.current_url, url + "register")'''

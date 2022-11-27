@@ -4,7 +4,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium import webdriver
 
 
-class MySeleniumTests(StaticLiveServerTestCase):
+class FooterTest(StaticLiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
