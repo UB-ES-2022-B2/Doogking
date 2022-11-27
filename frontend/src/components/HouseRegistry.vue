@@ -17,9 +17,6 @@
               required
             ></b-form-input>
           </b-form-group>
-
-          <b-button type="submit" variant="primary">Post</b-button>
-          <b-button type="reset" variant="danger">Cancel</b-button>
         </b-form>
     </div>
     <FileUpload name="demo[]" :customUpload="true" @uploader="myUploader($event)" :multiple="true" accept="image/*" :maxFileSize="1000000">
@@ -30,6 +27,8 @@
         </div>
       </template>
     </FileUpload>
+    <b-button type="submit" variant="primary">Post</b-button>
+    <b-button type="reset" variant="danger">Cancel</b-button>
     <Footer id="footer"></Footer>
   </div>
 </template>
