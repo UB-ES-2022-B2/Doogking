@@ -27,8 +27,10 @@
         </div>
       </template>
     </FileUpload>
-    <b-button type="submit" variant="primary">Post</b-button>
-    <b-button type="reset" variant="danger">Cancel</b-button>
+    </div>
+      <b-button type="submit" variant="primary">Post</b-button>
+      <b-button type="reset" variant="danger">Cancel</b-button>
+    </div>
     <Footer id="footer"></Footer>
   </div>
 </template>
