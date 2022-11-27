@@ -237,7 +237,7 @@ export default {
         housing: this.house_id,
         client: this.username,
         start_date: new Date(this.checkInDate),
-        end_date: new Date(this.checkInDate)
+        end_date: new Date(this.checkOutDate)
       }
       const path = 'https://doogking.azurewebsites.net/api/reservations/'
       axios.post(path, parameters, headers)
