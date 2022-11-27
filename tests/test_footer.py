@@ -30,4 +30,10 @@ class MySeleniumTests(StaticLiveServerTestCase):
         assert info_about_us.is_displayed() and firstDisplay
 
     def test_privacy_policy(self):
-        return 0
+        self.selenium.get(self.live_server_url)
+        privacy_policy = self.selenium.find_element(By.ID, "privacyPolicy")
+        firstDisplay = privacy_policy.is_displayed()
+        self.selenium.get(self.live_server_url + "/privacyPolicy")
+        self.selenium.implicitly_wait(10)
+        info_privacy_policy = self.selenium.find_element(By.ID, "privacy_policy_info")
+        assert info_privacy_policy.is_displayed() and firstDisplay
