@@ -168,6 +168,7 @@ export default {
       validInDate: true,
       validOutDate: true,
       loaderActive: false,
+      customer: null,
       submitted: false,
       showSuccessMessage: false,
       showErrorMessage: false,
@@ -237,8 +238,8 @@ export default {
       const headers = {'Access-Control-Allow-Origin': '*',
         'Authentication': 'Token ' + this.token}
       const parameters = {
-        housing: this.house_id,
-        client: this.username,
+        housing: 'https://doogking.azurewebsites.net/api/housing/' + this.house_id + '/',
+        customer: 'https://doogking.azurewebsites.net/api/housing/' + this.customer + '/',
         start_date: new Date(this.checkInDate),
         end_date: new Date(this.checkOutDate)
       }
@@ -327,6 +328,7 @@ export default {
   created () {
     this.logged = this.$route.query.logged === 'true'
     this.username = this.$route.query.username
+    this.customer = this.$route.query.customer
     this.token = this.$route.query.token
     this.house_id = this.$route.query.house_id
     if (this.logged === undefined) {
