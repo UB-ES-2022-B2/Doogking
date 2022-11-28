@@ -1,10 +1,13 @@
 name: Functional tests
 on:
   push:
-    branches: [ "integration", "main" ]
+    branches:
+      - main
+      - integration
   pull_request:
-    branches: [ "integration", "main" ]
-
+    branches:
+      - main
+      - integration
 jobs:
   build:
 
