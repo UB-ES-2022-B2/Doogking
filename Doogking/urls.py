@@ -31,7 +31,7 @@ router.register(r'housing', views.HousingViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('api/login/', obtain_auth_token),
+    path('api/login/', views.ObtainAuthTokenUser.as_view()),
     path('admin/', admin.site.urls),
     path('api/reset/', views.ResetView.as_view()),
     path('api/delete/<int:id>', views. ProfileViewSet.delete, name='delete'),
