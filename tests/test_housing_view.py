@@ -4,7 +4,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium import webdriver
 
 
-class HeaderTest(StaticLiveServerTestCase):
+class HousingView(StaticLiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -20,14 +20,17 @@ class HeaderTest(StaticLiveServerTestCase):
         cls.selenium.quit()
         super().tearDownClass()
 
-    def test_icon(self):
+    def test_housing_views(self):
         self.selenium.get(self.live_server_url)
-        logo = self.selenium.find_element(By.ID, "main_logo")
-        assert logo.is_enabled()
+        grid = self.selenium.find_element(By.ID, "buttonViewGrid").is_enabled()
+        assert grid
 
-    def test_homepage_link(self):
+    def test_housing_price(self):
         self.selenium.get(self.live_server_url)
-        homepage = self.selenium.find_element(By.ID,"main_homepage")
-        assert homepage.is_enabled()
+        container = self.selenium.find_element(By.ID, "priceContainer").is_enabled()
+        assert container
 
-
+    def test_housing_view_house(self):
+        self.selenium.get(self.live_server_url)
+        button_grid = self.selenium.find_element(By.ID, "favButtonGrid").is_enabled()
+        assert button_grid

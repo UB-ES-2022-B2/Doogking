@@ -5,7 +5,7 @@
       <div id="app">
         <div class="container">
           <div class="page-header"><h1 class="h2">Privacy Policy for Doogking</h1></div>
-          <div class="page__entryContent">
+          <div class="page__entryContent" id="privacy_policy_info">
             <p class="info-pp">At Doogking, accessible from https://doogking.azurewebsites.net, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Doogking and how we use it.</p>
 
             <p class="info-pp">If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.</p>

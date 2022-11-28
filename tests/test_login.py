@@ -31,7 +31,7 @@ class LogInTestCase(LiveServerTestCase):
         assert driver.current_url,url + "?username=aura&logged=true&token"
         driver.close()
 
-    def test_incorrectLogin(self):
+    '''def test_incorrectLogin(self):
         driver, username, password= self.setUp()
         username.send_keys("test@gmail.com")
         password.send_keys("password123")
@@ -40,7 +40,7 @@ class LogInTestCase(LiveServerTestCase):
         alert = waiter.until(EC.alert_is_present())
         assert 'Wrong username or password' in alert.text
         alert.accept()
-        driver.close()
+        driver.close()'''
 
     def test_regiter(self):
         driver, username, password = self.setUp()
