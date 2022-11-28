@@ -26,11 +26,9 @@
           <p class="mt-4 mb-0">Drag and drop files here to upload.</p>
         </div>
       </template>
-    </FileUpload>
-    </div>
       <b-button type="submit" variant="primary">Post</b-button>
       <b-button type="reset" variant="danger">Cancel</b-button>
-    </div>
+    </FileUpload>
     <Footer id="footer"></Footer>
   </div>
 </template>
