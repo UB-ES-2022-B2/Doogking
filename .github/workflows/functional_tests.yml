@@ -1,6 +1,13 @@
-name: Basic tests
-on: [pull_request]
-
+name: Functional tests
+on:
+  push:
+    branches:
+      - main
+      - integration
+  pull_request:
+    branches:
+      - main
+      - integration
 jobs:
   build:
 
@@ -20,9 +27,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Conventions
+    - name: Functional test housing
       run: |
-        flake8
-    - name: Smoke tests
+        python3 manage.py test tests.test_housing_view
+    - name: Functional tests header
       run: |
-        pytest tests/test_smoke.py
+        python3 manage.py test tests.test_header
+    - name: Functional tests footer
+      run: |
+        python3 manage.py test tests.test_footer
