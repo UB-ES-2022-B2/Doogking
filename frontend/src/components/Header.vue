@@ -1,11 +1,11 @@
 <template>
   <div>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
+    <div class="container-fluid" style="margin-top:0.3em;">
       <!-- Navbar main links -->
       <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <a class="navbar-brand" @click="goToHomepage" id="main_homepage" style="cursor: pointer; font-family: 'Brush Script MT'; font-size: 1.5em;">
+          <a class="navbar-brand" @click="goToHomepage" id="main_homepage" style="cursor: pointer; font-family: 'Brush Script MT'; font-size: 1.5em; margin-left: 0.5em;">
             <img src="@/assets/logoDog.png" id="main_logo" alt="" width="30" height="24" class="d-inline-block align-top" style="color: #8DD0FF;">
             Doogking
           </a>
@@ -30,12 +30,12 @@
       <!-- User dropdown -->
       <ul class="nav navbar-nav navbar-right" v-if="logged===false">
         <div>
-          <SplitButton label="Account" icon="pi pi-user" :model="itemsNotLogged" class="p-button-secondary mb-2"></SplitButton>
+          <SplitButton label="Account" icon="pi pi-user" @click="goToLogin" :model="itemsNotLogged" class="p-button-secondary mb-2"></SplitButton>
         </div>
       </ul>
       <ul class="nav navbar-nav navbar-right" v-else>
         <div>
-          <SplitButton :label="this.username" icon="pi pi-user" :model="itemsLogged" class="p-button-secondary mb-2"></SplitButton>
+          <SplitButton :label="this.username" icon="pi pi-user" @click="goToProfile" :model="itemsLogged" class="p-button-secondary mb-2"></SplitButton>
         </div>
       </ul>
     </div>
@@ -71,6 +71,7 @@ export default {
           label: 'Profile',
           icon: 'pi pi-user',
           command: () => {
+            this.goToProfile()
           }
         },
         {
