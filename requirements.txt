@@ -11,3 +11,4 @@ packaging
 selenium==3.141.0
 pytest-django
 flake8
+coverage
