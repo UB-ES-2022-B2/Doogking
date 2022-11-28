@@ -1,5 +1,5 @@
 <template>
-  <form>
+  <form onsubmit="return false;">
     <div class="flex-wrapper">
       <Header></Header>
       <div id="app">
@@ -8,7 +8,7 @@
             <div class="p-2" style="margin-left:50px">
               <img class="mx-auto rounded-circle" src="@/assets/avatar.png" style="width:200px">
               <div class="profileButton-button">
-                <button class="btn btn-lg btn-block" @click="goToUploadPhoto" name="forgotPassword"><u>Uploado Photo</u></button>
+                <button class="btn btn-lg btn-block" name="forgotPassword"><u>Uploado Photo</u></button>
               </div>
             </div>
             <div class="p-2" style="margin-right:300px">
@@ -24,7 +24,7 @@
                          autofocus v-model="addUserForm.username" aria-describedby="inputGroupPrepend2">
                 </div>
                 <div class="group-buttons">
-                  <button class="btn btn-lg btn-block" type="submit" @click="goUpdateInfo" name="editProfile">
+                  <button class="btn btn-lg btn-block" type="button" @click="goUpdateInfo">
                     Update Info</button>
                   <button class="btn btn-lg btn-block" type="submit" @click="goToProfile" name="editProfile">
                     close</button>
@@ -32,10 +32,10 @@
               </div>
             </div>
             <div class="changePassword-button" align-content="left">
-              <button class="btn btn-lg btn-block" type="submit" @click="goToChangePassword" name="changePassword" aria-label="Left Align"><fa :icon="['fas', 'unlock-alt']"/><h6>Change Password</h6></button>
+              <button class="btn btn-lg btn-block" type="submit" name="changePassword" aria-label="Left Align"><fa :icon="['fas', 'unlock-alt']"/><h6>Change Password</h6></button>
             </div>
             <div class="deleteAccount-button" align-content="left">
-              <button class="btn btn-lg btn-block" type="submit" @click="goToDeleteAccount" name="deleteAccount" aria-label="Left Align">Delete Account</button>
+              <button class="btn btn-lg btn-block" type="submit" name="deleteAccount" aria-label="Left Align">Delete Account</button>
             </div>
           </div>
         </div>
@@ -71,21 +71,24 @@ export default {
   },
   methods: {
     goUpdateInfo () {
-      const parameters = {
-        email: this.addUserForm.email,
-        first_name: this.addUserForm.username
-      }
-      const headers = {'Access-Control-Allow-Origin': '*', 'Authorization': 'Token ' + this.token}
-      const path = 'https://doogking.azurewebsites.net/api/profile/{user_id}'
-      axios.patch(path, parameters, headers).catch((error) => {
-        // eslint-disable-next-line
-        console.log(error)
-        this.error = error
-        this.showErrorMessage = true
+      var data = JSON.stringify({
+        'email': this.addUserForm.email,
+        'first_name': this.addUserForm.username
       })
+      var config = {
+        method: 'patch',
+        url: 'https://doogking.azurewebsites.net/api/profiles/' + this.user_id + '/',
+        headers: {
+          'Authorization': 'Token' + this.token,
+          'Content-Type': 'application/json'
+        },
+        data: data
+      }
+      axios(config)
+        .then(function (response) {
+        }).catch(function (response) {})
     },
     goToProfile () {
-      console.log(this.logged)
       this.$router.push({ path: '/profile', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
     }
   },
@@ -98,9 +101,6 @@ export default {
     if (this.logged === undefined) {
       this.logged = false
     }
-    console.log(this.email)
-    console.log(this.logged)
-    console.log(this.user_id)
   }
 }
 </script>

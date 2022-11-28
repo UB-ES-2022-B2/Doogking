@@ -8,14 +8,14 @@
             <div class="p-2" style="margin-left:50px">
               <img class="mx-auto rounded-circle" src="@/assets/avatar.png" style="width:200px">
               <div class="profileButton-button">
-                <button class="btn btn-lg btn-block" @click="goToUploadPhoto" name="forgotPassword"><u>Uploado Photo</u></button>
+                <button class="btn btn-lg btn-block"  name="forgotPassword"><u>Uploado Photo</u></button>
               </div>
             </div>
             <div class="p-2" style="margin-right:300px">
               <div class="info-containter" ><h2>{{username}}</h2>
                 <div class="reviewButton">
                   <fa :icon="['fas', 'star']"/>
-                  <button class="btn btn-lg btn-block" @click="goToReviews" name="goToLogIn">num. Reviews</button>
+                  <button class="btn btn-lg btn-block" name="goToLogIn">num. Reviews</button>
                 </div>
                 <div class="about-me"><h7>About me:</h7></div>
                 <div class="row">
@@ -78,6 +78,11 @@ export default {
     if (this.logged === undefined) {
       this.logged = false
     }
+    console.log((this.username))
+    console.log(this.email)
+    console.log(this.logged)
+    console.log(this.user_id)
+    console.log(this.token)
   }
 }
 </script>
