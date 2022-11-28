@@ -108,6 +108,7 @@ export default {
       checkOutDate: null,
       selectedCities: null,
       h: [],
+      numHouses: null,
       cities: [
         {name: 'Barcelona', code: 'BCN'},
         {name: 'Girona', code: 'GI'},
@@ -147,7 +148,7 @@ export default {
         this.checkOutDate = null
         this.$toast.add({severity: 'error', summary: 'Error message', detail: 'Check-out date should be greater than check-in date', life: 2000})
       }
-      if (this.houses.length !== 15) {
+      if (this.houses.length !== this.numHouses) {
         this.getHouses()
       }
       if (this.selectedCities.length !== 0) {
@@ -159,7 +160,7 @@ export default {
             }
           }
         } this.houses = this.h
-      } else {
+      } else if (this.selectedCities.length === 0) {
         this.houses.length = 0
         this.getHouses()
       } this.selectedCities.length = 0
@@ -178,11 +179,18 @@ export default {
       const headers = {'Access-Control-Allow-Origin': '*'}
       const pathHouses = 'https://doogking.azurewebsites.net/api/housing/'
       axios.get(pathHouses, headers).then(response => (this.houses = response.data))
+    },
+    getNumHouses () {
+      const headers = {'Access-Control-Allow-Origin': '*'}
+      const pathHouses = 'https://doogking.azurewebsites.net/api/housing/'
+      const promise = axios.get(pathHouses, headers)
+      Promise.resolve(promise).then((value) => (this.numHouses = value.data.length))
     }
   },
   created () {
     this.logged = this.$route.query.logged === 'true'
     this.getHouses()
+    this.getNumHouses()
   }
 }
 </script>
