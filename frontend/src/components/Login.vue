@@ -8,7 +8,7 @@
             <i class="pi pi-check-circle" :style="{fontSize: '5rem', color: 'var(--green-500)' }"></i>
             <h5 style="margin-top: 1em">Login Successful!</h5>
             <p style="text-align: center">
-              Your account is logged in under username <b>{{ this.email }}</b>
+              Your account is logged in under username <b>{{ this.username }}</b>
             </p>
           </div>
           <template #footer>
@@ -109,6 +109,8 @@ export default {
       logged: false,
       token: null,
       email: '',
+      username: '',
+      user_id: null,
       password: '',
       submitted: false,
       showSuccessMessage: false,
@@ -140,7 +142,7 @@ export default {
     toggleDialogSuccess () {
       this.showSuccessMessage = !this.showSuccessMessage
       if (!this.showSuccessMessage) {
-        this.$router.push({ path: '/', query: { username: this.email, logged: this.logged, token: this.token } })
+        this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
         this.resetForm()
       }
     },
@@ -169,6 +171,8 @@ export default {
           this.logged = true
           this.token = res.data.token
           this.showSuccessMessage = true
+          this.username = res.data.profile.first_name + res.data.profile.last_name
+          this.user_id = res.data.profile.id
         })
         .catch((error) => {
           // eslint-disable-next-line

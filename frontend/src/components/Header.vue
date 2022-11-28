@@ -83,6 +83,8 @@ export default {
         }
       ],
       username: null,
+      email: null,
+      user_id: null,
       token: null
     }
   },
@@ -98,7 +100,7 @@ export default {
     goToProfile () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       if (this.logged) {
-        this.$router.push({ path: '/profile', query: { username: this.username, logged: this.logged, token: this.token } })
+        this.$router.push({ path: '/profile', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
       }
     },
     logOut () {
@@ -109,7 +111,7 @@ export default {
     goToHomepage () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       if (this.logged) {
-        this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token } })
+        this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
       } else {
         // eslint-disable-next-line standard/object-curly-even-spacing
         this.$router.push({ path: '/'})
@@ -119,6 +121,8 @@ export default {
   created () {
     this.logged = this.$route.query.logged === 'true'
     this.username = this.$route.query.username
+    this.email = this.$route.query.email
+    this.user_id = this.$route.query.user_id
     this.token = this.$route.query.token
     if (this.logged === undefined) {
       this.logged = false

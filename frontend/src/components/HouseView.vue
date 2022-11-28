@@ -111,6 +111,8 @@ export default {
     return {
       logged: null,
       username: null,
+      email: null,
+      user_id: null,
       token: null,
       houses: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
       layout: 'grid',
@@ -164,7 +166,7 @@ export default {
     },
     // eslint-disable-next-line camelcase
     seeHouseDetails (house_id) {
-      this.$router.push({ path: '/housedetails', query: {username: this.username, logged: this.logged, token: this.token, house_id: house_id} })
+      this.$router.push({ path: '/housedetails', query: {username: this.username, logged: this.logged, token: this.token, house_id: house_id, email: this.email, user_id: this.user_id} })
     },
     changeFavorite () {
       if (this.logged === false) {
@@ -187,6 +189,8 @@ export default {
   created () {
     this.logged = this.$route.query.logged === 'true'
     this.username = this.$route.query.username
+    this.email = this.$route.query.email
+    this.user_id = this.$route.query.user_id
     this.token = this.$route.query.token
     if (this.logged === undefined) {
       this.logged = false
