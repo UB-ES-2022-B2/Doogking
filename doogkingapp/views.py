@@ -66,6 +66,12 @@ class ReservationViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
+    
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return CustomerReservationSerializer
+        else:
+            return ReservationSerializer
 
     def get_queryset(self):
         queryset = Reservation.objects.all()
