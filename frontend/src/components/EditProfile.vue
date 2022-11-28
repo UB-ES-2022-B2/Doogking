@@ -13,19 +13,32 @@
             </div>
             <div class="p-2" style="margin-right:300px">
               <div class="info-containter" >
-                <div class="form-label-group">
-                  <label for="inputEmail">Email</label>
-                  <input type="username" id="inputUsername" class="form-control"
-                         autofocus v-model="addUserForm.email" aria-describedby="inputGroupPrepend2" >
-                </div>
-                <div class="form-label-group">
-                  <label for="inputEmail">Username</label>
-                  <input type="username" id="inputUsername" class="form-control"
-                         autofocus v-model="addUserForm.username" aria-describedby="inputGroupPrepend2" >
-                </div>
+                <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
+                  <div class="field">
+                    <hr style="margin-bottom: 1.5rem;" class="solid"/>
+                    <div class="p-float-label">
+                      <InputText id="username" v-model="v$.username.$model" :class="{'p-invalid':v$.username.$invalid && submitted}" />
+                      <label for="username" :class="{'p-error':v$.username.$invalid && submitted}">Username*</label>
+                    </div>
+                    <small v-if="(v$.username.$invalid && submitted) || v$.username.$pending.$response" class="p-error">{{v$.username.required.$message.replace('Value', 'Name')}}</small>
+                  </div>
+                  <div class="field">
+                    <div class="p-float-label p-input-icon-right">
+                      <i class="pi pi-envelope" />
+                      <InputText id="email" v-model="v$.email.$model" :class="{'p-invalid':v$.email.$invalid && submitted}" aria-describedby="email-error"/>
+                      <label for="email" :class="{'p-error':v$.email.$invalid && submitted}">Email*</label>
+                    </div>
+                    <span v-if="v$.email.$error && submitted">
+                            <span id="email-error" v-for="(error, index) of v$.email.$errors" :key="index">
+                            <small class="p-error">{{error.$message}}</small>
+                            </span>
+                        </span>
+                    <small v-else-if="(v$.email.$invalid && submitted) || v$.email.$pending.$response" class="p-error">{{v$.email.required.$message.replace('Value', 'Email')}}</small>
+                  </div>
+                </form>
                 <div class="group-buttons">
-                  <button class="btn btn-lg btn-block" type="submit" @click="goToUpdateInfo" name="editProfile">
-                    Update info</button>
+                  <button class="btn btn-lg btn-block" type="submit" @click="goToProfile" name="editProfile">
+                    Update Info</button>
                 </div>
               </div>
             </div>
@@ -47,6 +60,7 @@
 
 import Header from './Header'
 import Footer from './Footer'
+import axios from 'axios'
 
 export default {
   components: {
@@ -55,30 +69,42 @@ export default {
   },
   data () {
     return {
-      email: null,
+      logged: null,
       username: null,
-      password: null,
-      token: null,
-      logged: false,
-      addUserForm: {
-        email: null,
-        password: null
-      }
+      email: null,
+      user_id: null,
+      token: null
     }
   },
   methods: {
-    goToUpdateInfo () {
-      console.log(this.username)
-      this.$router.push({ path: '/profile', query: { username: this.username, logged: this.logged, token: this.token } })
-    },
-    goToChangePassword () {},
-    goToDeleteAccount () {}
+    goToProfile () {
+      const parameters = {
+        username: this.email,
+        password: this.password
+      }
+      const headers = {'Access-Control-Allow-Origin': '*'}
+      console.log(parameters)
+      const path = 'https://doogking.azurewebsites.net/api/profile/'
+      axios.post(path, parameters, headers)
+        .then((res) => {
+          this.logged = true
+          this.token = res.data.token
+          this.showSuccessMessage = true
+          this.username = res.data.profile.first_name + res.data.profile.last_name
+          this.user_id = res.data.profile.id
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          this.error = error
+          this.showErrorMessage = true
+        })
+    }
   },
   created () {
     this.logged = this.$route.query.logged === 'true'
     this.username = this.$route.query.username
-    console.log(this.username)
     this.email = this.$route.query.email
+    this.user_id = this.$route.query.user_id
     this.token = this.$route.query.token
     if (this.logged === undefined) {
       this.logged = false

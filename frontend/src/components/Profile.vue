@@ -21,7 +21,7 @@
                 <div class="row">
                   <div class="col"><fa :icon="['fas', 'location-dot']"/>      Location</div>
                   <div class="w-100"></div>
-                  <div class="col"><fa :icon="['fas', 'envelope']"/>          {{username}}</div>
+                  <div class="col"><fa :icon="['fas', 'envelope']"/>          {{email}}</div>
                   <div class="w-100"></div>
                   <div class="col"><fa :icon="['fas', 'house']"/>Num houses</div>
                 </div>
@@ -52,11 +52,11 @@ export default {
   },
   data () {
     return {
-      email: null,
+      logged: null,
       username: null,
-      password: null,
-      token: null,
-      logged: false
+      email: null,
+      user_id: null,
+      token: null
     }
   },
   methods: {
@@ -66,13 +66,14 @@ export default {
       this.$router.push({path: '/'})
     },
     goToEditProfile () {
-      this.$router.push({ path: '/editProfile', query: {username: this.username, logged: this.logged, token: this.token} })
+      this.$router.push({ path: '/editProfile', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
     }
   },
   created () {
     this.logged = this.$route.query.logged === 'true'
     this.username = this.$route.query.username
     this.email = this.$route.query.email
+    this.user_id = this.$route.query.user_id
     this.token = this.$route.query.token
     if (this.logged === undefined) {
       this.logged = false
