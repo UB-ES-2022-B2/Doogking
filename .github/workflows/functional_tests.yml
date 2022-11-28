@@ -27,6 +27,26 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    - name: Setup node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 17
+        cache: npm
+        cache-dependency-path: '**/package-lock.json'
+
+    - name: Installing npm requirements
+      working-directory: ./frontend/
+      run: npm install --force
+
+    - name: Generate vue static files
+      working-directory: ./frontend/
+      run: npm run build
+
+    - name: Upload artifacts to runner
+      uses: actions/upload-artifact@v3
+      with:
+        name: vue_build
+        path: ./frontend/dist/
     - name: Functional test housing
       run: |
         python3 manage.py test tests.test_housing_view
