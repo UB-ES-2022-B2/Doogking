@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '../components/Login'
-import Homepage from '../components/Homepage'
+import Login from '@/components/Login.vue'
+import Homepage from '@/components/Homepage'
 import process from 'shelljs'
 import Register from '../components/Register'
 import ForgotPassword from '../components/ForgotPassword'
@@ -40,7 +40,7 @@ export default new Router({
       component: Reset
     },
     {
-      path: '/houseregistry',
+      path: '/HouseRegistry',
       name: 'HouseRegistry',
       component: HouseRegistry
     }
