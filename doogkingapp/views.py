@@ -54,8 +54,8 @@ class HousingImageViewSet(viewsets.ModelViewSet):
 
     @action(detail=False)
     def select(self, request, housing_id=None):
-        queryset = HousingImage.objects.\
-            all().\
+        queryset = HousingImage.objects. \
+            all(). \
             filter(housing__house_id=housing_id)
         serializer = HousingImageSerializer(
             queryset, many=True, context={'request': request})
@@ -103,12 +103,13 @@ class ReservationViewSet(viewsets.ModelViewSet):
 
         # Filter by owner id
         if owner_id:
-            # If the authenticated user is the owner, show client datails in each reservation
+            # If the authenticated user is the owner,
+            # show client details in each reservation
             if str(self.request.user.id) == owner_id:
                 self.serializer_class = CustomerReservationSerializer
             queryset = queryset.filter(housing__house_owner__id=owner_id)
 
-        # Filter by customer id (you can only query your own reservations) 
+        # Filter by customer id (you can only query your own reservations)
         if customer_id:
             # Check if the authenticated user id is the same as the query id
             if str(self.request.user.id) == customer_id:
@@ -132,7 +133,7 @@ class ResetView(APIView):
         user.otp = otp
         user.save()
 
-        requests.post( \
+        requests.post(
             url="https://api.emailjs.com/api/v1.0/email/send",
             json={"service_id": "service_doogking",
                   "template_id": "template_6flombd",
@@ -160,7 +161,11 @@ class ResetView(APIView):
 
 class ObtainAuthTokenUser(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
-        response = super(ObtainAuthTokenUser, self).post(request, *args, **kwargs)
+        response = super(ObtainAuthTokenUser, self)\
+            .post(request, *args, **kwargs)
         token = Token.objects.get(key=response.data['token'])
         user = Profile.objects.get(id=token.user_id)
-        return Response({'token': token.key, 'profile': CurrentProfileSerializer(user).data})
+        return Response(
+            {'token': token.key,
+             'profile': CurrentProfileSerializer(user).data}
+        )
