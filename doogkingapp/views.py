@@ -3,11 +3,13 @@ from django.core.exceptions import PermissionDenied
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import permissions
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
 from .models import Profile, Housing
-from .serializers import ProfileSerializer, HousingSerializer
-from .forms import SetPasswordForm
+from .serializers import ProfileSerializer, CurrentProfileSerializer, HousingSerializer
 import secrets
 import requests
 from django.conf import settings
@@ -30,6 +32,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
         if profile:
             profile.delete()
             return Response({"message": "Profile deleted"})
+
 
 class HousingViewSet(viewsets.ModelViewSet):
     queryset = Housing.objects.all()
@@ -70,38 +73,14 @@ class ResetView(APIView):
             user.set_password(request_pass)
             user.otp = ""
             user.save()
-            SetPasswordForm
+            return Response({"message": "Password successfully changed!"})
         else:
             raise PermissionDenied("Email and reset token do not match!")
 
+class ObtainAuthTokenUser(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        response = super(ObtainAuthTokenUser, self).post(request, *args, **kwargs)
+        token = Token.objects.get(key=response.data['token'])
+        user = Profile.objects.get(id=token.user_id)
+        return Response({'token': token.key, 'profile': CurrentProfileSerializer(user).data})
 
-'''#@login_required
-def password_change(request):
-    user = request.user
-    if request.method == 'POST':
-        form = SetPasswordForm(user, request.POST)
-        if form.is_valid():
-            form.save()
-            return Response({"message": "Your password has been changed"})
-
-        else:
-            for error in list(form.errors.values()):
-                return Response({"message": "Your password has been changed"})
-                #messages.error(request, error)
-
-    form = SetPasswordForm(user)
-    return render(request, '', {'form': form})'''
-
-
-class UploaderView(APIView):
-
-    def post(self, request):
-        file = request.FILES['file']
-        credential = {"account_name": settings.AZURE_ACCOUNT_NAME, "account_key": settings.AZURE_ACCOUNT_KEY}
-
-        blob_service_client = BlobServiceClient("https://" + settings.AZURE_CUSTOM_DOMAIN, credential)
-
-        blob_client = blob_service_client.get_blob_client(container=settings.AZURE_CONTAINER, blob=file.name)
-        blob_client.upload_blob(file.read())
-
-        return Response({"message": "success", "uploaded_name": file.name})
