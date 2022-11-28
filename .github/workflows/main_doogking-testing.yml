@@ -19,6 +19,7 @@ jobs:
       with:
         node-version: 17
         cache: npm
+        cache-dependency-path: '**/package-lock.json'
 
     - name: Installing npm requeriments
       working-directory: ./frontend/
