@@ -12,7 +12,7 @@
             <div class="page-header" style="margin-top:50px"><h4 class="h4"> Our Story <hr></h4></div>
             <p></p>
             <div class="page__entryContent">
-              <p class="info-aboutUs">
+              <p class="info-aboutUs" id="info_about_us">
                 We’re Doogking, a national, pet-loving community on a mission to create a
                 world where pets enjoy their owners’ vacations just as much as they do!
 
