@@ -256,7 +256,7 @@ export default {
       }
       const parameters = {
         housing: 'https://doogking.azurewebsites.net/api/housing/' + this.house_id + '/',
-        customer: 'https://doogking.azurewebsites.net/api/housing/' + this.user_id + '/',
+        customer: 'https://doogking.azurewebsites.net/api/profiles/' + this.user_id + '/',
         start_date: new Date(this.checkInDate),
         end_date: new Date(this.checkOutDate)
       }
