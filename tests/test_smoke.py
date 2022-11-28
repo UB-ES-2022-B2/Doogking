@@ -1,14 +1,14 @@
 import pytest as pytest
 import sqlite3
-from django.urls import reverse
-from rest_framework.authtoken.views import obtain_auth_token
 from django.test import Client
 
 c = Client()
 
+
 @pytest.mark.django_db  #
 def test_views_main():
-    response = c.get("http://127.0.0.1:8000/")  # get the path for the list of contacts
+    response = c.get("http://127.0.0.1:8000/")
+    # get the path for the list of contacts
     assert response.status_code == 200
 
 
@@ -35,12 +35,14 @@ def test_views_reset():
     response = c.get("http://127.0.0.1:8000/reset")
     assert response.status_code == 200
 
+
 @pytest.mark.count_queries  #
 def test_database_housing():
     con = sqlite3.connect("db.sqlite3")
     cur = con.cursor()
     res = cur.execute("SELECT * FROM doogkingapp_housing")
     assert res.fetchone()
+
 
 @pytest.mark.django_db  #
 def test_database_profile():
@@ -49,6 +51,7 @@ def test_database_profile():
     res = cur.execute("SELECT * FROM doogkingapp_profile")
     assert res.fetchone()
 
+
 @pytest.mark.django_db  #
 def test_database_master():
     con = sqlite3.connect("db.sqlite3")
@@ -56,10 +59,10 @@ def test_database_master():
     res = cur.execute("SELECT * FROM sqlite_master")
     assert res.fetchone()
 
+
 @pytest.mark.django_db  #
 def test_database_sequence():
     con = sqlite3.connect("db.sqlite3")
     cur = con.cursor()
     res = cur.execute("SELECT * FROM sqlite_sequence")
     assert res.fetchone()
-

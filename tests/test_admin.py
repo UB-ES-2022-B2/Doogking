@@ -5,9 +5,10 @@ from doogkingapp.models import Profile
 class SuperUserTestCase(TestCase):
 
     def create_superuser(self):
-        return Profile.objects.create_superuser(email="superusertest@gmail.com",
-                                                password="Password123", is_staff=True,
-                                                is_superuser=True, is_active=True)
+        return Profile.objects.create_superuser(
+            email="superusertest@gmail.com",
+            password="Password123", is_staff=True,
+            is_superuser=True, is_active=True)
 
     def test_superuser(self):
         admin = self.create_superuser()
@@ -24,8 +25,3 @@ class SuperUserTestCase(TestCase):
             "house_owner": "http://localhost:8000/api/profiles/1/"}
 
         client.post("/api/housing/", data_housing)
-        '''super_user_pages = []        #lista a llenar con los endpoints de un superuser
-        for page in super_user_pages:
-            resp = client.get(page)
-            assert resp.status_code == 200
-            assert "<!DOCTYPE html" in resp.content'''

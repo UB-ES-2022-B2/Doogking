@@ -11,7 +11,8 @@ class HeaderTest(StaticLiveServerTestCase):
         super().setUpClass()
         options = webdriver.ChromeOptions()
         options.add_argument("--headless")
-        cls.selenium = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=options)
+        cls.selenium = webdriver.Chrome(ChromeDriverManager().install(),
+                                        chrome_options=options)
         cls.selenium.maximize_window()
         cls.selenium.implicitly_wait(500)
 
