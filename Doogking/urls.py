@@ -20,10 +20,7 @@ from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
 from doogkingapp import views
 
-from django.conf.urls.static import static
-from django.conf import settings
 from django.conf.urls import url
-from django.views.static import serve
 
 router = routers.DefaultRouter()
 router.register(r'profiles', views.ProfileViewSet)

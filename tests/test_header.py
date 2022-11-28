@@ -27,7 +27,5 @@ class HeaderTest(StaticLiveServerTestCase):
 
     def test_homepage_link(self):
         self.selenium.get(self.live_server_url)
-        homepage = self.selenium.find_element(By.ID,"main_homepage")
+        homepage = self.selenium.find_element(By.ID, "main_homepage")
         assert homepage.is_enabled()
-
-
