@@ -3,32 +3,29 @@
     <Header></Header>
     <Toast />
     <div>
-        <b-form >
-          <b-form-group
-            location="b-form-group"
-            label="Location"
-            label-for="input-1"
-          >
-            <b-form-input
-              id="input-1"
-              v-model="location"
-              type="location"
-              placeholder="Introduce la ubicación"
-              required
-            ></b-form-input>
-          </b-form-group>
-        </b-form>
-    </div>
+    <div>
+      <TreeSelect v-model="selectedGroupedCities" :options="groupedCities" placeholder="Select a City"/>
+      <span class="p-float-label">
+        <InputText id="street" type="text" v-model="value" />
+        <label for="street">Gran Via de les Corts Catalanes, 585, Planta Baixa</label>
+      </span>
+      <h4>precio</h4>
+      <h4>email contacto</h4>
     <FileUpload name="demo[]" :customUpload="true" @uploader="myUploader($event)" :multiple="true" accept="image/*" :maxFileSize="1000000">
       <template #empty>
         <div class="flex align-items-center justify-content-center flex-column">
           <i class="pi pi-cloud-upload border-2 border-circle p-5 text-8xl text-400 border-400" />
           <p class="mt-4 mb-0">Drag and drop files here to upload.</p>
         </div>
+
       </template>
-      <b-button type="submit" variant="primary">Post</b-button>
-      <b-button type="reset" variant="danger">Cancel</b-button>
     </FileUpload>
+      <h4>Descripción</h4>
+      <Button label="Post" icon="pi pi-check" class="btnpost" />
+      <Button label="Delete" icon="pi pi-trash" class="btndelete"/>
+
+    </div>
+    </div>
     <Footer id="footer"></Footer>
   </div>
 </template>
@@ -74,5 +71,17 @@ export default {
   justify-content: flex-start;
   overflow-x: hidden;
   align-content: center;
+}
+
+.btnpost {
+  aligned: center;
+  background-color: #61A803;
+  border-color: #61A803;
+}
+
+.btndelete {
+  aligned: center;
+  background-color: #F03420;
+  border-color: #F03420;
 }
 </style>
