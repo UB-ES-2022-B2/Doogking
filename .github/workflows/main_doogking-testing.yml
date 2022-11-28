@@ -9,7 +9,7 @@ on:
 
 jobs:
   build_frontend:
-    name: Generate static files of the Vue forntend
+    name: Generate static files of the Vue frontend
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v3
@@ -21,7 +21,7 @@ jobs:
         cache: npm
         cache-dependency-path: '**/package-lock.json'
 
-    - name: Installing npm requeriments
+    - name: Installing npm requirements
       working-directory: ./frontend/
       run: npm install --force
 
@@ -29,14 +29,14 @@ jobs:
       working-directory: ./frontend/
       run: npm run build
 
-    - name: Upload srtifacts to runner
+    - name: Upload artifacts to runner
       uses: actions/upload-artifact@v3
       with:
         name: vue_build
         path: ./frontend/dist/
 
   build_enviroment:
-    name: Configure django deploy enviroment
+    name: Configure django deploy environment
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v2
