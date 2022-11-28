@@ -30,7 +30,7 @@
               <i class="pi pi-check-circle" :style="{fontSize: '5rem', color: 'var(--green-500)' }"></i>
               <h5 style="margin-top: 1em">Reservation Successful!</h5>
               <p style="text-align: center">
-                Reservation created with Start date: <b>{{ this.checkInDate }}</b> and End date: <b>{{ this.checkOutDate }}</b>
+                Reservation created with Start date: <b>{{ this.checkInDate }}</b> and End date: <b>{{ this.checkOutDate }}</b>.
               </p>
             </div>
             <template #footer>
@@ -45,12 +45,27 @@
               <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
               <h5 style="margin-top: 1em">Reservation Error!</h5>
               <p style="text-align: center">
-                There's a conflicting reservation with this date. Please enter a valid Check-in and Check-out date
+                There's a conflicting reservation with this date. Please enter a valid Check-in and Check-out date.
               </p>
             </div>
             <template #footer>
               <div class="flex justify-content-center">
                 <Button label="OK" @click="toggleDialogError" class="p-button-text" />
+              </div>
+            </template>
+          </Dialog>
+
+          <Dialog :visible="showLoginMessage" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
+            <div class="flex align-items-center flex-column pt-6 px-3">
+              <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
+              <h5 style="margin-top: 1em">Login Error!</h5>
+              <p style="text-align: center">
+                 You need to be logged in to make a reservation
+              </p>
+            </div>
+            <template #footer>
+              <div class="flex justify-content-center">
+                <Button label="OK" @click="toggleDialogLogin" class="p-button-text" />
               </div>
             </template>
           </Dialog>
@@ -172,6 +187,7 @@ export default {
       submitted: false,
       showSuccessMessage: false,
       showErrorMessage: false,
+      showLoginMessage: false,
       error: '',
       house: {
         'city': 'City',
@@ -236,7 +252,8 @@ export default {
     },
     makeReservation () {
       const headers = {'Access-Control-Allow-Origin': '*',
-        'Authentication': 'Token ' + this.token}
+        'Authorization': 'Token ' + this.token
+      }
       const parameters = {
         housing: 'https://doogking.azurewebsites.net/api/housing/' + this.house_id + '/',
         customer: 'https://doogking.azurewebsites.net/api/housing/' + this.customer + '/',
@@ -250,6 +267,7 @@ export default {
         })
         .catch((error) => {
           // eslint-disable-next-line
+          alert(error)
           this.error = error
           this.showErrorMessage = true
         })
@@ -257,7 +275,11 @@ export default {
     handleSubmit (isFormValid) {
       this.submitted = true
       if (isFormValid && this.checkOutDate !== null && this.checkInDate < this.checkOutDate) {
-        this.makeReservation()
+        if (this.logged === true) {
+          this.makeReservation()
+        } else {
+          this.showLoginMessage = true
+        }
       }
     },
     goToLogin () {
@@ -321,6 +343,12 @@ export default {
     toggleDialogError () {
       this.showErrorMessage = !this.showErrorMessage
       if (!this.showErrorMessage) {
+        this.resetForm()
+      }
+    },
+    toggleDialogLogin () {
+      this.showLoginMessage = !this.showLoginMessage
+      if (!this.showLoginMessage) {
         this.resetForm()
       }
     }
