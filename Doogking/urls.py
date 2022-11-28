@@ -17,13 +17,9 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
 from rest_framework import routers
-from rest_framework.authtoken.views import obtain_auth_token
 from doogkingapp import views
 
-from django.conf.urls.static import static
-from django.conf import settings
 from django.conf.urls import url
-from django.views.static import serve
 
 router = routers.DefaultRouter()
 router.register(r'profiles', views.ProfileViewSet)
@@ -36,6 +32,7 @@ urlpatterns = [
     path('api/login/', views.ObtainAuthTokenUser.as_view()),
     path('admin/', admin.site.urls),
     path('api/reset/', views.ResetView.as_view()),
-    url(r'^api/housing_images/housing/(?P<housing_id>[0-9]+)/$', views.HousingImageViewSet.as_view({'get': 'select'})),
+    url(r'^api/housing_images/housing/(?P<housing_id>[0-9]+)/$',
+        views.HousingImageViewSet.as_view({'get': 'select'})),
     url(r'^.*$', TemplateView.as_view(template_name='index.html')),
 ]

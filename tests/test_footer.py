@@ -11,7 +11,8 @@ class FooterTest(StaticLiveServerTestCase):
         super().setUpClass()
         options = webdriver.ChromeOptions()
         options.add_argument("--headless")
-        cls.selenium = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=options)
+        cls.selenium = webdriver.Chrome(ChromeDriverManager().install(),
+                                        chrome_options=options)
         cls.selenium.maximize_window()
         cls.selenium.implicitly_wait(500)
 
@@ -35,5 +36,6 @@ class FooterTest(StaticLiveServerTestCase):
         firstDisplay = privacy_policy.is_displayed()
         self.selenium.get(self.live_server_url + "/privacyPolicy")
         self.selenium.implicitly_wait(10)
-        info_privacy_policy = self.selenium.find_element(By.ID, "privacy_policy_info")
+        info_privacy_policy = self.selenium.find_element(
+            By.ID, "privacy_policy_info")
         assert info_privacy_policy.is_displayed() and firstDisplay

@@ -1,20 +1,18 @@
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.keys import Keys
-
 
 url = "https://doogking.azurewebsites.net/"
-#url = "http://localhost:8080/"
+
+
 class LogInTestCase(LiveServerTestCase):
     def setUp(self):
         options = webdriver.ChromeOptions()
         options.add_argument("no-sandbox")
         options.add_argument("--disable-gpu")
         options.add_argument("--headless")
-        driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=options)
+        driver = webdriver.Chrome(ChromeDriverManager().install(),
+                                  chrome_options=options)
         driver.get(url + "login")
 
         username = driver.find_element_by_id("inputUsername")
@@ -23,12 +21,12 @@ class LogInTestCase(LiveServerTestCase):
         return driver, username, password
 
     def test_correctLogin(self):
-        driver, username, password= self.setUp()
+        driver, username, password = self.setUp()
         username.send_keys("test@gmail.com")
         password.send_keys("password123")
         driver.find_element_by_name("signIn").click()
         driver.implicitly_wait(5)
-        assert driver.current_url,url + "?username=aura&logged=true&token"
+        assert driver.current_url, url + "?username=aura&logged=true&token"
         driver.close()
 
     '''def test_incorrectLogin(self):
