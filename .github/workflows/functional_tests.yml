@@ -27,6 +27,9 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    - name: Build npm
+      run: |
+        ./frontend/npm run build
     - name: Functional test housing
       run: |
         python3 manage.py test tests.test_housing_view
