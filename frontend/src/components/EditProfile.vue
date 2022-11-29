@@ -8,7 +8,7 @@
             <div class="p-2" style="margin-left:50px">
               <img class="mx-auto rounded-circle" src="@/assets/avatar.png" style="width:200px">
             </div>
-            <div class="p-2" style="margin-right:300px">
+            <div class="p-2" style="margin-right:400px">
               <div class="info-containter" >
                 <div class="form-label-group">
                   <label for="inputEmail" style="color:white">Email</label>
@@ -25,6 +25,9 @@
                   <button class="btn btn-lg btn-block" style="color: #8dd0ff" type="button" @click="goToProfile">Return</button>
                 </div>
               </div>
+            </div>
+            <div>
+              <button class="btn btn-lg btn-block" type="button" style="background-color: #D03739; color:white" @click="deleteProfile">Delete account</button>
             </div>
           </div>
         </div>
@@ -79,6 +82,13 @@ export default {
     },
     goToProfile () {
       this.$router.push({ path: '/profile', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
+    },
+    deleteProfile () {
+      const path = 'https://doogking.azurewebsites.net/api/profiles/' + this.user_id + '/'
+      axios.delete(path)
+      this.logged = false
+      // eslint-disable-next-line standard/object-curly-even-spacing
+      this.$router.push({path: '/'})
     }
   },
   created () {
