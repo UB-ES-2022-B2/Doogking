@@ -54,6 +54,7 @@ export default new Router({
       name: 'EditProfile',
       component: EditProfile
     },
+    {
       path: '/housedetails',
       name: 'HouseDetails',
       component: HouseDetails
