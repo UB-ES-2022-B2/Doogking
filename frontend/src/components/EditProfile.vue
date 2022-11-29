@@ -7,27 +7,24 @@
           <div class="d-flex flex-row">
             <div class="p-2" style="margin-left:50px">
               <img class="mx-auto rounded-circle" src="@/assets/avatar.png" style="width:200px">
-              <div class="profileButton-button">
-                <button class="btn btn-lg btn-block" name="forgotPassword"><u>Uploado Photo</u></button>
-              </div>
             </div>
             <div class="p-2" style="margin-right:300px">
               <div class="info-containter" >
                 <div class="form-label-group">
-                  <label for="inputEmail">Email</label>
-                  <input type="email" id="inputEmail" class="form-control"
+                  <label for="inputEmail" style="color:white">Email</label>
+                  <input type="email" style="color: #2a323d" id="inputEmail" class="form-control"
                          autofocus v-model="addUserForm.email" aria-describedby="inputGroupPrepend2">
                 </div>
                 <div class="form-label-group">
-                  <label for="inputUsername">Username</label>
-                  <input type="username" id="inputUsername" class="form-control"
+                  <label for="inputUsername" style="color:white">Username</label>
+                  <input type="username" style="backgroud-color: #2a323d" id="inputUsername" class="form-control"
                          autofocus v-model="addUserForm.username" aria-describedby="inputGroupPrepend2">
                 </div>
                 <div class="group-buttons">
                   <button class="btn btn-lg btn-block" type="button" @click="goUpdateInfo">
                     Update Info</button>
-                  <button class="btn btn-lg btn-block" type="submit" @click="goToProfile" name="editProfile">
-                    close</button>
+                  <button class="btn btn-lg btn-block" type="button" @click="goToProfile">
+                     Close</button>
                 </div>
               </div>
             </div>
@@ -106,6 +103,15 @@ export default {
 </script>
 
 <style scoped>
+.flex-wrapper {
+  background-color: #2A323D;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow-x: hidden;
+  align-content: center;
+}
 
 .info-containter{
   text-align: left;
@@ -114,12 +120,13 @@ export default {
 }
 
 .group-buttons > :first-child {
-  margin-top: 50px;
-  background-color: #6c757d;
-  border-color: #6c757d;
+  margin-top: 0.5em;
+  align-content: center;
+  background-color: #8dd0ff;
+  border-color: #2a323d;
   outline-style: none;
   border: none;
-  color: white;
+  color: #2a323d;
 }
 .changePassword-button > :first-child {
   margin-top: 0;
