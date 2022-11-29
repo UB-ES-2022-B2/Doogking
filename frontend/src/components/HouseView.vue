@@ -1,114 +1,126 @@
 <template>
   <div class="grid">
     <div class="col-12">
-        <DataView class="dataView" :value="houses" :layout="layout" :paginator="true" :rows="12" :columns="4">
-          <template #header>
-            <div class="grid grid-nogutter">
-              <div class="col-6 text-left">
-                <MultiSelect id="multiSelectCities" v-model="selectedCities" :options="cities" optionLabel="name" placeholder="Select Countries" :filter="true" class="multiselect-custom"
-                             style="min-width: 20rem; max-width: 20rem;">
-                  <template #value="slotProps">
-                    <div class="country-item country-item-value" v-for="option of slotProps.value" :key="option.code">
-                      <div>{{option.name}}</div>
-                    </div>
-                    <template v-if="!slotProps.value || slotProps.value.length === 0">
-                      Select cities
-                    </template>
-                  </template>
-                  <template #option="slotProps">
-                    <div class="country-item">
-                      <div>{{slotProps.option.name}}</div>
-                    </div>
-                  </template>
-                </MultiSelect>
-                <Button id="searchButton" type="button" @click="onSearch" icon="pi pi-search" style=""/>
-              </div>
-              <div class="col-6 text-right">
-                <DataViewLayoutOptions v-model="layout" />
-              </div>
-              <Calendar class="calendarIcon" id="icon" placeholder="Check-in" v-model="checkInDate" :showIcon="true" style="width: 9.65rem; margin-top: 0.5em; margin-right: 0.5em;"/>
-              <Calendar class="calendarIcon" id="icon" placeholder="Check-out" v-model="checkOutDate" @click="checkOutGreater()" :showIcon="true" style="width: 9.65rem; margin-top: 0.5em; margin-right: 0.5em;"/>
-              <ConfirmPopup id="confirmPopup" ></ConfirmPopup>
-              <Toast/>
-              <Button id="removeFiltersBtn" @click="confirmRemoveFilters($event)" icon="pi pi-times" style="background-color: indianred; border-color: indianred; color: white; margin-top: 0.5em;"/>
-            </div>
-            <Divider id="gridDivider" v-if="layout=='grid'"></Divider>
-          </template>
-          <template #list="slotProps">
-            <div class="col-12">
-              <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
-                <img id="listImage" :src="slotProps.data.image" :alt="slotProps.data.city" class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5" />
-                <div class="flex-1 text-center md:text-left">
-                  <div class="font-bold text-2xl">{{slotProps.data.city}}</div>
-                  <div class="mb-3">{{slotProps.data.street}},{{slotProps.data.street_number}},{{slotProps.data.floor}},{{slotProps.data.door}},{{slotProps.data.house_dimension}}</div>
-                  <Rating :value="slotProps.data.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
-                  <div class="flex align-items-center">
-                    <Tag :value="slotProps.data.house_owner_name" icon="pi pi-user" style="color: white; background-color: #6c757d"></Tag>
+      <DataView class="dataView" :value="houses" :layout="layout" :paginator="true" :rows="12" :columns="4">
+        <template #header>
+          <div class="grid grid-nogutter">
+            <div class="col-6 text-left">
+              <MultiSelect id="multiSelectCities" v-model="selectedCities" :options="cities" optionLabel="name" placeholder="Select Countries" :filter="true" class="multiselect-custom"
+                           style="min-width: 20rem; max-width: 20rem;">
+                <template #value="slotProps">
+                  <div class="country-item country-item-value" v-for="option of slotProps.value" :key="option.code">
+                    <div>{{option.name}}</div>
                   </div>
+                  <template v-if="!slotProps.value || slotProps.value.length === 0">
+                    Select cities
+                  </template>
+                </template>
+                <template #option="slotProps">
+                  <div class="country-item">
+                    <div>{{slotProps.option.name}}</div>
+                  </div>
+                </template>
+              </MultiSelect>
+              <Button id="searchButton" type="button" @click="onSearch" icon="pi pi-search" style=""/>
+            </div>
+            <div class="col-6 text-right">
+              <DataViewLayoutOptions v-model="layout" />
+            </div>
+            <Calendar class="calendarIcon" id="icon" placeholder="Check-in" v-model="checkInDate" :showIcon="true" style="width: 9.65rem; margin-top: 0.5em; margin-right: 0.5em;"/>
+            <Calendar class="calendarIcon" id="icon" placeholder="Check-out" v-model="checkOutDate" :showIcon="true" style="width: 9.65rem; margin-top: 0.5em; margin-right: 0.5em;"/>
+            <ConfirmPopup id="confirmPopup" ></ConfirmPopup>
+            <Toast/>
+            <Button id="removeFiltersBtn" @click="confirmRemoveFilters($event)" icon="pi pi-times" style="background-color: indianred; border-color: indianred; color: white; margin-top: 0.5em;"/>
+          </div>
+          <Divider id="gridDivider" v-if="layout=='grid'"></Divider>
+        </template>
+        <template #list="slotProps">
+          <div class="col-12">
+            <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
+              <img id="listImage" :src="slotProps.data.image" :alt="slotProps.data.city" class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5" />
+              <div class="flex-1 text-center md:text-left">
+                <div class="font-bold text-2xl">{{slotProps.data.city}}</div>
+                <div class="mb-3">{{slotProps.data.street}},{{slotProps.data.street_number}},{{slotProps.data.floor}},{{slotProps.data.door}},{{slotProps.data.house_dimension}}</div>
+                <Rating :value="slotProps.data.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
+                <div class="flex align-items-center">
+                  <Tag :value="slotProps.data.house_owner_name" icon="pi pi-user" style="color: white; background-color: #6c757d"></Tag>
                 </div>
-                <div class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
+              </div>
+              <div class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
                   <span v-if="slotProps.data.favorite==true">
                       <Button id="favButtonList" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
                   </span>
-                  <span v-else>
+                <span v-else>
                       <Button id="favButtonList" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
                   </span>
-                  <span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end">{{slotProps.data.price}}€ day</span>
-                  <Button id="buttonViewList" label="View house" iconPos="right" class="buttonView"/>
-                </div>
+                <span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end">{{slotProps.data.price}}€ day</span>
+                <Button id="buttonViewList" label="View house" @click="seeHouseDetails(slotProps.data.house_id)" iconPos="right" class="buttonView"/>
               </div>
             </div>
-          </template>
-          <template #grid="slotProps">
-            <div class="col-12 md:col-3">
-                <div class="card m-3 card1">
-                  <div id ="container-image" class="container">
-                    <div id="container-effect">
-                      <img id="card-img" :src="slotProps.data.image" alt="las vegas">
-                      <figcaption>
-                        <Button id="buttonViewGrid" label="View house" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
-                      </figcaption>
-                    </div>
-                    <span id="favContainer" v-if="slotProps.data.favorite==true">
-                        <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
-                      </span>
-                    <span id="favContainer" v-else>
+          </div>
+        </template>
+        <template #grid="slotProps">
+          <div class="col-12 md:col-3">
+            <div class="card m-3 card1">
+              <div id ="container-image" class="container">
+                <div id="container-effect">
+                  <img id="card-img" :src="slotProps.data.image" alt="img">
+                  <figcaption>
+                    <Button id="buttonViewGrid" label="View house" @click="seeHouseDetails(slotProps.data.house_id)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
+                  </figcaption>
+                </div>
+                <span id="favContainer" v-if="slotProps.data.favorite==true">
+                      <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
+                </span>
+                <span id="favContainer" v-else>
                         <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
-                      </span>
-                    <span id="priceContainer" class="text font-semibold"><a>{{slotProps.data.price}}€</a> day</span>
-                  </div>
-                  <div id="card-details" class="details">
-                    <div class="flex align-items-center justify-content-between">
-                      <h6>{{slotProps.data.city}}</h6>
-                      <div class="flex align-items-center">
-                        <Tag id="tagHost" :value="slotProps.data.house_owner_name" icon="pi pi-user" style="color: white; background-color: #2A323D"></Tag>
-                        <Rating :value="slotProps.data.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
-                      </div>
-                  </div>
-                    <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{slotProps.data.street}},{{slotProps.data.street_number}},{{slotProps.data.floor}},{{slotProps.data.door}},{{slotProps.data.house_dimension}}</p>
+                </span>
+                <span id="priceContainer" class="text font-semibold"><a>{{slotProps.data.price}}€</a> day</span>
+                <span id="loaderContainer" v-if="loaderActive===true">
+                  <LoadingSpinnerGrid :active="true"/>
+                </span>
+              </div>
+              <div id="card-details" class="details">
+                <div class="flex align-items-center justify-content-between">
+                  <h6>{{slotProps.data.city}}</h6>
+                  <div class="flex align-items-center">
+                    <Tag id="tagHost" :value="slotProps.data.house_owner_name" icon="pi pi-user" style="color: white; background-color: #2A323D"></Tag>
+                    <Rating :value="slotProps.data.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
                   </div>
                 </div>
+                <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{slotProps.data.street}},{{slotProps.data.street_number}},{{slotProps.data.floor}},{{slotProps.data.door}},{{slotProps.data.house_dimension}}</p>
+              </div>
             </div>
-          </template>
-        </DataView>
+          </div>
+        </template>
+      </DataView>
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import LoadingSpinnerGrid from './LoadingSpinnerGrid'
+
 export default {
   name: 'App',
+  components: {
+    LoadingSpinnerGrid
+  },
   data () {
     return {
       logged: null,
-      houses: [{}],
+      username: null,
+      token: null,
+      houses: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
       layout: 'grid',
       checkInDate: null,
       checkOutDate: null,
       selectedCities: null,
       h: [],
       numHouses: null,
+      loaderActive: false,
+      selectedCities: [],
       cities: [
         {name: 'Barcelona', code: 'BCN'},
         {name: 'Girona', code: 'GI'},
@@ -169,6 +181,10 @@ export default {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/login'})
     },
+    // eslint-disable-next-line camelcase
+    seeHouseDetails (house_id) {
+      this.$router.push({ path: '/housedetails', query: {username: this.username, logged: this.logged, token: this.token, house_id: house_id} })
+    },
     changeFavorite () {
       if (this.logged === false) {
         this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites', life: 2000})
@@ -185,12 +201,27 @@ export default {
       const pathHouses = 'https://doogking.azurewebsites.net/api/housing/'
       const promise = axios.get(pathHouses, headers)
       Promise.resolve(promise).then((value) => (this.numHouses = value.data.length))
+    },
+    showLoader () {
+      this.loaderActive = true
+    },
+    hideLoader () {
+      this.loaderActive = false
     }
   },
   created () {
     this.logged = this.$route.query.logged === 'true'
+    this.username = this.$route.query.username
+    this.token = this.$route.query.token
+    if (this.logged === undefined) {
+      this.logged = false
+    }
     this.getHouses()
     this.getNumHouses()
+    this.showLoader()
+    setTimeout(() => {
+      this.hideLoader()
+    }, 500)
   }
 }
 </script>
@@ -210,6 +241,7 @@ export default {
   box-sizing: border-box;
   overflow: hidden;
   text-overflow: ellipsis;
+  width: 19rem;
 }
 
 #container-image{
@@ -221,9 +253,11 @@ export default {
 
 #card-img{
   clip-path: polygon(0 0,100% 0, 100% 85%, 0 100%);
-  width: 100%;
   display: block;
   border-radius: 20px 20px 0 0;
+  overflow: hidden;
+  width: 19rem;
+  height: 12rem;
 }
 
 #container-effect {
@@ -407,6 +441,12 @@ export default {
   position:absolute;
   top:0.5em;
   right:0.5em;
+}
+
+#loaderContainer{
+  position:absolute;
+  top:40%;
+  left:45%;
 }
 
 #priceContainer{
