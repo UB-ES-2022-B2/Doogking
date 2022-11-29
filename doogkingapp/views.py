@@ -4,6 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import permissions
+from .permissions import IsOwnerOfProfile
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from .models import Profile, Housing, HousingImage, Reservation
@@ -25,7 +26,9 @@ class ProfileViewSet(viewsets.ModelViewSet):
         if self.action == 'create':
             permission_classes = [permissions.AllowAny]
         else:
-            permission_classes = [permissions.IsAdminUser]
+            permission_classes = [
+                permissions.IsAdminUser | IsOwnerOfProfile
+            ]
         return [permission() for permission in permission_classes]
 
 
