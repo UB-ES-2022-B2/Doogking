@@ -134,7 +134,6 @@ export default {
   methods: {
     handleSubmit (isFormValid) {
       this.submitted = true
-
       if (isFormValid) {
         this.checkLogin()
       }

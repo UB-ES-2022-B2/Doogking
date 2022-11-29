@@ -23,7 +23,7 @@
           </li>
           <li class="nav-item">
             <a v-if="this.$route.name ==='AboutUs'" class="nav-link" style="color: #8DD0FF; cursor: pointer"><fa :icon="['fas', 'circle-info'] " /></a>
-            <a v-else class="nav-link" style="cursor: pointer"><fa :icon="['fas', 'circle-info'] " /></a>
+            <a v-else class="nav-link" @click="goToAboutUs" style="cursor: pointer"><fa :icon="['fas', 'circle-info'] " /></a>
           </li>
         </ul>
       </div>
@@ -102,6 +102,10 @@ export default {
       if (this.logged) {
         this.$router.push({ path: '/profile', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
       }
+    },
+    goToAboutUs () {
+      // eslint-disable-next-line standard/object-curly-even-spacing
+      this.$router.push({ path: '/aboutUs', query: {username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id} })
     },
     logOut () {
       this.logged = false

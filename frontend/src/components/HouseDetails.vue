@@ -70,6 +70,21 @@
             </template>
           </Dialog>
 
+          <Dialog :visible="showHouseMessage" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
+            <div class="flex align-items-center flex-column pt-6 px-3">
+              <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
+              <h5 style="margin-top: 1em">House Error!</h5>
+              <p style="text-align: center">
+                The house you are trying to see doesn't exist.
+              </p>
+            </div>
+            <template #footer>
+              <div class="flex justify-content-center">
+                <Button label="OK" @click="toggleDialogHouse" class="p-button-text" />
+              </div>
+            </template>
+          </Dialog>
+
           <div class="flex justify-content-center">
             <div class="card">
               <h5 class="text-center" style="margin-top: 1.5em;">{{ house.city}}</h5>
@@ -101,7 +116,7 @@
                 </div>
                 <div class="field">
                   <div class="p-float-label">
-                    <Calendar id="checkInDate" :showIcon="true" v-model="v$.checkInDate.$model" :class="{'p-invalid':v$.checkInDate.$invalid && submitted || (checkInDate !== null && !validInDate)}"/>
+                    <Calendar id="checkInDate" :showIcon="true" v-model="v$.checkInDate.$model" :disabledDates="invalidDates" :manualInput="false" :class="{'p-invalid':v$.checkInDate.$invalid && submitted || (checkInDate !== null && !validInDate)}"/>
                     <label for="checkOutDate" :class="{'p-error':v$.checkInDate.$invalid && submitted}">Check-in*</label>
                   </div>
                   <small v-if="(v$.checkInDate.$invalid && submitted) || v$.checkInDate.$pending.$response" class="p-error">{{v$.checkInDate.required.$message.replace('Value', 'Check-in')}}</small>
@@ -109,7 +124,7 @@
                 </div>
                 <div class="field">
                   <div class="p-float-label">
-                    <Calendar id="checkOutDate" :showIcon="true" v-model="v$.checkOutDate.$model" :class="{'p-invalid':v$.checkOutDate.$invalid && submitted || (checkOutDate !== null && checkInDate >= checkOutDate) || (checkOutDate !== null && !validOutDate)}"/>
+                    <Calendar id="checkOutDate" :showIcon="true" v-model="v$.checkOutDate.$model" :disabledDates="invalidDates" :manualInput="false" :class="{'p-invalid':v$.checkOutDate.$invalid && submitted || (checkOutDate !== null && checkInDate >= checkOutDate) || (checkOutDate !== null && !validOutDate)}"/>
                     <label for="checkOutDate" :class="{'p-error':v$.checkOutDate.$invalid && submitted}">Check-out*</label>
                   </div>
                   <small v-if="(v$.checkOutDate.$invalid && submitted) || v$.checkOutDate.$pending.$response" class="p-error">{{v$.checkOutDate.required.$message.replace('Value', 'Check-out')}}</small>
@@ -188,7 +203,9 @@ export default {
       showSuccessMessage: false,
       showErrorMessage: false,
       showLoginMessage: false,
+      showHouseMessage: false,
       error: '',
+      invalidDates: [],
       house: {
         'city': 'City',
         'street': 'street',
@@ -243,7 +260,13 @@ export default {
     getHouse () {
       const headers = {'Access-Control-Allow-Origin': '*'}
       const pathHouses = 'https://doogking.azurewebsites.net/api/housing/' + this.house_id + '/'
-      axios.get(pathHouses, headers).then(response => (this.house = response.data))
+      axios.get(pathHouses, headers)
+        .then(response => (this.house = response.data))
+        .catch((error) => {
+          // eslint-disable-next-line
+          this.error = error
+          this.showHouseMessage = true
+        })
     },
     getHouseImages () {
       const headers = {'Access-Control-Allow-Origin': '*'}
@@ -280,9 +303,33 @@ export default {
           this.showErrorMessage = true
         })
     },
+    getReservations () {
+      const headers = {'Access-Control-Allow-Origin': '*'}
+      const pathReservations = 'https://doogking.azurewebsites.net/api/reservations/?housing=' + this.house_id
+      axios.get(pathReservations, headers)
+        .then((res) => {
+          for (let i = 0; i < res.data.length; i++) {
+            var reservationStartDate = new Date(res.data[i].start_date)
+            var reservationEndDate = new Date(res.data[i].end_date)
+            var differenceInTimeRes = reservationEndDate.getTime() - reservationStartDate.getTime()
+            // To calculate the no. of days between two dates
+            var differenceInDaysRes = differenceInTimeRes / (1000 * 3600 * 24)
+            let invalidDate = new Date(reservationStartDate.getTime())
+            for (let i = 0; i <= differenceInDaysRes; i++) {
+              this.invalidDates.push(new Date(invalidDate.getTime()))
+              invalidDate.setDate(invalidDate.getDate() + 1)
+            }
+          }
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          this.error = error
+        })
+    },
     handleSubmit (isFormValid) {
       this.submitted = true
-      if (isFormValid && this.checkOutDate !== null && this.checkInDate < this.checkOutDate) {
+      if (isFormValid && (this.checkOutDate !== null) && (this.checkInDate !== null) &&
+        (this.checkInDate < this.checkOutDate) && (this.validInDate) && (this.validOutDate)) {
         if (this.logged === true) {
           this.makeReservation()
         } else {
@@ -293,6 +340,15 @@ export default {
     goToLogin () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/login'})
+    },
+    goToHomepage () {
+      // eslint-disable-next-line standard/object-curly-even-spacing
+      if (this.logged) {
+        this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
+      } else {
+        // eslint-disable-next-line standard/object-curly-even-spacing
+        this.$router.push({ path: '/'})
+      }
     },
     checkInDateValid () {
       const today = new Date()
@@ -345,7 +401,7 @@ export default {
     toggleDialogSuccess () {
       this.showSuccessMessage = !this.showSuccessMessage
       if (!this.showSuccessMessage) {
-        this.resetForm()
+        this.$router.go()
       }
     },
     toggleDialogError () {
@@ -358,6 +414,13 @@ export default {
       this.showLoginMessage = !this.showLoginMessage
       if (!this.showLoginMessage) {
         this.resetForm()
+      }
+    },
+    toggleDialogHouse () {
+      this.showHouseMessage = !this.showHouseMessage
+      if (!this.showHouseMessage) {
+        this.resetForm()
+        this.goToHomepage()
       }
     }
   },
@@ -374,6 +437,7 @@ export default {
     }
     this.getHouse()
     this.getHouseImages()
+    this.getReservations()
     this.showLoader()
     setTimeout(() => {
       this.hideLoader()
