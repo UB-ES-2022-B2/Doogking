@@ -118,7 +118,6 @@ export default {
       layout: 'grid',
       checkInDate: null,
       checkOutDate: null,
-      selectedCities: null,
       h: [],
       numHouses: null,
       loaderActive: false,
@@ -152,6 +151,7 @@ export default {
           this.selectedCities = null
           this.checkInDate = null
           this.checkOutDate = null
+          this.getHouses()
         },
         reject: () => {
         }
