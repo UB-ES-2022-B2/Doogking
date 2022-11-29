@@ -12,12 +12,12 @@
               <div class="info-containter" >
                 <div class="form-label-group">
                   <label for="inputEmail" style="color:white">Email</label>
-                  <input type="email" style="background-color: #212529" id="inputEmail" class="form-control"
+                  <input type="email" id="inputEmail" class="form-control"
                          autofocus v-model="addUserForm.email" aria-describedby="inputGroupPrepend2">
                 </div>
                 <div class="form-label-group">
                   <label for="inputUsername" style="color:white">Username</label>
-                  <input type="username" style="background-color: #212529" id="inputUsername" class="form-control"
+                  <input type="username" id="inputUsername" class="form-control"
                          autofocus v-model="addUserForm.username" aria-describedby="inputGroupPrepend2">
                 </div>
                 <div class="group-buttons">
@@ -63,6 +63,11 @@ export default {
   },
   methods: {
     goUpdateInfo () {
+      if (this.addUserForm.email === null) {
+        this.addUserForm.email = this.email
+      } if (this.addUserForm.username === null) {
+        this.addUserForm.username = this.username
+      }
       var data = JSON.stringify({
         'email': this.addUserForm.email,
         'first_name': this.addUserForm.username
@@ -71,11 +76,13 @@ export default {
         method: 'patch',
         url: 'https://doogking.azurewebsites.net/api/profiles/' + this.user_id + '/',
         headers: {
-          'Authorization': 'Token' + this.token,
+          'Access-Control-Allow-Origin': '*',
+          'Authorization': 'Token ' + this.token,
           'Content-Type': 'application/json'
         },
         data: data
       }
+      console.log('Token ' + this.token)
       axios(config)
         .then(function (response) {
         }).catch(function (response) {})
@@ -88,7 +95,8 @@ export default {
         method: 'delete',
         url: 'https://doogking.azurewebsites.net/api/profiles/' + this.user_id + '/',
         headers: {
-          'Authorization': 'Token' + this.token,
+          'Access-Control-Allow-Origin': '*',
+          'Authorization': 'Token ' + this.token,
           'Content-Type': 'application/json'
         }
       }
