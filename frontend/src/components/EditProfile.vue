@@ -29,11 +29,6 @@
               </div>
             </div>
             <div class="changePassword-button" align-content="left">
-              <button class="btn btn-lg btn-block" type="submit" name="changePassword" aria-label="Left Align"><fa :icon="['fas', 'unlock-alt']"/><h6>Change Password</h6></button>
-            </div>
-            <div class="deleteAccount-button" align-content="left">
-              <button class="btn btn-lg btn-block" type="submit" name="deleteAccount" aria-label="Left Align">Delete Account</button>
-            </div>
           </div>
         </div>
       </div>
