@@ -28,7 +28,6 @@
                 </div>
               </div>
             </div>
-            <div class="changePassword-button" align-content="left">
           </div>
         </div>
       </div>
