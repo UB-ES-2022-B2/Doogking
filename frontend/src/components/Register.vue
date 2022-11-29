@@ -117,6 +117,7 @@ export default {
       username: '',
       email: '',
       password: '',
+      user_id: null,
       accept: null,
       submitted: false,
       cities: [
@@ -169,6 +170,8 @@ export default {
         .then((res) => {
           this.logged = true
           this.token = res.data.token
+          this.username = res.data.profile.first_name + res.data.profile.last_name
+          this.user_id = res.data.profile.id
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -211,7 +214,7 @@ export default {
       this.showSuccessMessage = !this.showSuccessMessage
 
       if (!this.showSuccessMessage) {
-        this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token } })
+        this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
         this.resetForm()
       }
     },
