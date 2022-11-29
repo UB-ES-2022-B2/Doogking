@@ -63,11 +63,11 @@ export default {
     },
     goToPrivacyPolicy () {
       // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({path: '/privacyPolicy'})
+      this.$router.push({ path: '/privacyPolicy', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
     },
     goToAboutUs () {
       // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/aboutUs'})
+      this.$router.push({ path: '/aboutUs', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
     }
   },
   created () {
