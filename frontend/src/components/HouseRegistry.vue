@@ -29,7 +29,7 @@
                 </FileUpload>
               <h1></h1>
               <span class="p-float-label">
-                <InputText id="price" type="text" v-model="value" />
+                <InputText id="price" type="number" v-model="value" />
                 <label for="price">Price per day</label>
               </span>
               <h1></h1>
