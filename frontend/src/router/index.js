@@ -12,7 +12,6 @@ import HouseDetails from '../components/HouseDetails'
 import PrivacyPolicy from '../components/PrivacyPolicy'
 import AboutUs from '../components/AboutUs'
 
-
 Vue.use(Router)
 
 export default new Router({
