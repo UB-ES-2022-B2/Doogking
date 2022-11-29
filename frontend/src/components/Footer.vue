@@ -6,7 +6,6 @@
           <h4>DoogKing</h4>
           <ul>
             <li><a href="#">About us</a></li>
-            <li><a href="#">Services</a></li>
             <li><a href="#">Privacy policy</a></li>
             <li><a href="#">Register</a></li>
           </ul>
@@ -14,30 +13,20 @@
         <div class="footer-col">
           <h4>Support</h4>
           <ul>
-            <li><a href="#">FAQ</a></li>
-            <li><a href="#">Complaints</a></li>
-            <li><a href="#">Customer support</a></li>
-            <li><a href="#">Payment options</a></li>
-            <li><a href="#">Business contact</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h4>Housing</h4>
           <ul>
-            <li><a href="#">Cities</a></li>
-            <li><a href="#">Regions</a></li>
-            <li><a href="#">Countries</a></li>
-            <li><a href="#">Houses</a></li>
-            <li><a href="#">Flats</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h4>Follow us</h4>
           <div class="social-links">
-            <a href="#"><fa :icon="['fab', 'facebook']" /></a>
-            <a href="#"><fa :icon="['fab', 'twitter']" /></a>
-            <a href="#"><fa :icon="['fab', 'instagram']" /></a>
-            <a href="#"><fa :icon="['fab', 'linkedin']" /></a>
+            <a href="https://www.facebook.com/profile.php?id=100087988193167" target="_blank"><fa :icon="['fab', 'facebook']" /></a>
+            <a href="https://twitter.com/doogkingUB2022" target="_blank"><fa :icon="['fab', 'twitter']" /></a>
+            <a href="https://www.instagram.com/doogking_ub_2022/" target="_blank"><fa :icon="['fab', 'instagram']" /></a>
+            <a href="https://www.linkedin.com/in/doogking-ub-855804256/" target="_blank"><fa :icon="['fab', 'linkedin']" /></a>
           </div>
         </div>
       </div>
