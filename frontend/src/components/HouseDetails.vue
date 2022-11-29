@@ -251,22 +251,31 @@ export default {
       axios.get(pathImageHouses, headers).then(response => (this.houseImages = response.data))
     },
     makeReservation () {
-      const headers = {'Access-Control-Allow-Origin': '*',
-        'Authorization': 'Token ' + this.token
+      var data = JSON.stringify({
+        'housing': 'https://doogking.azurewebsites.net/api/housing/' + this.house_id + '/',
+        'customer': 'https://doogking.azurewebsites.net/api/profiles/' + this.user_id + '/',
+        'start_date': this.checkInDate.getFullYear() + '-' + this.checkInDate.toLocaleString('default', { month: '2-digit' }) + '-' + this.checkInDate.toLocaleString('default', { day: '2-digit' }),
+        'end_date': this.checkOutDate.getFullYear() + '-' + this.checkOutDate.toLocaleString('default', { month: '2-digit' }) + '-' + this.checkOutDate.toLocaleString('default', { day: '2-digit' })
+      })
+      console.log(this.checkInDate.getFullYear() + '-' + this.checkInDate.getMonth() + '-' + this.checkInDate.getDate())
+      var config = {
+        method: 'post',
+        url: 'https://doogking.azurewebsites.net/api/reservations/',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Authorization': 'Token ' + this.token,
+          'Content-Type': 'application/json'
+        },
+        data: data
       }
-      const parameters = {
-        housing: 'https://doogking.azurewebsites.net/api/housing/' + this.house_id + '/',
-        customer: 'https://doogking.azurewebsites.net/api/profiles/' + this.user_id + '/',
-        start_date: new Date(this.checkInDate),
-        end_date: new Date(this.checkOutDate)
-      }
-      const path = 'https://doogking.azurewebsites.net/api/reservations/'
-      axios.post(path, parameters, headers)
-        .then((res) => {
+
+      axios(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data))
           this.showSuccessMessage = true
         })
         .catch((error) => {
-          // eslint-disable-next-line
+          console.log(error)
           this.error = error
           this.showErrorMessage = true
         })
