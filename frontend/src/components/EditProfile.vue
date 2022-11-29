@@ -12,19 +12,17 @@
               <div class="info-containter" >
                 <div class="form-label-group">
                   <label for="inputEmail" style="color:white">Email</label>
-                  <input type="email" style="color: #2a323d" id="inputEmail" class="form-control"
+                  <input type="email" style="background-color: #212529" id="inputEmail" class="form-control"
                          autofocus v-model="addUserForm.email" aria-describedby="inputGroupPrepend2">
                 </div>
                 <div class="form-label-group">
                   <label for="inputUsername" style="color:white">Username</label>
-                  <input type="username" style="color: #2a323d" id="inputUsername" class="form-control"
+                  <input type="username" style="background-color: #212529" id="inputUsername" class="form-control"
                          autofocus v-model="addUserForm.username" aria-describedby="inputGroupPrepend2">
                 </div>
                 <div class="group-buttons">
-                  <button class="btn btn-lg btn-block" type="button" @click="goUpdateInfo">
-                    Update Info</button>
-                  <button class="btn btn-lg btn-block" type="button" @click="goToProfile">
-                     Close</button>
+                  <button class="btn btn-lg btn-block" type="button" @click="goUpdateInfo">Update Info</button>
+                  <button class="btn btn-lg btn-block" style="color: #8dd0ff" type="button" @click="goToProfile">Return</button>
                 </div>
               </div>
             </div>
