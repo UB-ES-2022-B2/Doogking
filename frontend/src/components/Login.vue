@@ -1,131 +1,166 @@
 <template>
-<div>
-  <div class="flex-wrapper">
-  <Header></Header>
-  <div id="app">
-    <div class="col-lg-6 col-md-12 m-auto">
-      <b-alert v-model="showDismissibleAlert" variant="danger" dismissible>
-        <h4 class="alert-heading">Oops, something went wrong</h4>
-        <p>Please enter a valid username/password.</p>
-      </b-alert>
-    </div>
-    <div class="body">
-      <div id="container-login" class="container">
-        <div v-if="!creatingAccount" class="card" style="width: 30rem; background-color: #4f5050; color: white">
-          <h3>Iniciar sesión</h3>
-          <hr>
-          <div class="form-label-group">
-            <label for="inputEmail">Username</label>
-            <input type="username" id="inputUsername" class="form-control"
-                   autofocus v-model="addUserForm.username" aria-describedby="inputGroupPrepend2" required>
+  <div>
+    <div class="flex-wrapper">
+      <Header></Header>
+      <div class="form-demo">
+        <Dialog :visible="showSuccessMessage" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
+          <div class="flex align-items-center flex-column pt-6 px-3">
+            <i class="pi pi-check-circle" :style="{fontSize: '5rem', color: 'var(--green-500)' }"></i>
+            <h5 style="margin-top: 1em">Login Successful!</h5>
+            <p style="text-align: center">
+              Your account is logged in under username <b>{{ this.username }}</b>
+            </p>
           </div>
-          <div class="form-label-group">
-            <label for="inputPassword">Password</label>
-            <input type="password" id="inputPassword" class="form-control" v-model="addUserForm.password" aria-describedby="inputGroupPrepend2" required>
-          </div>
-          <div class="group-buttons">
-            <button class="btn btn-lg btn-block" type="submit" @click="checkLogin" name="signIn">Login</button>
-            <button class="btn btn-lg btn-block" @click="goToRegister" name="createAccount">Create account</button>
-          </div>
-          <div class="forgotPassword-button">
-            <button class="btn btn-lg btn-block" @click="goToForgotPassword" name="forgotPassword">Forgot Password</button>
+          <template #footer>
+            <div class="flex justify-content-center">
+              <Button label="OK" @click="toggleDialogSuccess" class="p-button-text" />
             </div>
+          </template>
+        </Dialog>
+
+        <Dialog :visible="showErrorMessage" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
+          <div class="flex align-items-center flex-column pt-6 px-3">
+            <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
+            <h5 style="margin-top: 1em">Login Error!</h5>
+            <p style="text-align: center">
+              Please enter a valid email/password
+            </p>
+          </div>
+          <template #footer>
+            <div class="flex justify-content-center">
+              <Button label="OK" @click="toggleDialogError" class="p-button-text" />
+            </div>
+          </template>
+        </Dialog>
+
+        <div class="flex justify-content-center">
+          <div class="card">
+            <h5 class="text-center" style="margin-bottom: -2rem; padding-top: 1rem">Login</h5>
+            <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
+              <div class="field">
+                <hr style="margin-bottom: 1.5rem;" class="solid"/>
+                <div class="p-float-label p-input-icon-right">
+                  <i class="pi pi-envelope" />
+                  <InputText id="email" v-model="v$.email.$model" :class="{'p-invalid':v$.email.$invalid && submitted}" aria-describedby="email-error"/>
+                  <label for="email" :class="{'p-error':v$.email.$invalid && submitted}">Email*</label>
+                </div>
+                <span v-if="v$.email.$error && submitted">
+                            <span id="email-error" v-for="(error, index) of v$.email.$errors" :key="index">
+                            <small class="p-error">{{error.$message}}</small>
+                            </span>
+                        </span>
+                <small v-else-if="(v$.email.$invalid && submitted) || v$.email.$pending.$response" class="p-error">{{v$.email.required.$message.replace('Value', 'Email')}}</small>
+              </div>
+              <div class="field">
+                <div class="p-float-label">
+                  <Password id="password" v-model="v$.password.$model" :class="{'p-invalid':v$.password.$invalid && submitted}" toggleMask>
+                    <template #header>
+                      <h6>Enter your password</h6>
+                    </template>
+                    <template #footer="sp">
+                      {{sp.level}}
+                      <Divider />
+                      <p class="mt-2">Suggestions</p>
+                      <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+                        <li>At least one lowercase</li>
+                        <li>At least one uppercase</li>
+                        <li>At least one numeric</li>
+                        <li>Minimum 8 characters</li>
+                      </ul>
+                    </template>
+                  </Password>
+                  <label for="password" :class="{'p-error':v$.password.$invalid && submitted}">Password*</label>
+                </div>
+                <small v-if="(v$.password.$invalid && submitted) || v$.password.$pending.$response" class="p-error">{{v$.password.required.$message.replace('Value', 'Password')}}</small>
+              </div>
+              <div class="field" style="margin-top: -1em">
+                <label>Forgot your password? <a class="link" @click="goToForgotPassword" style="cursor: pointer; color: #8DD0FF; text-decoration: none; margin-top: -1em">Recover it now!</a></label>
+              </div>
+              <div class="field" style="margin-top: -1em">
+                <Button id="submitButton" type="submit" label="Submit" class="mt-2"/>
+              </div>
+              <div class="field" style="margin-top: -1em">
+                <label>Don't have an account yet? <a class="link" @click="goToRegister" style="cursor: pointer; color: #8DD0FF; text-decoration: none; margin-top: -1em">Register now!</a></label>
+              </div>
+            </form>
           </div>
         </div>
       </div>
+      <Footer></Footer>
     </div>
-    <Footer></Footer>
   </div>
-</div>
 </template>
-
-<style scoped>
-.flex-wrapper {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-#container-login {
-  padding: 2em;
-  text-align: center;
-}
-.card {
-  padding: 2em;
-  margin: 0 auto;
-}
-.form-label-group {
-  text-align: left;
-}
-.card > :not(:first-child) {
-  margin-top: 1em;
-}
-.card > :first-child {
-  margin-top: 0;
-}
-.group-buttons > :not(:first-child) {
-  margin-top: 1em;
-  background-color: #6c757d;
-  border-color: #6c757d;
-  outline-style: none;
-  border: none;
-  color: white;
-}
-.group-buttons > :first-child {
-  margin-top: 1em;
-  background-color: #6c757d;
-  border-color: #6c757d;
-  outline-style: none;
-  border: none;
-  color: white;
-}
-.forgotPassword-button > :first-child {
-  margin-top: 0.5em;
-  background-color: #4F5050;
-  border-color: #4F5050;
-  outline-style: none;
-  border: none;
-  color: white;
-}
-
-.btn:hover {
-  color: #F06449;
-  border-color: #6c757d;
-}
-
-</style>
 
 <script>
 import Header from './Header'
 import Footer from './Footer'
-
 import axios from 'axios'
+import { email, required } from '@vuelidate/validators'
+import { useVuelidate } from '@vuelidate/core'
+
 export default {
   components: {
     Header,
     Footer
   },
+  setup: () => ({ v$: useVuelidate() }),
   data () {
     return {
       logged: false,
-      username: null,
-      password: null,
       token: null,
-      creatingAccount: false,
-      addUserForm: {
-        username: null,
-        password: null
+      email: '',
+      username: '',
+      user_id: null,
+      password: '',
+      submitted: false,
+      showSuccessMessage: false,
+      showErrorMessage: false,
+      error: ''
+    }
+  },
+  validations () {
+    return {
+      email: {
+        required,
+        email
       },
-      showDismissibleAlert: false
+      password: {
+        required
+      }
     }
   },
   created () {
   },
   methods: {
+    handleSubmit (isFormValid) {
+      this.submitted = true
+      if (isFormValid) {
+        this.checkLogin()
+      }
+    },
+    toggleDialogSuccess () {
+      this.showSuccessMessage = !this.showSuccessMessage
+      if (!this.showSuccessMessage) {
+        this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
+        this.resetForm()
+      }
+    },
+    toggleDialogError () {
+      this.showErrorMessage = !this.showErrorMessage
+
+      if (!this.showErrorMessage) {
+        this.resetForm()
+      }
+    },
+    resetForm () {
+      this.email = ''
+      this.password = ''
+      this.submitted = false
+    },
     checkLogin () {
       const parameters = {
-        username: this.addUserForm.username,
-        password: this.addUserForm.password
+        username: this.email,
+        password: this.password
       }
       const headers = {'Access-Control-Allow-Origin': '*'}
       console.log(parameters)
@@ -134,12 +169,14 @@ export default {
         .then((res) => {
           this.logged = true
           this.token = res.data.token
-          this.$router.push({ path: '/', query: { username: this.addUserForm.username, logged: this.logged, token: this.token } })
+          this.showSuccessMessage = true
+          this.username = res.data.profile.first_name + res.data.profile.last_name
+          this.user_id = res.data.profile.id
         })
         .catch((error) => {
           // eslint-disable-next-line
-          console.error(error)
-          this.showDismissibleAlert = true
+          this.error = error
+          this.showErrorMessage = true
         })
     },
     goToRegister () {
@@ -153,3 +190,46 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.flex-wrapper {
+  background-color: #2A323D;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow-x: hidden;
+  align-content: center;
+}
+
+.form-demo .card {
+  margin-top: 1.5rem;
+  border-radius: 1rem;
+  min-width: 30rem;
+  background-color: #3d4755;
+  color: white;
+  margin-bottom: 1.5rem;
+}
+
+.form-demo .card form{
+  margin-top: 2rem;
+}
+
+.form-demo .card .field{
+  margin-bottom: 1.5rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.form-demo .card .field-checkbox{
+  margin-bottom: 1.5rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.form-demo @media screen and (max-width: 960px) {
+  .card {
+    width: 80%;
+  }
+}
+</style>
