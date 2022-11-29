@@ -116,6 +116,9 @@ export default {
       layout: 'grid',
       checkInDate: null,
       checkOutDate: null,
+      selectedCities: null,
+      h: [],
+      numHouses: null,
       loaderActive: false,
       selectedCities: [],
       cities: [
@@ -157,6 +160,22 @@ export default {
         this.checkOutDate = null
         this.$toast.add({severity: 'error', summary: 'Error message', detail: 'Check-out date should be greater than check-in date', life: 2000})
       }
+      if (this.houses.length !== this.numHouses) {
+        this.getHouses()
+      }
+      if (this.selectedCities.length !== 0) {
+        this.h.length = 0
+        for (let i = 0; i < this.selectedCities.length; i++) {
+          for (let j = 0; j < this.houses.length; j++) {
+            if (this.selectedCities[i].name === this.houses[j].city) {
+              this.h.push(this.houses[j])
+            }
+          }
+        } this.houses = this.h
+      } else if (this.selectedCities.length === 0) {
+        this.houses.length = 0
+        this.getHouses()
+      } this.selectedCities.length = 0
     },
     goToLogin () {
       // eslint-disable-next-line standard/object-curly-even-spacing
@@ -177,6 +196,12 @@ export default {
       const pathHouses = 'https://doogking.azurewebsites.net/api/housing/'
       axios.get(pathHouses, headers).then(response => (this.houses = response.data))
     },
+    getNumHouses () {
+      const headers = {'Access-Control-Allow-Origin': '*'}
+      const pathHouses = 'https://doogking.azurewebsites.net/api/housing/'
+      const promise = axios.get(pathHouses, headers)
+      Promise.resolve(promise).then((value) => (this.numHouses = value.data.length))
+    },
     showLoader () {
       this.loaderActive = true
     },
@@ -192,6 +217,7 @@ export default {
       this.logged = false
     }
     this.getHouses()
+    this.getNumHouses()
     this.showLoader()
     setTimeout(() => {
       this.hideLoader()
