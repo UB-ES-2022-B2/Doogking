@@ -34,11 +34,14 @@ router.register(r'housing', views.HousingViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),
+    #path('ChangePasswordView/<int:pk>/', views.ChangePasswordView.as_view(), name='auth_change_password'),
     path('api/login/', views.ObtainAuthTokenUser.as_view()),
     path('admin/', admin.site.urls),
     path('api/reset/', views.ResetView.as_view()),
     path('api/delete/<int:id>', views. ProfileViewSet.delete, name='delete'),
     #path('api/changePassword/', auth_views.PasswordChangeView, name='password_change'),
     path('api/uploadProfile/', views.UploaderView.as_view()),
+    path('api/change-password/', views.ChangePasswordView.as_view(), name='change-password'),
+
     url(r'^.*$', TemplateView.as_view(template_name='index.html')),
 ]
