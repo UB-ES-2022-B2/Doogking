@@ -17,7 +17,7 @@
                 </div>
                 <div class="form-label-group">
                   <label for="inputUsername" style="color:white">Username</label>
-                  <input type="username" style="backgroud-color: #2a323d" id="inputUsername" class="form-control"
+                  <input type="username" style="color: #2a323d" id="inputUsername" class="form-control"
                          autofocus v-model="addUserForm.username" aria-describedby="inputGroupPrepend2">
                 </div>
                 <div class="group-buttons">
