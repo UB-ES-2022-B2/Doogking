@@ -13,6 +13,7 @@
         <div class="footer-col">
           <h4>Support</h4>
           <ul>
+            <li><a href="#" @click="goToBusinessContact" target="_blank">About>Business contact</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -57,6 +58,10 @@ export default {
     goToAboutUs () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/aboutUs', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
+    },
+    goToBusinessContact () {
+      // eslint-disable-next-line standard/object-curly-even-spacing
+      this.$router.push({ path: '/businessContact', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
     }
   },
   created () {
