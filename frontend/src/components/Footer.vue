@@ -13,7 +13,7 @@
         <div class="footer-col">
           <h4>Support</h4>
           <ul>
-            <li><a href="#" @click="goToBusinessContact" target="_blank">About>Business contact</a></li>
+            <li><a href="#" @click="goToBusinessContact" target="_blank">Business contact</a></li>
           </ul>
         </div>
         <div class="footer-col">
