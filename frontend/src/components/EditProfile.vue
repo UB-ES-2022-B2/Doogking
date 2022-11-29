@@ -13,17 +13,21 @@
             </div>
             <div class="p-2" style="margin-right:300px">
               <div class="info-containter" >
-                <div>
+                <div class="form-label-group">
                   <label for="inputEmail">Email</label>
-                  <input type="email" id="inputEmail" class="form-control">
+                  <input type="email" id="inputEmail" class="form-control"
+                         autofocus v-model="addUserForm.email" aria-describedby="inputGroupPrepend2">
                 </div>
-                <div>
-                  <label for="inputUsername" style="margin-top:20px">Username</label>
-                  <input type="email" id="inputEmail" class="form-control">
+                <div class="form-label-group">
+                  <label for="inputUsername">Username</label>
+                  <input type="username" id="inputUsername" class="form-control"
+                         autofocus v-model="addUserForm.username" aria-describedby="inputGroupPrepend2">
                 </div>
                 <div class="group-buttons">
-                  <button class="btn btn-lg btn-block" type="submit" @click="goToUpdateInfo" name="editProfile">
-                    Update info</button>
+                  <button class="btn btn-lg btn-block" type="submit" @click="goUpdateInfo" name="editProfile">
+                    Update Info</button>
+                  <button class="btn btn-lg btn-block" type="submit" @click="goToProfile" name="editProfile">
+                    close</button>
                 </div>
               </div>
             </div>
@@ -40,11 +44,11 @@
     </div>
   </form>
 </template>
-
 <script>
 
 import Header from './Header'
 import Footer from './Footer'
+import axios from 'axios'
 
 export default {
   components: {
@@ -53,21 +57,50 @@ export default {
   },
   data () {
     return {
-      email: null,
+      logged: null,
       username: null,
-      password: null,
+      email: null,
+      user_id: null,
       token: null,
-      logged: false
+      showSuccessMessage: false,
+      addUserForm: {
+        email: null,
+        username: null
+      }
+    }
+  },
+  methods: {
+    goUpdateInfo () {
+      const parameters = {
+        email: this.addUserForm.email,
+        first_name: this.addUserForm.username
+      }
+      const headers = {'Access-Control-Allow-Origin': '*', 'Authorization': 'Token ' + this.token}
+      const path = 'https://doogking.azurewebsites.net/api/profile/{user_id}'
+      axios.patch(path, parameters, headers).catch((error) => {
+        // eslint-disable-next-line
+        console.log(error)
+        this.error = error
+        this.showErrorMessage = true
+      })
+    },
+    goToProfile () {
+      console.log(this.logged)
+      this.$router.push({ path: '/profile', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
     }
   },
   created () {
     this.logged = this.$route.query.logged === 'true'
     this.username = this.$route.query.username
     this.email = this.$route.query.email
+    this.user_id = this.$route.query.user_id
     this.token = this.$route.query.token
     if (this.logged === undefined) {
       this.logged = false
     }
+    console.log(this.email)
+    console.log(this.logged)
+    console.log(this.user_id)
   }
 }
 </script>
