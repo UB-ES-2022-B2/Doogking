@@ -84,8 +84,17 @@ export default {
       this.$router.push({ path: '/profile', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
     },
     deleteProfile () {
-      const path = 'https://doogking.azurewebsites.net/api/profiles/' + this.user_id + '/'
-      axios.delete(path)
+      var config = {
+        method: 'delete',
+        url: 'https://doogking.azurewebsites.net/api/profiles/' + this.user_id + '/',
+        headers: {
+          'Authorization': 'Token' + this.token,
+          'Content-Type': 'application/json'
+        }
+      }
+      axios(config)
+        .then(function (response) {
+        }).catch(function (response) {})
       this.logged = false
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({path: '/'})
