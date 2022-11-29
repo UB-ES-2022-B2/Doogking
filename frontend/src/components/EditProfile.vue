@@ -93,7 +93,7 @@ export default {
     deleteProfile () {
       var config = {
         method: 'delete',
-        url: 'https://doogking.azurewebsites.net/api/profiles/' + this.user_id + '/',
+        url: 'https://doogking.azurewebsites.net/api/deleteProfile/' + this.user_id + '/',
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Authorization': 'Token ' + this.token,

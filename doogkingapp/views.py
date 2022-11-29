@@ -2,7 +2,6 @@ from django.core.exceptions import PermissionDenied
 from rest_framework import viewsets
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework import permissions
 from .permissions import IsOwnerOfProfile
@@ -14,16 +13,13 @@ from .serializers import ProfileSerializer, \
     HousingSerializer, \
     HousingImageSerializer, \
     ReservationSerializer, \
-    CustomerReservationSerializer
+    CustomerReservationSerializer, \
+    ChangePasswordSerializer
 import secrets
 import requests
 from django.conf import settings
 from azure.storage.blob import BlobServiceClient
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import UpdateAPIView
-from django.contrib.auth import update_session_auth_hash
-
-from django.contrib.auth.models import User
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -176,21 +172,30 @@ class ResetView(APIView):
         else:
             raise PermissionDenied("Email and reset token do not match!")
 
+
 class ObtainAuthTokenUser(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
-        response = super(ObtainAuthTokenUser, self).post(request, *args, **kwargs)
+        response = super(ObtainAuthTokenUser, self).post(
+            request, *args, **kwargs)
         token = Token.objects.get(key=response.data['token'])
         user = Profile.objects.get(id=token.user_id)
-        return Response({'token': token.key, 'profile': CurrentProfileSerializer(user).data})
+        return Response(
+            {'token': token.key,
+             'profile': CurrentProfileSerializer(user).data}
+            )
+
 
 class UploaderView(APIView):
     def post(self, request):
         file = request.FILES['file']
-        credential = {"account_name": settings.AZURE_ACCOUNT_NAME, "account_key": settings.AZURE_ACCOUNT_KEY}
+        credential = {"account_name": settings.AZURE_ACCOUNT_NAME,
+                      "account_key": settings.AZURE_ACCOUNT_KEY}
 
-        blob_service_client = BlobServiceClient("https://" + settings.AZURE_CUSTOM_DOMAIN, credential)
+        blob_service_client = BlobServiceClient(
+            "https://" + settings.AZURE_CUSTOM_DOMAIN, credential)
 
-        blob_client = blob_service_client.get_blob_client(container=settings.AZURE_CONTAINER, blob=file.name)
+        blob_client = blob_service_client.get_blob_client(
+            container=settings.AZURE_CONTAINER, blob=file.name)
         blob_client.upload_blob(file.read())
 
         return Response({"message": "success", "uploaded_name": file.name})
@@ -209,6 +214,7 @@ class UploaderView(APIView):
         return Response({"message": "Password successfully changed!"})
 '''
 
+
 class ChangePasswordView(UpdateAPIView):
     """
     An endpoint for changing password.
@@ -216,13 +222,11 @@ class ChangePasswordView(UpdateAPIView):
     serializer_class = ChangePasswordSerializer
     model = Profile
 
-    #permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
     def get_permissions(self):
 
         permission_classes = [permissions.IsAuthenticated]
-
-
         return [permission() for permission in permission_classes]
 
     def get_object(self, queryset=None):
@@ -235,8 +239,9 @@ class ChangePasswordView(UpdateAPIView):
 
         if serializer.is_valid():
             # Check old password
-            #if not self.object.check_password(serializer.data.get("old_password")):
-                #return Response({"old_password": ["Wrong password."]})
+            # if not self.object.check_password(
+            # serializer.data.get("old_password")):
+            #       return Response({"old_password": ["Wrong password."]})
             # set_password also hashes the password that the user will get
             self.object.set_password(serializer.data.get("new_password"))
             self.object.save()
@@ -248,15 +253,3 @@ class ChangePasswordView(UpdateAPIView):
             }
 
             return Response(response)
-            
-class ObtainAuthTokenUser(ObtainAuthToken):
-    def post(self, request, *args, **kwargs):
-        response = super(ObtainAuthTokenUser, self)\
-            .post(request, *args, **kwargs)
-        token = Token.objects.get(key=response.data['token'])
-        user = Profile.objects.get(id=token.user_id)
-        return Response(
-            {'token': token.key,
-             'profile': CurrentProfileSerializer(user).data}
-        )
-
