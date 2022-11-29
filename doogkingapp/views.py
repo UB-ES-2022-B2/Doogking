@@ -1,6 +1,6 @@
 from django.core.exceptions import PermissionDenied
 from rest_framework import viewsets
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import permissions
@@ -13,9 +13,13 @@ from .serializers import ProfileSerializer, \
     HousingSerializer, \
     HousingImageSerializer, \
     ReservationSerializer, \
-    CustomerReservationSerializer
+    CustomerReservationSerializer, \
+    ChangePasswordSerializer
 import secrets
 import requests
+from django.conf import settings
+from azure.storage.blob import BlobServiceClient
+from rest_framework.generics import UpdateAPIView
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -30,6 +34,13 @@ class ProfileViewSet(viewsets.ModelViewSet):
                 permissions.IsAdminUser | IsOwnerOfProfile
             ]
         return [permission() for permission in permission_classes]
+
+    @api_view(('DELETE',))
+    def delete(request, id):
+        profile = Profile.objects.get(id=id)
+        if profile:
+            profile.delete()
+            return Response({"message": "Profile deleted"})
 
 
 class HousingViewSet(viewsets.ModelViewSet):
@@ -164,11 +175,81 @@ class ResetView(APIView):
 
 class ObtainAuthTokenUser(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
-        response = super(ObtainAuthTokenUser, self)\
-            .post(request, *args, **kwargs)
+        response = super(ObtainAuthTokenUser, self).post(
+            request, *args, **kwargs)
         token = Token.objects.get(key=response.data['token'])
         user = Profile.objects.get(id=token.user_id)
         return Response(
             {'token': token.key,
              'profile': CurrentProfileSerializer(user).data}
-        )
+            )
+
+
+class UploaderView(APIView):
+    def post(self, request):
+        file = request.FILES['file']
+        credential = {"account_name": settings.AZURE_ACCOUNT_NAME,
+                      "account_key": settings.AZURE_ACCOUNT_KEY}
+
+        blob_service_client = BlobServiceClient(
+            "https://" + settings.AZURE_CUSTOM_DOMAIN, credential)
+
+        blob_client = blob_service_client.get_blob_client(
+            container=settings.AZURE_CONTAINER, blob=file.name)
+        blob_client.upload_blob(file.read())
+
+        return Response({"message": "success", "uploaded_name": file.name})
+
+
+'''class ChangePasswordView(UpdateAPIView):
+
+    queryset = Profile.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ChangePasswordSerializer
+    def post(self,request,id):
+        user = Profile.objects.get(id=id)
+        request_pass = request.data['password']
+        user.set_password(request_pass)
+        user.save()
+        return Response({"message": "Password successfully changed!"})
+'''
+
+
+class ChangePasswordView(UpdateAPIView):
+    """
+    An endpoint for changing password.
+    """
+    serializer_class = ChangePasswordSerializer
+    model = Profile
+
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get_permissions(self):
+
+        permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+    def get_object(self, queryset=None):
+        obj = self.request.user
+        return obj
+
+    def update(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            # Check old password
+            # if not self.object.check_password(
+            # serializer.data.get("old_password")):
+            #       return Response({"old_password": ["Wrong password."]})
+            # set_password also hashes the password that the user will get
+            self.object.set_password(serializer.data.get("new_password"))
+            self.object.save()
+            response = {
+                'status': 'success',
+                'code': 'HTTP_200_OK',
+                'message': 'Password updated successfully',
+                'data': []
+            }
+
+            return Response(response)
