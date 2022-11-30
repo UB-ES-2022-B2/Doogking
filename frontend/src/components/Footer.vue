@@ -7,7 +7,7 @@
           <ul>
             <li><a href="#" @click="goToAboutUs" id="aboutUs">About Us</a></li>
             <li><a href="#" @click="goToPrivacyPolicy" id="privacyPolicy">Privacy policy</a></li>
-            <li><a href="#">Register</a></li>
+            <li><a href="#" @click="goToRegister" id="goRegister">Register</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -58,6 +58,10 @@ export default {
     goToAboutUs () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/aboutUs', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
+    },
+    goToRegister () {
+      // eslint-disable-next-line standard/object-curly-even-spacing
+      this.$router.push({ path: '/register'})
     },
     goToBusinessContact () {
       // eslint-disable-next-line standard/object-curly-even-spacing
