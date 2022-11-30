@@ -6,6 +6,12 @@ import process from 'shelljs'
 import Register from '../components/Register'
 import ForgotPassword from '../components/ForgotPassword'
 import Reset from '../components/Reset'
+import BusinessContact from '../components/BusinessContact'
+import Profile from '../components/Profile'
+import EditProfile from '../components/EditProfile'
+import HouseDetails from '../components/HouseDetails'
+import PrivacyPolicy from '../components/PrivacyPolicy'
+import AboutUs from '../components/AboutUs'
 
 Vue.use(Router)
 
@@ -37,6 +43,36 @@ export default new Router({
       path: '/reset',
       name: 'ResetPassword',
       component: Reset
+    },
+    {
+      path: '/BusinessContact',
+      name: 'BusinessContact',
+      component: BusinessContact
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      component: Profile
+    },
+    {
+      path: '/editProfile',
+      name: 'EditProfile',
+      component: EditProfile
+    },
+    {
+      path: '/housedetails',
+      name: 'HouseDetails',
+      component: HouseDetails
+    },
+    {
+      path: '/privacyPolicy',
+      name: 'privacyPolicy',
+      component: PrivacyPolicy
+    },
+    {
+      path: '/aboutUs',
+      name: 'AboutUs',
+      component: AboutUs
     }
   ]
 })

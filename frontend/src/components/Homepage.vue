@@ -21,12 +21,16 @@ export default {
     return {
       logged: null,
       username: null,
+      email: null,
+      user_id: null,
       token: null
     }
   },
   created () {
     this.logged = this.$route.query.logged === 'true'
     this.username = this.$route.query.username
+    this.email = this.$route.query.email
+    this.user_id = this.$route.query.user_id
     this.token = this.$route.query.token
     if (this.logged === undefined) {
       this.logged = false
