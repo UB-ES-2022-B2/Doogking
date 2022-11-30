@@ -15,7 +15,7 @@
           </li>
           <li class="nav-item">
             <a v-if="this.$route.name ==='Help'" class="nav-link" style="color: #8DD0FF; cursor: pointer">Support</a>
-            <a v-else class="nav-link" style="cursor: pointer">Support</a>
+            <a href="https://doogking.azurewebsites.net/api/housing/" v-else class="nav-link" style="cursor: pointer" target="_blank">House registry</a>
           </li>
           <li class="nav-item">
             <a v-if="this.$route.name ==='Property'" class="nav-link" style="color: #8DD0FF; cursor: pointer">House registry</a>
@@ -111,6 +111,10 @@ export default {
       this.logged = false
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/'})
+    },
+    goToBusinessContact () {
+      // eslint-disable-next-line standard/object-curly-even-spacing
+      this.$router.push({ path: '/businessContact', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
     },
     goToHomepage () {
       // eslint-disable-next-line standard/object-curly-even-spacing
