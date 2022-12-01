@@ -31,6 +31,7 @@
               <ConfirmPopup id="confirmPopup" ></ConfirmPopup>
               <Toast/>
               <Button id="removeFiltersBtn" @click="confirmRemoveFilters($event)" icon="pi pi-times" style="background-color: indianred; border-color: indianred; color: white; margin-top: 0.5em;"/>
+              <Button id="post" style="margin-left: 750px; border-radius: 12px" @click="addHouse" v-if="logged===true"><fa :icon="['fas', 'plus']"/> Post now</Button>
             </div>
             <Divider id="gridDivider" v-if="layout=='grid'"></Divider>
           </template>
@@ -154,6 +155,12 @@ export default {
     changeFavorite () {
       if (this.logged === false) {
         this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites', life: 2000})
+      }
+    },
+    addHouse () {
+      // eslint-disable-next-line standard/object-curly-even-spacing
+      if (this.logged) {
+        this.$router.push({ path: '/houseRegistry', query: { username: this.username, logged: this.logged, token: this.token } })
       }
     },
     getHouses () {
@@ -438,4 +445,5 @@ export default {
   outline-color: #1c1b29;
   box-shadow: 0 0 0 0.1em indianred;
 }
+
 </style>
