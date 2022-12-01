@@ -93,7 +93,7 @@ export default {
         description: this.description,
         price: this.price
       }
-      const path = 'https://doogking.azurewebsites.net/api/houses/'
+      const path = 'https://doogking.azurewebsites.net/api/housing/'
       axios.post(path, parameters, headers)
         .then((res) => {
           this.showSuccessMessage = true
