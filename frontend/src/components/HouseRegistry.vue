@@ -44,7 +44,7 @@
                     <h1></h1>
                     <div class="btn-group">
                       <div class="field">
-                        <Button id="submitButton" type="submit" label="Submit" @click='checkRegisterHouse' class="mt-2" style="width:200px"/>
+                        <Button id="submitButton" type="submit" label="Submit" @click='goPostHouse' class="mt-2" style="width:200px"/>
                       </div>
                     </div>
                   </div>
@@ -98,7 +98,7 @@ export default {
     }
   },
   methods: {
-    goUpdateInfo () {
+    goPostHouse () {
       var data = JSON.stringify({
         'street': this.addUserForm.street,
         'street_number': this.addUserForm.street_number,
@@ -124,30 +124,6 @@ export default {
       axios(config)
         .then(function (response) {
         }).catch(function (response) {})
-    },
-    checkRegisterHouse () {
-      const headers = {'Access-Control-Allow-Origin': '*'}
-      const parameters = {
-        street: this.addUserForm.street,
-        street_number: this.addUserForm.street_number,
-        floor: this.addUserForm.floor,
-        door: this.addUserForm.door,
-        house_dimension: this.addUserForm.house_dimension,
-        house_owner: this.addUserForm.house_owner,
-        house_owner_name: this.addUserForm.house_owner_name,
-        price_per_day: this.addUserForm.price_per_day,
-        desciption: this.addUserForm.desciption
-      }
-      const path = 'https://doogking.azurewebsites.net/api/housing/'
-      axios.post(path, parameters, headers)
-        .then((res) => {
-          this.showSuccessMessage = true
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          this.error = error
-          this.showErrorMessage = true
-        })
     },
     myUploader (event) {
       alert(event.files[0].objectURL)
