@@ -36,6 +36,7 @@
           <hr>
         </div>
       </div>
+      <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
       <Footer></Footer>
     </div>
   </form>

@@ -8,7 +8,7 @@
         <Galleria id="galleriaHouse" :value="houseImages" :responsiveOptions="responsiveOptions" :numVisible="3"
                   :showItemNavigators="true" :showItemNavigatorsOnHover="true"
                   :circular="true" :autoPlay="true" :transitionInterval="3000"
-                  style="max-width: 39em; margin:1em;">
+                  style="width: 46vw; margin:1em;">
           <template #item="{item}">
             <img id="imageHouse" :src="item.image" :alt="item.alt" style="width: 100%; display: block;" />
           </template>
@@ -478,14 +478,14 @@ export default {
 }
 
 #imageHouse{
-  height: 26em;
+  height: 30.7vw;
   border-radius: 2em 2em 0 0;
   border: 5px solid #1c1b29;
 }
 
 #thumbnailImage{
-  height: 5em;
-  width: 7em;
+  height: 6vw;
+  width: 8.5vw;
   border-radius: 0.5em;
   border: 3px solid #1c1b29;
 }
@@ -493,7 +493,7 @@ export default {
 .form-demo .card {
   margin-top: 1rem;
   border-radius: 1rem;
-  width: 35rem;
+  width: 41vw;
   background-color: #3d4755;
   color: white;
   margin-bottom: 1.5rem;
