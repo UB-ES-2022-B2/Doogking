@@ -31,7 +31,7 @@
               <ConfirmPopup id="confirmPopup" ></ConfirmPopup>
               <Toast/>
               <Button id="removeFiltersBtn" @click="confirmRemoveFilters($event)" icon="pi pi-times" style="background-color: indianred; border-color: indianred; color: white; margin-top: 0.5em;"/>
-              <Button id="post" style="margin-left: 750px; border-radius: 12px" @click="addHouse" v-if="logged===true"><fa :icon="['fas', 'plus']"/> Post now</Button>
+              <Button id="post" style="margin-left: 750px; border-radius: 12px" @click="addHouse" v-if="logged===true"><fa :icon="['fas', 'plus']"/>      Post now</Button>
             </div>
             <Divider id="gridDivider" v-if="layout=='grid'"></Divider>
           </template>

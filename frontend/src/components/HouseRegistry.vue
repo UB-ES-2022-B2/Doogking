@@ -20,36 +20,31 @@
                 <div class="field">
                   <div class="p-float-label">
                     <span class="p-float-label">
-                      <InputText id="street" type="text" v-model="value" placeholder="Street" />
+                      <InputText id="street" type="text" class="form-control" v-model="addUserForm.street" aria-describedby="inputGroupPrepend2" placeholder="Street" />
                     </span>
                     <h1></h1>
-                    <span class="p-float-label" style="margin-right:145px">
-                      <InputText id="street number" type="text" v-model="value" style="width:130px" placeholder="Street Number"/>
-                      <InputText id="floor" type="text" v-model="value" style="width:100px" placeholder="Floor"/>
-                      <InputText id="door" type="text" v-model="value" style="width:100px" placeholder="Door"/>
+                    <span class="p-float-label" style="margin-right:30px">
+                      <InputText id="street number" type="text" autofocus v-model="addUserForm.street_number" aria-describedby="inputGroupPrepend2" style="width:130px" placeholder="Street Number"/>
+                      <InputText id="floor" type="text" v-model="addUserForm.floor" aria-describedby="inputGroupPrepend2" style="width:80px" placeholder="Floor"/>
+                      <InputText id="door" type="text" v-model="addUserForm.door" aria-describedby="inputGroupPrepend2" style="width:80px" placeholder="Door"/>
+                      <InputText id="house_dimension" type="text" v-model="addUserForm.house_dimension" aria-describedby="inputGroupPrepend2" style="width:150px" placeholder="House Dimension"/>
                     </span>
                     <h1></h1>
                   <div class="p-float-label">
                     <InputText id="city" type="text" v-model="value" placeholder="City" />
                   </div>
                     <h1></h1>
-                    <span class="p-float-label" style="margin-right:1px">
-                      <InputText id="house_dimension" type="text" v-model="value" style="width:150px" placeholder="House Dimension"/>
-                      <InputText id="house_owner" type="text" v-model="value" style="width:150px" placeholder="House Owner"/>
-                      <InputText id="house_owner_name" type="text" v-model="value" style="width:174px" placeholder="House Owner Name"/>
-                    </span>
-                    <h1></h1>
                     <span class="p-float-label">
-                <InputText id="price" type="number" v-model="value" placeholder="Price per day" />
+                <InputText id="price" type="number" class="form-control" v-model="addUserForm.price" aria-describedby="inputGroupPrepend2" placeholder="Price per day" />
               </span>
                     <h1></h1>
                     <span class="p-float-label">
-                <InputText id="description" type="text" v-model="value" style="height:100px" placeholder="Description"/>
+                <InputText id="description" type="text" class="form-control" v-model="addUserForm.desciption" aria-describedby="inputGroupPrepend2" style="height:100px" placeholder="Description"/>
               </span>
                     <h1></h1>
                     <div class="btn-group">
                       <div class="field">
-                        <Button id="submitButton" type="submit" label="Submit" class="mt-2" style="width:200px"/>
+                        <Button id="submitButton" type="submit" label="Submit" @click='checkRegisterHouse' class="mt-2" style="width:200px"/>
                       </div>
                     </div>
                   </div>
@@ -81,17 +76,67 @@ export default {
       username: null,
       email: null,
       user_id: null,
-      token: null
+      token: null,
+      street: null,
+      street_number: null,
+      floor: null,
+      door: null,
+      house_dimension: null,
+      house_owner: null,
+      house_owner_name: null,
+      price_per_day: null,
+      desciption: null,
+      addUserForm: {
+        street: null,
+        street_number: null,
+        floor: null,
+        door: null,
+        house_dimension: null,
+        price_per_day: null,
+        desciption: null
+      }
     }
   },
   methods: {
+    goUpdateInfo () {
+      var data = JSON.stringify({
+        'street': this.addUserForm.street,
+        'street_number': this.addUserForm.street_number,
+        'floor': this.addUserForm.floor,
+        'door': this.addUserForm.door,
+        'house_dimension': this.addUserForm.house_dimension,
+        'house_owner': 'https://doogking.azurewebsites.net/api/profile/' + this.user_id + '/',
+        'house_owner_name': this.username,
+        'price_per_day': this.addUserForm.price_per_day,
+        'desciption': this.addUserForm.desciption
+      })
+      var config = {
+        method: 'post',
+        url: 'https://doogking.azurewebsites.net/api/housing/' + this.user_id + '/',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Authorization': 'Token ' + this.token,
+          'Content-Type': 'application/json'
+        },
+        data: data
+      }
+      console.log('Token ' + this.token)
+      axios(config)
+        .then(function (response) {
+        }).catch(function (response) {})
+    },
     checkRegisterHouse () {
       const headers = {'Access-Control-Allow-Origin': '*'}
       const parameters = {
-        city: this.city,
-        street: this.street,
-        description: this.description,
-        price: this.price
+        street: this.addUserForm.street,
+        street_number: this.addUserForm.street_number,
+        floor: this.addUserForm.floor,
+        door: this.addUserForm.door,
+        house_dimension: this.addUserForm.house_dimension,
+        house_owner: this.addUserForm.house_owner,
+        house_owner_name: this.addUserForm.house_owner_name,
+        price_per_day: this.addUserForm.price_per_day,
+        desciption: this.addUserForm.desciption
       }
       const path = 'https://doogking.azurewebsites.net/api/housing/'
       axios.post(path, parameters, headers)
