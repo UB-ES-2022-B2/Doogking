@@ -36,7 +36,49 @@
           <hr>
         </div>
       </div>
-      <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
+      <Carousel :value="houses" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="3000">
+        <template #header>
+          <h3 style="text-align: left; margin-left: 6vw; color: white;">My houses</h3>
+          <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
+        </template>
+        <template #item="slotProps">
+          <div class="product-item">
+            <div class="product-item-content">
+              <div class="card" style="margin:auto;">
+                <div id ="container-image" class="container">
+                  <div id="container-effect">
+                    <img id="card-img" :src="slotProps.data.image" alt="img">
+                    <figcaption>
+                      <Button id="buttonViewGrid" label="View house" @click="seeHouseDetails(slotProps.data.house_id)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
+                    </figcaption>
+                  </div>
+                  <Toast/>
+                  <span id="favContainer" v-if="slotProps.data.favorite==true">
+                      <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
+                  </span>
+                  <span id="favContainer" v-else>
+                        <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
+                  </span>
+                  <span id="priceContainer" class="text font-semibold" style="color:white"><a>{{slotProps.data.price}}€</a> day</span>
+                  <span id="loaderContainer" v-if="loaderActive===true">
+                  <LoadingSpinnerGrid :active="true"/>
+                </span>
+                </div>
+                <div id="card-details" class="details">
+                  <div class="flex align-items-center justify-content-between">
+                    <h6 style="color:white">{{slotProps.data.city}}</h6>
+                    <div class="flex align-items-center">
+                      <Tag id="tagHost" :value="slotProps.data.house_owner_name" icon="pi pi-user" style="color: white; background-color: #2A323D"></Tag>
+                      <Rating :value="slotProps.data.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
+                    </div>
+                  </div>
+                  <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{slotProps.data.street}},{{slotProps.data.street_number}},{{slotProps.data.floor}},{{slotProps.data.door}},{{slotProps.data.house_dimension}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </Carousel>
       <Footer></Footer>
     </div>
   </form>
@@ -45,17 +87,22 @@
 <script>
 import Header from './Header'
 import Footer from './Footer'
+import axios from 'axios'
+import LoadingSpinnerGrid from './LoadingSpinnerGrid'
 
 export default {
   components: {
     Header,
-    Footer
+    Footer,
+    LoadingSpinnerGrid
   },
   data () {
     return {
       logged: null,
       username: null,
       email: null,
+      houses: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+      loaderActive: false,
       user_id: null,
       token: null
     }
@@ -68,6 +115,32 @@ export default {
     },
     goToEditProfile () {
       this.$router.push({ path: '/editProfile', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
+    },
+    getUserHouses () {
+      const headers = {'Access-Control-Allow-Origin': '*'}
+      const pathHouses = 'https://doogking.azurewebsites.net/api/housing/?owner=' + this.user_id
+      axios.get(pathHouses, headers)
+        .then(response => (this.houses = response.data))
+        .catch((error) => {
+          // eslint-disable-next-line
+          this.error = error
+          alert('holaaaa')
+        })
+    },
+    // eslint-disable-next-line camelcase
+    seeHouseDetails (house_id) {
+      this.$router.push({ path: '/housedetails', query: {username: this.username, logged: this.logged, token: this.token, house_id: house_id, email: this.email, user_id: this.user_id} })
+    },
+    showLoader () {
+      this.loaderActive = true
+    },
+    hideLoader () {
+      this.loaderActive = false
+    },
+    changeFavorite () {
+      if (this.logged === false) {
+        this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites', life: 2000})
+      }
     }
   },
   created () {
@@ -79,11 +152,11 @@ export default {
     if (this.logged === undefined) {
       this.logged = false
     }
-    console.log((this.username))
-    console.log(this.email)
-    console.log(this.logged)
-    console.log(this.user_id)
-    console.log(this.token)
+    this.getUserHouses()
+    this.showLoader()
+    setTimeout(() => {
+      this.hideLoader()
+    }, 500)
   }
 }
 </script>
@@ -135,4 +208,181 @@ export default {
   color: white;
 }
 
+.card{
+  background-color: #1c1b29;
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.18);
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 22.3vw;
+  height: 22vw;
+}
+#container-image{
+  position: relative;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+#card-img{
+  clip-path: polygon(0 0,100% 0, 100% 85%, 0 100%);
+  display: block;
+  border-radius: 20px 20px 0 0;
+  overflow: hidden;
+  width: 22.3vw;
+  height: 14vw;
+}
+#container-effect {
+  background-color: #000;
+  display: inline-block;
+  overflow: hidden;
+  border-radius: 20px 20px 0 0;
+  clip-path: polygon(0 0,100% 0, 100% 85%, 0 100%);
+}
+#container-effect * {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: all 0.35s ease;
+  transition: all 0.35s ease;
+}
+#container-effect:before,
+#container-effect:after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  -webkit-transition: all 0.35s ease;
+  transition: all 0.35s ease;
+  background-color: #8DD0FF;
+  border-left: 3px solid #fff;
+  border-right: 3px solid #fff;
+  content: '';
+  opacity: 0.6;
+  z-index: 1;
+}
+#container-effect:before {
+  -webkit-transform: skew(45deg) translateX(-155%);
+  transform: skew(45deg) translateX(-155%);
+}
+#container-effect:after {
+  -webkit-transform: skew(45deg) translateX(155%);
+  transform: skew(45deg) translateX(155%);
+}
+#container-effect figcaption {
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  z-index: 2;
+  -webkit-transform: translate(-50%, -50%) scale(0.5);
+  transform: translate(-50%, -50%) scale(0.5);
+  opacity: 0;
+}
+#container-effect:hover > #card-img,
+#container-effect.hover > #card-img {
+  opacity: 0.5;
+}
+#container-effect:hover:before{
+  -webkit-transform: skew(45deg) translateX(-55%);
+  transform: skew(45deg) translateX(-55%);
+}
+#container-effect:hover:after,
+#container-effect.hover:after {
+  -webkit-transform: skew(45deg) translateX(55%);
+  transform: skew(45deg) translateX(55%);
+}
+#container-effect:hover figcaption,
+#container-effect.hover figcaption {
+  -webkit-transform: translate(-50%, -50%) scale(1);
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+#card-details{
+  padding: 20px 10px;
+}
+#card-details>h6{
+  color: #ffffff;
+  font-weight: 600;
+  margin: 10px 0 15px 0;
+}
+#card-details>p{
+  color: #a0a0a0;
+  font-size: 15px;
+  line-height: 30px;
+  font-weight: 400;
+}
+
+#buttonViewGrid{
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
+}
+
+#buttonViewGrid:hover{
+  background-color: #8DD0FF;
+  border-color: #8DD0FF;
+  outline-color: #8DD0FF;
+  color: white;
+}
+
+#buttonViewGrid:focus {
+  box-shadow: 0 0 0 0.1em #8DD0FF;
+  background-color: #8DD0FF;
+  border-color: #8DD0FF;
+  outline-color: #8DD0FF;
+  color: white;
+}
+
+#tagHost{
+  position:absolute;
+  top:1em;
+  left:1em;
+}
+#favContainer{
+  position:absolute;
+  top:0.5em;
+  right:0.5em;
+}
+
+#priceContainer{
+  position:absolute;
+  top:90%;
+  right:0.5em;
+  font-size: 1em;
+}
+#priceContainer a{
+  font-size: 1.5em;
+}
+
+#favButtonGrid{
+  color: indianred;
+  background-color: #2A323D;
+  border-color: #2A323D;
+}
+#favButtonGrid:hover{
+  color: indianred;
+  background-color: #2A323D;
+  border-color: #2A323D;
+}
+#favButtonGrid:focus{
+  color: indianred;
+  background-color: #2A323D;
+  border-color: #2A323D;
+  box-shadow: 0 0 0 0.1em indianred;
+}
+
+.product-item .product-item-content {
+  border: 1px solid var(--surface-border);
+  border-radius: 3px;
+  margin: .3rem;
+  padding: 2rem 0;
+}
+
+#loaderContainer{
+  position:absolute;
+  top:40%;
+  left:45%;
+}
 </style>

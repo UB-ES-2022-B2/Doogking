@@ -31,10 +31,6 @@
             <ConfirmPopup id="confirmPopup" ></ConfirmPopup>
             <Toast/>
             <Button id="removeFiltersBtn" @click="confirmRemoveFilters($event)" icon="pi pi-times" style="background-color: indianred; border-color: indianred; color: white; margin-top: 0.5em;"/>
-            <div id="houseViewText" style="margin-left: 30vw; margin-top: -6em;">
-            <h3 style="font-family: 'Brush Script MT'; font-size: 3em;">Compare and find the best houses for your pet!</h3>
-            <h5 style="width:50vw;">Are you going on vacation for a few days? We help you find a house to take care of your dog! Find the best people near you!</h5>
-            </div>
           </div>
           <Divider id="gridDivider" v-if="layout=='grid'"></Divider>
         </template>
