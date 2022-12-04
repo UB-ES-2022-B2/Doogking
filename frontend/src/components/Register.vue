@@ -169,12 +169,9 @@ export default {
       axios.post(path, parameters, headers)
         .then((res) => {
           this.logged = true
-          this.token = res.data.token
-          this.username = res.data.profile.first_name + res.data.profile.last_name
-          this.user_id = res.data.profile.id
+          this.persist(res.data.profile.first_name + res.data.profile.last_name, res.data.profile.id, res.data.token, this.email)
         })
         .catch((error) => {
-          // eslint-disable-next-line
           this.error = error
         })
     },
@@ -184,8 +181,6 @@ export default {
         email: this.email,
         first_name: this.username,
         password: this.password
-        // street: this.addUserForm.street,
-        // street_number: this.addUserForm.streetNumber
       }
       const path = 'https://doogking.azurewebsites.net/api/profiles/'
       axios.post(path, parameters, headers)
@@ -214,7 +209,7 @@ export default {
       this.showSuccessMessage = !this.showSuccessMessage
 
       if (!this.showSuccessMessage) {
-        this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
+        this.$router.push({path: '/'})
         this.resetForm()
       }
     },
@@ -231,6 +226,12 @@ export default {
       this.password = ''
       this.accept = null
       this.submitted = false
+    },
+    persist (username, userId, token, email) {
+      localStorage.username = username
+      localStorage.userId = userId
+      localStorage.token = token
+      localStorage.email = email
     }
   },
   created () {
