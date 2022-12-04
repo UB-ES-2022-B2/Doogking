@@ -187,7 +187,7 @@ export default {
   setup: () => ({ v$: useVuelidate() }),
   data () {
     return {
-      logged: null,
+      logged: false,
       username: null,
       token: null,
       house_id: null,
@@ -198,7 +198,7 @@ export default {
       validInDate: true,
       validOutDate: true,
       loaderActive: false,
-      user_id: null,
+      userId: null,
       submitted: false,
       showSuccessMessage: false,
       showErrorMessage: false,
@@ -263,7 +263,6 @@ export default {
       axios.get(pathHouses, headers)
         .then(response => (this.house = response.data))
         .catch((error) => {
-          // eslint-disable-next-line
           this.error = error
           this.showHouseMessage = true
         })
@@ -276,7 +275,7 @@ export default {
     makeReservation () {
       var data = JSON.stringify({
         'housing': 'https://doogking.azurewebsites.net/api/housing/' + this.house_id + '/',
-        'customer': 'https://doogking.azurewebsites.net/api/profiles/' + this.user_id + '/',
+        'customer': 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/',
         'start_date': this.checkInDate.getFullYear() + '-' + this.checkInDate.toLocaleString('default', { month: '2-digit' }) + '-' + this.checkInDate.toLocaleString('default', { day: '2-digit' }),
         'end_date': this.checkOutDate.getFullYear() + '-' + this.checkOutDate.toLocaleString('default', { month: '2-digit' }) + '-' + this.checkOutDate.toLocaleString('default', { day: '2-digit' })
       })
@@ -342,13 +341,7 @@ export default {
       this.$router.push({ path: '/login'})
     },
     goToHomepage () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      if (this.logged) {
-        this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
-      } else {
-        // eslint-disable-next-line standard/object-curly-even-spacing
-        this.$router.push({ path: '/'})
-      }
+      this.$router.push({path: '/'})
     },
     checkInDateValid () {
       const today = new Date()
@@ -424,17 +417,23 @@ export default {
       }
     }
   },
-  created () {
-    this.logged = this.$route.query.logged === 'true'
-    this.username = this.$route.query.username
-    this.username = this.$route.query.username
-    this.email = this.$route.query.email
-    this.user_id = this.$route.query.user_id
-    this.token = this.$route.query.token
-    this.house_id = this.$route.query.house_id
-    if (this.logged === undefined) {
-      this.logged = false
+  mounted () {
+    if (localStorage.username) {
+      this.logged = true
+      this.username = localStorage.username
     }
+    if (localStorage.userId) {
+      this.userId = localStorage.userId
+    }
+    if (localStorage.token) {
+      this.token = localStorage.token
+    }
+    if (localStorage.email) {
+      this.email = localStorage.email
+    }
+  },
+  created () {
+    this.house_id = this.$route.query.house_id
     this.getHouse()
     this.getHouseImages()
     this.getReservations()

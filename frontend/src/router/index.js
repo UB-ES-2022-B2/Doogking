@@ -12,6 +12,7 @@ import EditProfile from '../components/EditProfile'
 import HouseDetails from '../components/HouseDetails'
 import PrivacyPolicy from '../components/PrivacyPolicy'
 import AboutUs from '../components/AboutUs'
+import MyHouseDetails from '../components/MyHouseDetails'
 
 Vue.use(Router)
 
@@ -63,6 +64,11 @@ export default new Router({
       path: '/housedetails',
       name: 'HouseDetails',
       component: HouseDetails
+    },
+    {
+      path: '/myHouseDetails',
+      name: 'MyHouseDetails',
+      component: MyHouseDetails
     },
     {
       path: '/privacyPolicy',

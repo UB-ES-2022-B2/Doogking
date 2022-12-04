@@ -108,10 +108,10 @@ export default {
   },
   data () {
     return {
-      logged: null,
+      logged: false,
       username: null,
       email: null,
-      user_id: null,
+      userId: null,
       token: null,
       houses: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
       layout: 'grid',
@@ -179,12 +179,11 @@ export default {
       } this.selectedCities.length = 0
     },
     goToLogin () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/login'})
+      this.$router.push({path: '/login'})
     },
     // eslint-disable-next-line camelcase
     seeHouseDetails (house_id) {
-      this.$router.push({ path: '/housedetails', query: {username: this.username, logged: this.logged, token: this.token, house_id: house_id, email: this.email, user_id: this.user_id} })
+      this.$router.push({path: '/housedetails', query: {house_id: house_id}})
     },
     changeFavorite () {
       if (this.logged === false) {
@@ -210,15 +209,22 @@ export default {
       this.loaderActive = false
     }
   },
-  created () {
-    this.logged = this.$route.query.logged === 'true'
-    this.username = this.$route.query.username
-    this.email = this.$route.query.email
-    this.user_id = this.$route.query.user_id
-    this.token = this.$route.query.token
-    if (this.logged === undefined) {
-      this.logged = false
+  mounted () {
+    if (localStorage.username) {
+      this.logged = true
+      this.username = localStorage.username
     }
+    if (localStorage.userId) {
+      this.userId = localStorage.userId
+    }
+    if (localStorage.token) {
+      this.token = localStorage.token
+    }
+    if (localStorage.email) {
+      this.email = localStorage.email
+    }
+  },
+  created () {
     this.getHouses()
     this.getNumHouses()
     this.showLoader()

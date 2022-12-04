@@ -99,7 +99,7 @@ export default {
       token: null,
       email: '',
       username: '',
-      user_id: null,
+      userId: null,
       password: '',
       submitted: false,
       showSuccessMessage: false,
@@ -130,7 +130,7 @@ export default {
     toggleDialogSuccess () {
       this.showSuccessMessage = !this.showSuccessMessage
       if (!this.showSuccessMessage) {
-        this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
+        this.$router.push({ path: '/' })
         this.resetForm()
       }
     },
@@ -156,11 +156,9 @@ export default {
       const path = 'https://doogking.azurewebsites.net/api/login/'
       axios.post(path, parameters, headers)
         .then((res) => {
-          this.logged = true
-          this.token = res.data.token
-          this.showSuccessMessage = true
           this.username = res.data.profile.first_name + res.data.profile.last_name
-          this.user_id = res.data.profile.id
+          this.persist(res.data.profile.first_name + res.data.profile.last_name, res.data.profile.id, res.data.token, this.email)
+          this.showSuccessMessage = true
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -175,6 +173,12 @@ export default {
     goToForgotPassword () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/forgotPassword'})
+    },
+    persist (username, userId, token, email) {
+      localStorage.username = username
+      localStorage.userId = userId
+      localStorage.token = token
+      localStorage.email = email
     }
   }
 }

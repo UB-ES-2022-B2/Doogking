@@ -2,6 +2,20 @@
   <form>
     <div class="flex-wrapper">
       <Header></Header>
+      <Dialog :visible="showLoginMessage" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
+        <div class="flex align-items-center flex-column pt-6 px-3">
+          <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
+          <h5 style="margin-top: 1em">Login Error!</h5>
+          <p style="text-align: center">
+            You need to be logged in to access your profile
+          </p>
+        </div>
+        <template #footer>
+          <div class="flex justify-content-center">
+            <Button label="OK" @click="toggleDialogLogin" class="p-button-text" />
+          </div>
+        </template>
+      </Dialog>
       <div id="app">
         <div class="body">
           <div class="d-flex flex-row">
@@ -49,7 +63,7 @@
                   <div id="container-effect">
                     <img id="card-img" :src="slotProps.data.image" alt="img">
                     <figcaption>
-                      <Button id="buttonViewGrid" label="View house" @click="seeHouseDetails(slotProps.data.house_id)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
+                      <Button id="buttonViewGrid" label="View house" @click="seeMyHouseDetails(slotProps.data.house_id)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
                     </figcaption>
                   </div>
                   <Toast/>
@@ -98,38 +112,40 @@ export default {
   },
   data () {
     return {
-      logged: null,
+      logged: false,
       username: null,
       email: null,
       houses: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
       loaderActive: false,
-      user_id: null,
-      token: null
+      userId: null,
+      token: null,
+      showLoginMessage: false
     }
   },
   methods: {
     logOut () {
       this.logged = false
-      // eslint-disable-next-line standard/object-curly-even-spacing
+      localStorage.removeItem('username')
+      localStorage.removeItem('userId')
+      localStorage.removeItem('token')
+      localStorage.removeItem('email')
       this.$router.push({path: '/'})
     },
     goToEditProfile () {
-      this.$router.push({ path: '/editProfile', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
+      this.$router.push({path: '/editProfile'})
     },
     getUserHouses () {
       const headers = {'Access-Control-Allow-Origin': '*'}
-      const pathHouses = 'https://doogking.azurewebsites.net/api/housing/?owner=' + this.user_id
+      const pathHouses = 'https://doogking.azurewebsites.net/api/housing/?owner=' + this.userId
       axios.get(pathHouses, headers)
         .then(response => (this.houses = response.data))
         .catch((error) => {
-          // eslint-disable-next-line
           this.error = error
-          alert('holaaaa')
         })
     },
     // eslint-disable-next-line camelcase
-    seeHouseDetails (house_id) {
-      this.$router.push({ path: '/housedetails', query: {username: this.username, logged: this.logged, token: this.token, house_id: house_id, email: this.email, user_id: this.user_id} })
+    seeMyHouseDetails (house_id) {
+      this.$router.push({path: '/myHouseDetails', query: {house_id: house_id}})
     },
     showLoader () {
       this.loaderActive = true
@@ -141,17 +157,33 @@ export default {
       if (this.logged === false) {
         this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites', life: 2000})
       }
+    },
+    toggleDialogLogin () {
+      this.showLoginMessage = !this.showLoginMessage
+      if (!this.showLoginMessage) {
+        this.$router.push({path: '/'})
+      }
+    }
+  },
+  mounted () {
+    if (localStorage.username) {
+      this.logged = true
+      this.username = localStorage.username
+    }
+    if (localStorage.userId) {
+      this.userId = localStorage.userId
+    }
+    if (localStorage.token) {
+      this.token = localStorage.token
+    }
+    if (localStorage.email) {
+      this.email = localStorage.email
+    }
+    if (this.logged === false) {
+      this.showLoginMessage = true
     }
   },
   created () {
-    this.logged = this.$route.query.logged === 'true'
-    this.username = this.$route.query.username
-    this.email = this.$route.query.email
-    this.user_id = this.$route.query.user_id
-    this.token = this.$route.query.token
-    if (this.logged === undefined) {
-      this.logged = false
-    }
     this.getUserHouses()
     this.showLoader()
     setTimeout(() => {
