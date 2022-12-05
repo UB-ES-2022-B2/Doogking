@@ -23,9 +23,8 @@ class MyHousesTest(StaticLiveServerTestCase):
         super().tearDownClass()
 
     def test_profile_houses(self):
-        # house_registry = self.selenium.find_element(By.NAME, "My houses").is_enabled()
+        house_registry = self.selenium.find_element(By.NAME, "My houses").is_enabled()
         client = RequestsClient()
-        headers = {'Access-Control-Allow-Origin': '*'}
         house_id = 1
         requests_passed = True
         while house_id < 8 and requests_passed:
@@ -33,4 +32,4 @@ class MyHousesTest(StaticLiveServerTestCase):
                 'https://doogking.azurewebsites.net/api/housing_images/housing/' + str(house_id) + '/')
             requests_passed = requests.status_code == 200
             house_id += 1
-        assert house_id == 8
+        assert house_id == 8 and house_registry
