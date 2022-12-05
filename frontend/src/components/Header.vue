@@ -27,7 +27,7 @@
           </li>
           <li class="nav-item">
             <a v-if="this.$route.name ==='HouseRegistry'" class="nav-link" style="color: #8DD0FF; cursor: pointer">House registry</a>
-            <a v-else class="nav-link" @click="goToHouseRegistry" style="cursor: pointer">House registry</a>
+            <a v-else class="nav-link" @click="goToHouseRegistry" style="cursor: pointer" id="houseRegistry">House registry</a>
           </li>
           <li class="nav-item">
             <a v-if="this.$route.name ==='AboutUs'" class="nav-link" style="color: #8DD0FF; cursor: pointer"><fa :icon="['fas', 'circle-info'] " /></a>
