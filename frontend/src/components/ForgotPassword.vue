@@ -100,8 +100,7 @@ export default {
       this.submitted = false
     },
     goToLogin () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/login'})
+      this.$router.push({path: '/login'})
     },
     sendEmail () {
       try {
@@ -115,7 +114,6 @@ export default {
         // eslint-disable-next-line standard/object-curly-even-spacing
         this.$router.push({path: '/reset'})
       } catch (error) {
-        // eslint-disable-next-line
         this.error = error
         this.showErrorMessage = true
       }

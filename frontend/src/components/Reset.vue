@@ -194,7 +194,6 @@ export default {
               this.showSuccessMessage = true
             })
             .catch((error) => {
-              // eslint-disable-next-line
               this.error = error
               this.showErrorMessage = true
             })
@@ -202,13 +201,11 @@ export default {
           this.showPasswordMismatch = true
         }
       } catch (error) {
-        // eslint-disable-next-line
         this.showErrorMessage = true
       }
     },
     goToLogin () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/login'})
+      this.$router.push({path: '/login'})
     },
     handleSubmit (isFormValid) {
       this.submitted = true
