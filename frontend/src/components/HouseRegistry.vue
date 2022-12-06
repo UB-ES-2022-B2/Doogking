@@ -15,45 +15,45 @@
               </template>
             </FileUpload>
           </div>
-            <div class="p-2" style="width:500px">
-              <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
-                <div class="field">
-                  <div class="p-float-label">
+          <div class="p-2" style="width:500px">
+            <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
+              <div class="field">
+                <div class="p-float-label">
                     <span class="p-float-label">
                       <InputText id="street" type="text" class="form-control" v-model="addUserForm.street" aria-describedby="inputGroupPrepend2" placeholder="Street" />
                     </span>
-                    <h1></h1>
-                    <span class="p-float-label" style="margin-right:30px">
+                  <h1></h1>
+                  <span class="p-float-label" style="margin-right:30px">
                       <InputText id="street number" type="text" autofocus v-model="addUserForm.street_number" aria-describedby="inputGroupPrepend2" style="width:130px" placeholder="Street Number"/>
                       <InputText id="floor" type="text" v-model="addUserForm.floor" aria-describedby="inputGroupPrepend2" style="width:80px" placeholder="Floor"/>
                       <InputText id="door" type="text" v-model="addUserForm.door" aria-describedby="inputGroupPrepend2" style="width:80px" placeholder="Door"/>
                       <InputText id="house_dimension" type="text" v-model="addUserForm.house_dimension" aria-describedby="inputGroupPrepend2" style="width:150px" placeholder="House Dimension"/>
                     </span>
-                    <h1></h1>
+                  <h1></h1>
                   <div class="p-float-label">
-                    <InputText id="city" type="text" v-model="value" placeholder="City" />
+                    <InputText id="city" type="text" class="form-control" v-model="addUserForm.city" aria-describedby="inputGroupPrepend2" placeholder="City" />
                   </div>
-                    <h1></h1>
-                    <span class="p-float-label">
-                <InputText id="price" type="number" class="form-control" v-model="addUserForm.price" aria-describedby="inputGroupPrepend2" placeholder="Price per day" />
+                  <h1></h1>
+                  <span class="p-float-label">
+                <InputText id="price" type="number" class="form-control" v-model="addUserForm.price_per_day" aria-describedby="inputGroupPrepend2" placeholder="Price per day" />
               </span>
-                    <h1></h1>
-                    <span class="p-float-label">
+                  <h1></h1>
+                  <span class="p-float-label">
                 <InputText id="description" type="text" class="form-control" v-model="addUserForm.desciption" aria-describedby="inputGroupPrepend2" style="height:100px" placeholder="Description"/>
               </span>
-                    <h1></h1>
-                    <div class="btn-group">
-                      <div class="field">
-                        <Button id="submitButton" type="submit" label="Submit" @click='goPostHouse' class="mt-2" style="width:200px"/>
-                      </div>
+                  <h1></h1>
+                  <div class="btn-group">
+                    <div class="field">
+                      <Button id="submitButton" type="submit" label="Submit" @click='goPostHouse' class="mt-2" style="width:200px"/>
                     </div>
                   </div>
                 </div>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
+    </div>
     <Footer id="footer"></Footer>
   </div>
 </template>
@@ -75,7 +75,7 @@ export default {
       logged: null,
       username: null,
       email: null,
-      user_id: null,
+      userId: null,
       token: null,
       street: null,
       street_number: null,
@@ -86,7 +86,9 @@ export default {
       house_owner_name: null,
       price_per_day: null,
       desciption: null,
+      numHouses: null,
       addUserForm: {
+        city: null,
         street: null,
         street_number: null,
         floor: null,
@@ -100,19 +102,21 @@ export default {
   methods: {
     goPostHouse () {
       var data = JSON.stringify({
+        'city': this.addUserForm.city,
         'street': this.addUserForm.street,
         'street_number': this.addUserForm.street_number,
         'floor': this.addUserForm.floor,
         'door': this.addUserForm.door,
         'house_dimension': this.addUserForm.house_dimension,
-        'house_owner': 'https://doogking.azurewebsites.net/api/profile/' + this.user_id + '/',
+        'price': this.addUserForm.price_per_day,
+        'raiting': 0,
+        'desciption': this.addUserForm.desciption,
         'house_owner_name': this.username,
-        'price_per_day': this.addUserForm.price_per_day,
-        'desciption': this.addUserForm.desciption
+        'house_owner': this.email
       })
       var config = {
         method: 'post',
-        url: 'https://doogking.azurewebsites.net/api/housing/' + this.user_id + '/',
+        url: 'https://doogking.azurewebsites.net/api/housing/' + (this.numHouses + 1) + '/',
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Authorization': 'Token ' + this.token,
@@ -124,6 +128,7 @@ export default {
       axios(config)
         .then(function (response) {
         }).catch(function (response) {})
+      this.$router.push({path: '/'})
     },
     myUploader (event) {
       alert(event.files[0].objectURL)
@@ -135,17 +140,32 @@ export default {
           console.log('SUCCESS')
         })
       this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 })
+    },
+    getNumHouses () {
+      const headers = {'Access-Control-Allow-Origin': '*'}
+      const pathHouses = 'https://doogking.azurewebsites.net/api/housing/'
+      const promise = axios.get(pathHouses, headers)
+      Promise.resolve(promise).then((value) => (this.numHouses = value.data.length))
+    }
+  },
+  mounted () {
+    if (localStorage.username) {
+      this.logged = true
+      this.username = localStorage.username
+    }
+    if (localStorage.userId) {
+      this.userId = localStorage.userId
+    }
+    if (localStorage.token) {
+      this.token = localStorage.token
+    }
+    if (localStorage.email) {
+      this.email = localStorage.email
     }
   },
   created () {
-    this.logged = this.$route.query.logged === 'true'
-    this.username = this.$route.query.username
-    this.email = this.$route.query.email
-    this.user_id = this.$route.query.user_id
-    this.token = this.$route.query.token
-    if (this.logged === undefined) {
-      this.logged = false
-    }
+    this.house_id = this.$route.query.house_id
+    this.getNumHouses()
   }
 }
 </script>

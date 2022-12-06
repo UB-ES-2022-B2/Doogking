@@ -89,7 +89,7 @@ export default {
       })
       var config = {
         method: 'patch',
-        url: 'https://doogking.azurewebsites.net/api/profiles/' + this.userIder + '/',
+        url: 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/',
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Authorization': 'Token ' + this.token,
@@ -108,7 +108,7 @@ export default {
     deleteProfile () {
       var config = {
         method: 'delete',
-        url: 'https://doogking.azurewebsites.net/api/deleteProfile/' + this.user_id + '/',
+        url: 'https://doogking.azurewebsites.net/api/deleteProfile/' + this.userId + '/',
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Authorization': 'Token ' + this.token,
