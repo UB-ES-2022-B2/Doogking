@@ -8,7 +8,7 @@
         <Galleria id="galleriaHouse" :value="houseImages" :responsiveOptions="responsiveOptions" :numVisible="3"
                   :showItemNavigators="true" :showItemNavigatorsOnHover="true"
                   :circular="true" :autoPlay="true" :transitionInterval="3000"
-                  style="max-width: 39em; margin:1em;">
+                  style="width: 46vw; margin:1em;">
           <template #item="{item}">
             <img id="imageHouse" :src="item.image" :alt="item.alt" style="width: 100%; display: block;" />
           </template>
@@ -186,7 +186,7 @@ export default {
   setup: () => ({ v$: useVuelidate() }),
   data () {
     return {
-      logged: null,
+      logged: false,
       username: null,
       token: null,
       house_id: null,
@@ -197,7 +197,7 @@ export default {
       validInDate: true,
       validOutDate: true,
       loaderActive: false,
-      user_id: null,
+      userId: null,
       submitted: false,
       showSuccessMessage: false,
       showErrorMessage: false,
@@ -262,7 +262,6 @@ export default {
       axios.get(pathHouses, headers)
         .then(response => (this.house = response.data))
         .catch((error) => {
-          // eslint-disable-next-line
           this.error = error
           this.showHouseMessage = true
         })
@@ -275,7 +274,7 @@ export default {
     makeReservation () {
       var data = JSON.stringify({
         'housing': 'https://doogking.azurewebsites.net/api/housing/' + this.house_id + '/',
-        'customer': 'https://doogking.azurewebsites.net/api/profiles/' + this.user_id + '/',
+        'customer': 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/',
         'start_date': this.checkInDate.getFullYear() + '-' + this.checkInDate.toLocaleString('default', { month: '2-digit' }) + '-' + this.checkInDate.toLocaleString('default', { day: '2-digit' }),
         'end_date': this.checkOutDate.getFullYear() + '-' + this.checkOutDate.toLocaleString('default', { month: '2-digit' }) + '-' + this.checkOutDate.toLocaleString('default', { day: '2-digit' })
       })
@@ -340,13 +339,7 @@ export default {
       this.$router.push({ path: '/login'})
     },
     goToHomepage () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      if (this.logged) {
-        this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
-      } else {
-        // eslint-disable-next-line standard/object-curly-even-spacing
-        this.$router.push({ path: '/'})
-      }
+      this.$router.push({path: '/'})
     },
     checkInDateValid () {
       const today = new Date()
@@ -422,17 +415,23 @@ export default {
       }
     }
   },
-  created () {
-    this.logged = this.$route.query.logged === 'true'
-    this.username = this.$route.query.username
-    this.username = this.$route.query.username
-    this.email = this.$route.query.email
-    this.user_id = this.$route.query.user_id
-    this.token = this.$route.query.token
-    this.house_id = this.$route.query.house_id
-    if (this.logged === undefined) {
-      this.logged = false
+  mounted () {
+    if (localStorage.username) {
+      this.logged = true
+      this.username = localStorage.username
     }
+    if (localStorage.userId) {
+      this.userId = localStorage.userId
+    }
+    if (localStorage.token) {
+      this.token = localStorage.token
+    }
+    if (localStorage.email) {
+      this.email = localStorage.email
+    }
+  },
+  created () {
+    this.house_id = this.$route.query.house_id
     this.getHouse()
     this.getHouseImages()
     this.getReservations()
@@ -470,20 +469,20 @@ export default {
   align-content: center;
 }
 #imageHouse{
-  height: 26em;
+  height: 30.7vw;
   border-radius: 2em 2em 0 0;
   border: 5px solid #1c1b29;
 }
 #thumbnailImage{
-  height: 5em;
-  width: 7em;
+  height: 6vw;
+  width: 8.5vw;
   border-radius: 0.5em;
   border: 3px solid #1c1b29;
 }
 .form-demo .card {
   margin-top: 1rem;
   border-radius: 1rem;
-  width: 35rem;
+  width: 41vw;
   background-color: #3d4755;
   color: white;
   margin-bottom: 1.5rem;
