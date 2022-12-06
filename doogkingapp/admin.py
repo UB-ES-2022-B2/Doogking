@@ -19,7 +19,13 @@ class ProfileAdmin(UserAdmin):
     list_filter = ('email', 'is_staff', 'is_active',)
 
     fieldsets = (
-        (None, {'fields': ('email', 'password', 'first_name', 'last_name')}),
+        (None, {'fields': (
+            'email',
+            'password',
+            'first_name',
+            'last_name',
+            'image'
+        )}),
         ('Dates', {'fields': ('last_login', 'date_joined')}),
         ('Permissions', {'fields': ('is_staff', 'is_active')}),
     )
@@ -31,7 +37,8 @@ class ProfileAdmin(UserAdmin):
                 'password1',
                 'password2',
                 'is_staff',
-                'is_active')}
+                'is_active',
+                )}
          ),
     )
     search_fields = ('email',)

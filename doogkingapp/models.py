@@ -9,6 +9,11 @@ class Profile(AbstractUser):
     username = None
     email = models.EmailField('email address', unique=True)
     otp = models.CharField(max_length=32, blank=True)
+    image = models.ImageField(
+            storage=AzureStorage,
+            upload_to='profile/',
+            default='profile/default.svg'
+        )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

@@ -6,7 +6,14 @@ from .models import Profile, Housing, HousingImage, Reservation
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Profile
-        fields = ['url', 'email', 'password', 'first_name', 'last_name']
+        fields = [
+            'url',
+            'email',
+            'password',
+            'first_name',
+            'last_name',
+            'image'
+        ]
         extra_kwargs = {
             'password': {'write_only': True},
             'otp': {'read_only': True}
