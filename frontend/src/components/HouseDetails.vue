@@ -60,7 +60,7 @@
               <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
               <h5 style="margin-top: 1em">Login Error!</h5>
               <p style="text-align: center">
-                 You need to be logged in to make a reservation
+                You need to be logged in to make a reservation
               </p>
             </div>
             <template #footer>
@@ -176,7 +176,6 @@ import LoadingSpinner from './LoadingSpinner'
 import axios from 'axios'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
-
 export default {
   name: 'HouseDetails',
   components: {
@@ -291,7 +290,6 @@ export default {
         },
         data: data
       }
-
       axios(config)
         .then((response) => {
           console.log(JSON.stringify(response.data))
@@ -451,22 +449,17 @@ export default {
   display: flex;
   margin-left: 2em;
 }
-
 .houseDetails {
   flex: 1;
 }
-
 #fieldRowContainer {
   display: flex;
 }
-
 #fieldRow {
   float: left;
 }
-
 .houseDetails:first-child {
 }
-
 .flex-wrapper {
   background-color: #2A323D;
   display: flex;
@@ -476,20 +469,17 @@ export default {
   overflow-x: hidden;
   align-content: center;
 }
-
 #imageHouse{
   height: 26em;
   border-radius: 2em 2em 0 0;
   border: 5px solid #1c1b29;
 }
-
 #thumbnailImage{
   height: 5em;
   width: 7em;
   border-radius: 0.5em;
   border: 3px solid #1c1b29;
 }
-
 .form-demo .card {
   margin-top: 1rem;
   border-radius: 1rem;
@@ -516,42 +506,35 @@ export default {
     width: 80%;
   }
 }
-
 #favContainer{
   position:absolute;
   top: 0.7em;
   right: 1em;
 }
-
 #favButtonGrid{
   color: indianred;
   background-color: #2A323D;
   border-color: #2A323D;
 }
-
 #favButtonGrid:hover{
   color: indianred;
   background-color: #2A323D;
   border-color: #2A323D;
 }
-
 #favButtonGrid:focus{
   color: indianred;
   background-color: #2A323D;
   border-color: #2A323D;
   box-shadow: 0 0 0 0.1em indianred;
 }
-
 #tagHost{
   position:absolute;
   top:1em;
   left:1.5em;
 }
-
 #priceContainer{
   font-size: 1em;
 }
-
 #priceContainer a{
   font-size: 1.5em;
 }

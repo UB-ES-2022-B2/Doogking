@@ -101,7 +101,6 @@
 <script>
 import axios from 'axios'
 import LoadingSpinnerGrid from './LoadingSpinnerGrid'
-
 export default {
   name: 'App',
   components: {
@@ -231,11 +230,9 @@ export default {
 </script>
 
 <style scoped>
-
 .col-12{
   padding-bottom: 0px;
 }
-
 .card{
   background-color: #1c1b29;
   border-radius: 20px;
@@ -247,14 +244,12 @@ export default {
   text-overflow: ellipsis;
   width: 19rem;
 }
-
 #container-image{
   position: relative;
   box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
-
 #card-img{
   clip-path: polygon(0 0,100% 0, 100% 85%, 0 100%);
   display: block;
@@ -263,7 +258,6 @@ export default {
   width: 19rem;
   height: 12rem;
 }
-
 #container-effect {
   background-color: #000;
   display: inline-block;
@@ -271,14 +265,12 @@ export default {
   border-radius: 20px 20px 0 0;
   clip-path: polygon(0 0,100% 0, 100% 85%, 0 100%);
 }
-
 #container-effect * {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   -webkit-transition: all 0.35s ease;
   transition: all 0.35s ease;
 }
-
 #container-effect:before,
 #container-effect:after {
   position: absolute;
@@ -295,17 +287,14 @@ export default {
   opacity: 0.6;
   z-index: 1;
 }
-
 #container-effect:before {
   -webkit-transform: skew(45deg) translateX(-155%);
   transform: skew(45deg) translateX(-155%);
 }
-
 #container-effect:after {
   -webkit-transform: skew(45deg) translateX(155%);
   transform: skew(45deg) translateX(155%);
 }
-
 #container-effect figcaption {
   top: 50%;
   left: 50%;
@@ -315,30 +304,25 @@ export default {
   transform: translate(-50%, -50%) scale(0.5);
   opacity: 0;
 }
-
 #container-effect:hover > #card-img,
 #container-effect.hover > #card-img {
   opacity: 0.5;
 }
-
 #container-effect:hover:before{
   -webkit-transform: skew(45deg) translateX(-55%);
   transform: skew(45deg) translateX(-55%);
 }
-
 #container-effect:hover:after,
 #container-effect.hover:after {
   -webkit-transform: skew(45deg) translateX(55%);
   transform: skew(45deg) translateX(55%);
 }
-
 #container-effect:hover figcaption,
 #container-effect.hover figcaption {
   -webkit-transform: translate(-50%, -50%) scale(1);
   transform: translate(-50%, -50%) scale(1);
   opacity: 1;
 }
-
 #card-details{
   padding: 20px 10px;
 }
@@ -353,33 +337,28 @@ export default {
   line-height: 30px;
   font-weight: 400;
 }
-
 #buttonViewList{
   background-color: #6c757d;
   border-color: #6c757d;
   color: white;
 }
-
 #buttonViewGrid{
   background-color: #6c757d;
   border-color: #6c757d;
   color: white;
 }
-
 #buttonViewList:hover{
   background-color: #8DD0FF;
   border-color: #8DD0FF;
   outline-color: #8DD0FF;
   color: white;
 }
-
 #buttonViewGrid:hover{
   background-color: #8DD0FF;
   border-color: #8DD0FF;
   outline-color: #8DD0FF;
   color: white;
 }
-
 #buttonViewList:focus {
   box-shadow: 0 0 0 0.1em #8DD0FF;
   background-color: #8DD0FF;
@@ -387,7 +366,6 @@ export default {
   outline-color: #8DD0FF;
   color: white;
 }
-
 #buttonViewGrid:focus {
   box-shadow: 0 0 0 0.1em #8DD0FF;
   background-color: #8DD0FF;
@@ -395,36 +373,29 @@ export default {
   outline-color: #8DD0FF;
   color: white;
 }
-
 #listImage{
   border-radius: 0.5em;
   border: 3px solid #1c1b29;
 }
-
 .p-dropdown {
   width: 14rem;
   font-weight: normal;
 }
-
 .product-name {
   font-size: 1.5rem;
   font-weight: 700;
 }
-
 .product-description {
   margin: 0 0 1rem 0;
 }
-
 .product-category-icon {
   vertical-align: middle;
   margin-right: .5rem;
 }
-
 .product-category {
   font-weight: 600;
   vertical-align: middle;
 }
-
 .multiselect-custom >>> .country-item-value {
   font-size: 0.8rem;
   padding: 0.1rem;
@@ -434,72 +405,60 @@ export default {
   background-color: #6c757d;
   color: white;
 }
-
 #tagHost{
   position:absolute;
   top:1em;
   left:1em;
 }
-
 #favContainer{
   position:absolute;
   top:0.5em;
   right:0.5em;
 }
-
 #loaderContainer{
   position:absolute;
   top:40%;
   left:45%;
 }
-
 #priceContainer{
   position:absolute;
   top:90%;
   right:0.5em;
   font-size: 1em;
 }
-
 #priceContainer a{
   font-size: 1.5em;
 }
-
 #calendarIcon >>> p-calendar >>> p-calendar-w-btn{
   bacground-color: white;
   color: white;
 }
-
 #favButtonGrid{
   color: indianred;
   background-color: #2A323D;
   border-color: #2A323D;
 }
-
 #favButtonGrid:hover{
   color: indianred;
   background-color: #2A323D;
   border-color: #2A323D;
 }
-
 #favButtonGrid:focus{
   color: indianred;
   background-color: #2A323D;
   border-color: #2A323D;
   box-shadow: 0 0 0 0.1em indianred;
 }
-
 #favButtonList{
   color: indianred;
   background-color: #1c1b29;
   border-color: #1c1b29;
 }
-
 #favButtonList:hover{
   color: indianred;
   background-color: #1c1b29;
   border-color: #1c1b29;
 }
-
 #favButtonList:focus{
   color: indianred;
   background-color: #1c1b29;
