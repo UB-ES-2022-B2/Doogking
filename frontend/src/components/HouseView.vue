@@ -239,12 +239,10 @@ export default {
 .col-12{
   padding-bottom: 0px;
 }
-
 #gridLayout{
   align-items: center;
   justify-content: center;
 }
-
 .card{
   background-color: #1c1b29;
   border-radius: 20px;

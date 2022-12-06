@@ -148,7 +148,6 @@ export default {
 .nav-item .nav-link:hover {
   color: #8DD0FF;
 }
-
 .loginIcon:hover{
   color: #8DD0FF;
 }
