@@ -79,7 +79,6 @@ Vue.component('SplitButton', SplitButton)
 Vue.component('Carousel', Carousel)
 Vue.component('FileUpload', FileUpload)
 
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
