@@ -82,6 +82,7 @@ export default new Router({
       name: 'AboutUs',
       component: AboutUs
     },
+    {
       path: '/HouseRegistry',
       name: 'HouseRegistry',
       component: HouseRegistry

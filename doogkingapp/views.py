@@ -1,5 +1,3 @@
-from django.shortcuts import render, get_object_or_404
-from django.views import View
 from django.core.exceptions import PermissionDenied
 from django.conf import settings
 from rest_framework import viewsets
@@ -12,6 +10,7 @@ from .serializers import ProfileSerializer, HousingSerializer
 import secrets
 import requests
 
+
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all().order_by('-date_joined')
     serializer_class = ProfileSerializer
@@ -22,6 +21,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = [permissions.IsAdminUser]
         return [permission() for permission in permission_classes]
+
 
 class HousingViewSet(viewsets.ModelViewSet):
     queryset = Housing.objects.all()
@@ -34,6 +34,7 @@ class HousingViewSet(viewsets.ModelViewSet):
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
 
+
 class ResetView(APIView):
     queryset = Profile.objects.all()
 
@@ -45,9 +46,13 @@ class ResetView(APIView):
         user.otp = otp
         user.save()
 
-        requests.post(\
-                url= "https://api.emailjs.com/api/v1.0/email/send",
-                json = {"service_id":"service_doogking", "template_id":"template_6flombd", "user_id":"v_pteFmOs0hEWfD7U", "template_params":{"email": request_email, "reset_code": otp} }
+        requests.post(
+                url="https://api.emailjs.com/api/v1.0/email/send",
+                json={"service_id": "service_doogking",
+                      "template_id": "template_6flombd",
+                      "user_id": "v_pteFmOs0hEWfD7U",
+                      "template_params": {"email": request_email,
+                                          "reset_code": otp}}
             )
 
         return Response({"message": "Password reset email sent!"})
@@ -71,12 +76,14 @@ class UploaderView(APIView):
 
     def post(self, request):
         file = request.FILES['file']
-        credential = {"account_name": settings.AZURE_ACCOUNT_NAME, "account_key": settings.AZURE_ACCOUNT_KEY}
+        credential = {"account_name": settings.AZURE_ACCOUNT_NAME,
+                      "account_key": settings.AZURE_ACCOUNT_KEY}
 
-        blob_service_client = BlobServiceClient("https://" + settings.AZURE_CUSTOM_DOMAIN, credential)
+        blob_service_client = BlobServiceClient(
+            "https://" + settings.AZURE_CUSTOM_DOMAIN, credential)
 
-        blob_client = blob_service_client.get_blob_client(container=settings.AZURE_CONTAINER, blob=file.name)
+        blob_client = blob_service_client.get_blob_client(
+            container=settings.AZURE_CONTAINER, blob=file.name)
         blob_client.upload_blob(file.read())
 
         return Response({"message": "success", "uploaded_name": file.name})
-
