@@ -33,14 +33,10 @@ urlpatterns = [
     path('api/login/', views.ObtainAuthTokenUser.as_view()),
     path('admin/', admin.site.urls),
     path('api/reset/', views.ResetView.as_view()),
-    path('api/change/', views.ChangeView.as_view()),
+    path('api/change-password/', views.ChangeView.as_view()),
     path('api/deleteProfile/<int:id>', views. ProfileViewSet.delete,
          name='delete'),
     path('api/upload/', views.UploaderView.as_view()),
-    path('api/change-password/', views.ChangePasswordView.as_view(),
-         name='change-password'),
-    path('api/pass/', views.PasswordView.as_view()),
-
     url(r'^api/housing_images/housing/(?P<housing_id>[0-9]+)/$',
         views.HousingImageViewSet.as_view({'get': 'select'})),
 

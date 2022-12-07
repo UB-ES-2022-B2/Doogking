@@ -27,7 +27,6 @@ class CurrentProfileSerializer(serializers.ModelSerializer):
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
-    #id = serializers.IntegerFieldField(write_only=True, required=True)
     password = serializers.CharField(write_only=True, required=True,
                                      validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)

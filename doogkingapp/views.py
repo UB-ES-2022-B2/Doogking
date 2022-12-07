@@ -20,11 +20,6 @@ import requests
 from django.conf import settings
 from azure.storage.blob import BlobServiceClient
 from rest_framework.generics import UpdateAPIView
-from django.contrib.auth.forms import PasswordChangeForm
-from django.urls import reverse_lazy
-from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.views import PasswordChangeView
-from django.views.decorators.csrf import csrf_exempt
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -205,86 +200,10 @@ class UploaderView(APIView):
 
         return Response({"message": "success", "uploaded_name": file.name})
 
-class ChangePasswordView(UpdateAPIView):
-
-    serializer_class = ChangePasswordSerializer
-    model = Profile
-
-    permission_classes = [permissions.IsAuthenticated]
-
-    @csrf_exempt
-    def get_permissions(self):
-
-        permission_classes = [permissions.IsAuthenticated]
-        return [permission() for permission in permission_classes]
-
-    @csrf_exempt
-    def get_object(self, queryset=None):
-        obj = self.request.user
-        return obj
-
-    @csrf_exempt
-    def update(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        serializer = self.get_serializer(data=request.data)
-
-
-        if serializer.is_valid():
-            # Check old password
-            # if not self.object.check_password(
-            # serializer.data.get("old_password")):
-            #       return Response({"old_password": ["Wrong password."]})
-            # set_password also hashes the password that the user will get
-            self.object.set_password(serializer.data.get("new_password"))
-            self.object.save()
-            response = {"message": "Password successfully changed!"}
-
-            return Response(response)
-
-class PasswordView(PasswordChangeView):
-    form_class = PasswordChangeForm
-    success_url = reverse_lazy('password_change_done')
-    #template_name = 'registration/password_change_form.html'
-    #title = _('Password change')
-
-    #@method_decorator(sensitive_post_parameters())
-    #@method_decorator(csrf_protect)
-    #@method_decorator(login_required)
-    @csrf_exempt
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
-
-    @csrf_exempt
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
-        return kwargs
-
-    @csrf_exempt
-    def form_valid(self, form):
-        form.save()
-        # Updating the password logs out all other sessions for the user
-        # except the current one.
-        update_session_auth_hash(self.request, form.user)
-        return super().form_valid(form)
-
-
-
 class ChangeView(UpdateAPIView):
     queryset = Profile.objects.all()
     permission_classes = [permissions.AllowAny]
     serializer_class = ChangePasswordSerializer
-
-    '''#@csrf_exempt
-    def post(self,request,id):
-        user = Profile.objects.get(id=id)
-        request_pass = request.data['password']
-        print("hola")
-        print(request_pass)
-        user.set_password(request_pass)
-        user.save()
-        return Response({"message": "Password successfully changed!"})'''
-
     def post(self, request):
         email = request.data['email']
         old_pass = request.data['old_password']
