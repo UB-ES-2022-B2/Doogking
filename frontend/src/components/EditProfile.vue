@@ -42,6 +42,7 @@
             </div>
             <div>
               <button class="btn btn-lg btn-block" type="button" style="background-color: #D03739; color:white" @click="deleteProfile">Delete account</button>
+              <button class="btn btn-lg btn-block" type="submit" style="color: #8dd0ff" @click="goToChangePassword" name="editProfile" aria-label="Left Align"><fa :icon="['fas', 'unlock']"/><h6>Change Password</h6></button>
             </div>
           </div>
         </div>
@@ -89,7 +90,7 @@ export default {
       })
       var config = {
         method: 'patch',
-        url: 'https://doogking.azurewebsites.net/api/profiles/' + this.userIder + '/',
+        url: 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/',
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Authorization': 'Token ' + this.token,
@@ -105,10 +106,13 @@ export default {
     goToProfile () {
       this.$router.push({path: '/profile'})
     },
+    goToChangePassword () {
+      this.$router.push({path: '/changePassword'})
+    },
     deleteProfile () {
       var config = {
         method: 'delete',
-        url: 'https://doogking.azurewebsites.net/api/deleteProfile/' + this.user_id + '/',
+        url: 'https://doogking.azurewebsites.net/api/deleteProfile/' + this.userId + '/',
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Authorization': 'Token ' + this.token,
