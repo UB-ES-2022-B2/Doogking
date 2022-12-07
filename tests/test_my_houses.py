@@ -23,6 +23,7 @@ class MyHousesTest(StaticLiveServerTestCase):
         super().tearDownClass()
 
     def test_profile_houses(self):
+        self.selenium.get(self.live_server_url+"/profile")
         house_registry = self.selenium.find_element(By.NAME, "My houses").is_enabled()
         client = RequestsClient()
         house_id = 1
@@ -33,3 +34,12 @@ class MyHousesTest(StaticLiveServerTestCase):
             requests_passed = requests.status_code == 200
             house_id += 1
         assert house_id == 8 and house_registry
+
+    def test_showing_houses(self):
+        client = RequestsClient()
+        num_house = 1
+        request = client.get('https://doogking.azurewebsites.net/api/housing/?owner=' + str(num_house))
+        while request.status_code == 200:
+            request = client.get('https://doogking.azurewebsites.net/api/housing/?owner=' + str(num_house))
+            num_house += 1
+        assert num_house >= 15
