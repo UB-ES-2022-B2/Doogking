@@ -12,7 +12,8 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
             'password',
             'first_name',
             'last_name',
-            'image'
+            'balance',
+            'image',
         ]
         extra_kwargs = {
             'password': {'write_only': True},

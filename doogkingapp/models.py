@@ -14,6 +14,7 @@ class Profile(AbstractUser):
             upload_to='profile/',
             default='profile/default.svg'
         )
+    balance = models.IntegerField(default=0)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

@@ -9,7 +9,6 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from .models import Profile, Housing, HousingImage, Reservation, Favourite
 from .serializers import ProfileSerializer, \
-    CurrentProfileSerializer, \
     HousingSerializer, \
     HousingImageSerializer, \
     ReservationSerializer, \
@@ -30,6 +29,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action == 'create':
             permission_classes = [permissions.AllowAny]
+        elif self.action == 'list':
+            permission_classes = [permissions.IsAdminUser]
         else:
             permission_classes = [
                 permissions.IsAdminUser | IsOwnerOfProfile
@@ -201,8 +202,11 @@ class ObtainAuthTokenUser(ObtainAuthToken):
         user = Profile.objects.get(id=token.user_id)
         return Response(
             {'token': token.key,
-             'profile': CurrentProfileSerializer(user).data}
-            )
+             'profile': ProfileSerializer(
+                user,
+                context={'request': request}
+                ).data}
+        )
 
 
 class UploaderView(APIView):
