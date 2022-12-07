@@ -38,11 +38,15 @@ class FilteringHousesTest(StaticLiveServerTestCase):
 
         assert testPassed
     '''
+
     def test_filtering(self):
         self.selenium.get(self.live_server_url)
-        checkin_field = self.selenium.find_element(By.NAME, "Check-in date").is_enabled()
-        checkout_field = self.selenium.find_element(By.NAME, "Check-out date").is_enabled()
-        #search_button = self.selenium.find_element(By., "searchButton")
-
-        #self.selenium.execute_script("arguments[0].click();", search_button)
-        assert  checkout_field and checkin_field
+        checkin_field = self.selenium.find_element(By.ID, "check_in")
+        checkout_field = self.selenium.find_element(By.ID, "check_out")
+        search_button = self.selenium.find_element(By.ID, "searchButton")
+        #yyyy-mm-dd
+        checkin_field.send_keys("12/07/2022")
+        checkout_field.send_keys("12/07/2022")
+        self.selenium.execute_script("arguments[0].click();", search_button)
+        self.selenium.implicitly_wait(100)
+        assert self.selenium.find_element(By.ID, "confirmPopup").is_enabled()
