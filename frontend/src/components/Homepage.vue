@@ -26,10 +26,10 @@
               <div class="col-6 text-right">
                 <DataViewLayoutOptions v-model="layout" />
               </div>
-              <Calendar class="calendarIcon" id="icon" placeholder="Check-in" v-model="checkInDate" :showIcon="true" style="width: 9.65rem; margin-top: 0.5em; margin-right: 0.5em;"/>
-              <Calendar class="calendarIcon" id="icon" placeholder="Check-out" v-model="checkOutDate" @click="checkOutGreater()" :showIcon="true" style="width: 9.65rem; margin-top: 0.5em; margin-right: 0.5em;"/>
+              <Calendar class="calendarIcon" id="check_in" placeholder="Check-in" v-model="checkInDate" :showIcon="true" style="width: 9.65rem; margin-top: 0.5em; margin-right: 0.5em;"/>
+              <Calendar class="calendarIcon" id="check_out" placeholder="Check-out" v-model="checkOutDate" @click="checkOutGreater()" :showIcon="true" style="width: 9.65rem; margin-top: 0.5em; margin-right: 0.5em;"/>
               <ConfirmPopup id="confirmPopup" ></ConfirmPopup>
-              <Toast/>
+              <Toast id="error_toast"/>
               <Button id="removeFiltersBtn" @click="confirmRemoveFilters($event)" icon="pi pi-times" style="background-color: indianred; border-color: indianred; color: white; margin-top: 0.5em;"/>
             </div>
             <div class="col-3 text-left">
