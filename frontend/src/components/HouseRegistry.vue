@@ -109,14 +109,12 @@ export default {
         'door': this.addUserForm.door,
         'house_dimension': this.addUserForm.house_dimension,
         'price': this.addUserForm.price_per_day,
-        'raiting': 0,
         'desciption': this.addUserForm.desciption,
-        'house_owner_name': this.username,
-        'house_owner': this.email
+        'house_owner': 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/'
       })
       var config = {
         method: 'post',
-        url: 'https://doogking.azurewebsites.net/api/housing/' + (this.numHouses + 1) + '/',
+        url: 'https://doogking.azurewebsites.net/api/housing/',
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Authorization': 'Token ' + this.token,
