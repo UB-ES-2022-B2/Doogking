@@ -9,6 +9,8 @@ Class to check if the user that makes the request
 
 
 class IsOwnerOfProfile(permissions.BasePermission):
-    def has_object_permission(self, request: object,
-            view: object, obj: object) -> object:
+    def has_object_permission(self,
+                              request: object,
+                              view: object,
+                              obj: object) -> object:
         return obj == request.user

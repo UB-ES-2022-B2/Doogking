@@ -205,6 +205,7 @@ class ChangePasswordView(UpdateAPIView):
     queryset = Profile.objects.all()
     permission_classes = [permissions.AllowAny]
     serializer_class = ChangePasswordSerializer
+
     def post(self, request):
         email = request.data['email']
         old_pass = request.data['old_password']
