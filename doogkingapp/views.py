@@ -7,12 +7,13 @@ from rest_framework import permissions
 from .permissions import IsOwnerOfProfile
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from .models import Profile, Housing, HousingImage, Reservation
+from .models import Profile, Housing, HousingImage, Reservation, Favourite
 from .serializers import ProfileSerializer, \
     CurrentProfileSerializer, \
     HousingSerializer, \
     HousingImageSerializer, \
     ReservationSerializer, \
+    FavouriteSerializer, \
     CustomerReservationSerializer, \
     ChangePasswordSerializer
 import secrets
@@ -134,6 +135,25 @@ class ReservationViewSet(viewsets.ModelViewSet):
                     "You can't access other customers reservations!"
                 )
         return queryset
+
+
+class FavouriteViewSet(viewsets.ModelViewSet):
+    queryset = Favourite.objects.all()
+    serializer_class = FavouriteSerializer
+
+    @action(detail=False)
+    def select(self, request, user_id=None):
+        queryset = Favourite.objects.filter(user__id=user_id)
+        serializer = FavouriteSerializer(
+            queryset,
+            many=True,
+            context={'request': request}
+        )
+        return Response(serializer.data)
+
+    def get_permissions(self):
+        permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
 
 class ResetView(APIView):

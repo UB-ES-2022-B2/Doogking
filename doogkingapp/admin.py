@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import ProfileCreationForm, ProfileChangeForm
-from .models import Profile, Housing, HousingImage, Reservation
+from .models import Profile, Housing, HousingImage, Reservation, Favourite
 
 
 class ProfileAdmin(UserAdmin):
@@ -49,3 +49,4 @@ admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Housing)
 admin.site.register(HousingImage)
 admin.site.register(Reservation)
+admin.site.register(Favourite)

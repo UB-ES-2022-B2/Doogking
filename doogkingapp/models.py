@@ -93,3 +93,12 @@ class Reservation(models.Model):
              str(self.start_date),
              "--",
              str(self.end_date)])
+
+
+class Favourite(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    housing = models.ForeignKey(Housing, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return " ".join([str(self.user), "--", str(self.housing)])

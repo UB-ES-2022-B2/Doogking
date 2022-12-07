@@ -1,6 +1,6 @@
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
-from .models import Profile, Housing, HousingImage, Reservation
+from .models import Profile, Housing, HousingImage, Reservation, Favourite
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
@@ -103,3 +103,9 @@ class CustomerReservationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Reservation
         fields = ['housing', 'customer', 'start_date', 'end_date']
+
+
+class FavouriteSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Favourite
+        fields = ['user', 'housing']
