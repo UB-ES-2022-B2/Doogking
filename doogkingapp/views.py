@@ -217,4 +217,4 @@ class ChangePasswordView(UpdateAPIView):
             user.save()
             return Response({"message": "Password successfully changed!"})
         else:
-            raise PermissionDenied("Email and reset token do not match!")
+            raise PermissionDenied("No matching passwords")
