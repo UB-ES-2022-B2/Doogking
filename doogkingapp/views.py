@@ -184,6 +184,7 @@ class ObtainAuthTokenUser(ObtainAuthToken):
              'profile': CurrentProfileSerializer(user).data}
             )
 
+
 class UploaderView(APIView):
     def post(self, request):
         file = request.FILES['file']
@@ -198,6 +199,7 @@ class UploaderView(APIView):
         blob_client.upload_blob(file.read())
 
         return Response({"message": "success", "uploaded_name": file.name})
+
 
 class ChangePasswordView(UpdateAPIView):
     queryset = Profile.objects.all()
