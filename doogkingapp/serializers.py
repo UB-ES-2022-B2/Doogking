@@ -31,11 +31,10 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
                                      validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
     old_password = serializers.CharField(write_only=True, required=True)
-    # email = serializers.EmailField('email address', unique=True)
 
     class Meta:
         model = Profile
-        fields = ('email', 'old_password', 'password', 'password2')
+        fields = ('old_password', 'password', 'password2')
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:

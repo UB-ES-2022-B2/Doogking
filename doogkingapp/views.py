@@ -200,25 +200,8 @@ class UploaderView(APIView):
 
         return Response({"message": "success", "uploaded_name": file.name})
 
-
-'''class ChangePasswordView(UpdateAPIView):
-
-    queryset = Profile.objects.all()
-    permission_classes = (IsAuthenticated,)
-    serializer_class = ChangePasswordSerializer
-    def post(self,request,id):
-        user = Profile.objects.get(id=id)
-        request_pass = request.data['password']
-        user.set_password(request_pass)
-        user.save()
-        return Response({"message": "Password successfully changed!"})
-'''
-
-
 class ChangePasswordView(UpdateAPIView):
-    """
-    An endpoint for changing password.
-    """
+
     serializer_class = ChangePasswordSerializer
     model = Profile
 
@@ -245,11 +228,6 @@ class ChangePasswordView(UpdateAPIView):
             # set_password also hashes the password that the user will get
             self.object.set_password(serializer.data.get("new_password"))
             self.object.save()
-            response = {
-                'status': 'success',
-                'code': 'HTTP_200_OK',
-                'message': 'Password updated successfully',
-                'data': []
-            }
+            response = {"message": "Password successfully changed!"}
 
             return Response(response)
