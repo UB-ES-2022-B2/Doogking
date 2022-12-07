@@ -2,6 +2,20 @@
   <form onsubmit="return false;">
     <div class="flex-wrapper">
       <Header></Header>
+      <Dialog :visible="showLoginMessage" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
+        <div class="flex align-items-center flex-column pt-6 px-3">
+          <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
+          <h5 style="margin-top: 1em">Login Error!</h5>
+          <p style="text-align: center">
+            You need to be logged in to access your profile
+          </p>
+        </div>
+        <template #footer>
+          <div class="flex justify-content-center">
+            <Button label="OK" @click="toggleDialogLogin" class="p-button-text" />
+          </div>
+        </template>
+      </Dialog>
       <div id="app">
         <div class="body">
           <div class="d-flex flex-row">
@@ -49,16 +63,17 @@ export default {
   },
   data () {
     return {
-      logged: null,
+      logged: false,
       username: null,
       email: null,
-      user_id: null,
+      userId: null,
       token: null,
       showSuccessMessage: false,
       addUserForm: {
         email: null,
         username: null
-      }
+      },
+      showLoginMessage: false
     }
   },
   methods: {
@@ -74,7 +89,7 @@ export default {
       })
       var config = {
         method: 'patch',
-        url: 'https://doogking.azurewebsites.net/api/profiles/' + this.user_id + '/',
+        url: 'https://doogking.azurewebsites.net/api/profiles/' + this.userIder + '/',
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Authorization': 'Token ' + this.token,
@@ -88,7 +103,7 @@ export default {
         }).catch(function (response) {})
     },
     goToProfile () {
-      this.$router.push({ path: '/profile', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
+      this.$router.push({path: '/profile'})
     },
     deleteProfile () {
       var config = {
@@ -104,19 +119,34 @@ export default {
         .then(function (response) {
         }).catch(function (response) {})
       this.logged = false
-      // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({path: '/'})
+    },
+    toggleDialogLogin () {
+      this.showLoginMessage = !this.showLoginMessage
+      if (!this.showLoginMessage) {
+        this.$router.push({path: '/'})
+      }
+    }
+  },
+  mounted () {
+    if (localStorage.username) {
+      this.logged = true
+      this.username = localStorage.username
+    }
+    if (localStorage.userId) {
+      this.userId = localStorage.userId
+    }
+    if (localStorage.token) {
+      this.token = localStorage.token
+    }
+    if (localStorage.email) {
+      this.email = localStorage.email
+    }
+    if (this.logged === false) {
+      this.showLoginMessage = true
     }
   },
   created () {
-    this.logged = this.$route.query.logged === 'true'
-    this.username = this.$route.query.username
-    this.email = this.$route.query.email
-    this.user_id = this.$route.query.user_id
-    this.token = this.$route.query.token
-    if (this.logged === undefined) {
-      this.logged = false
-    }
   }
 }
 </script>
