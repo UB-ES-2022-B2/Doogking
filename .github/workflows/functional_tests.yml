@@ -56,3 +56,6 @@ jobs:
     - name: Functional tests footer
       run: |
         python3 manage.py test tests.test_footer
+    - name: Functional tests my houses
+      run: |
+        python3 manage.py test tests.test_my_houses
