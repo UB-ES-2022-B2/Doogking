@@ -104,9 +104,8 @@
 import Header from './Header'
 import Footer from './Footer'
 import HouseView from './HouseView'
-
-<script>
 import axios from 'axios'
+
 export default {
   name: 'App',
   data () {
