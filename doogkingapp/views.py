@@ -184,7 +184,6 @@ class ObtainAuthTokenUser(ObtainAuthToken):
              'profile': CurrentProfileSerializer(user).data}
             )
 
-
 class UploaderView(APIView):
     def post(self, request):
         file = request.FILES['file']
@@ -200,7 +199,7 @@ class UploaderView(APIView):
 
         return Response({"message": "success", "uploaded_name": file.name})
 
-class ChangeView(UpdateAPIView):
+class ChangePasswordView(UpdateAPIView):
     queryset = Profile.objects.all()
     permission_classes = [permissions.AllowAny]
     serializer_class = ChangePasswordSerializer
