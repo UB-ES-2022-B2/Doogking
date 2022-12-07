@@ -83,6 +83,7 @@ class HousingSerializer(serializers.HyperlinkedModelSerializer):
                   'house_owner_name',
                   'price',
                   'rating',
+                  'num_ratings',
                   'description',
                   'image']
 

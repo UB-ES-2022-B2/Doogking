@@ -33,7 +33,8 @@ class Housing(models.Model):
     door = models.CharField(max_length=25, blank=True)
     house_dimension = models.IntegerField()
     price = models.IntegerField(default=0)
-    rating = models.IntegerField(default=-1)
+    rating = models.IntegerField(default=0)
+    num_ratings = models.IntegerField(default=0)
     description = models.TextField(blank=True)
     house_owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
