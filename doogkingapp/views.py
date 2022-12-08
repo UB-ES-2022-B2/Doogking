@@ -7,14 +7,14 @@ from rest_framework import permissions
 from .permissions import IsOwnerOfProfile
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from .models import Profile, Housing, HousingImage, Reservation
+from .models import Profile, Housing, HousingImage, Reservation, Favourite
 from .serializers import ProfileSerializer, \
-    CurrentProfileSerializer, \
     HousingSerializer, \
     HousingImageSerializer, \
     ReservationSerializer, \
     DetailedReservationSerializer, \
     CustomerReservationSerializer, \
+    FavouriteSerializer, \
     ChangePasswordSerializer
 import secrets
 import requests
@@ -30,6 +30,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action == 'create':
             permission_classes = [permissions.AllowAny]
+        elif self.action == 'list':
+            permission_classes = [permissions.IsAdminUser]
         else:
             permission_classes = [
                 permissions.IsAdminUser | IsOwnerOfProfile
@@ -137,6 +139,25 @@ class ReservationViewSet(viewsets.ModelViewSet):
         return queryset
 
 
+class FavouriteViewSet(viewsets.ModelViewSet):
+    queryset = Favourite.objects.all()
+    serializer_class = FavouriteSerializer
+
+    @action(detail=False)
+    def select(self, request, user_id=None):
+        queryset = Favourite.objects.filter(user__id=user_id)
+        serializer = FavouriteSerializer(
+            queryset,
+            many=True,
+            context={'request': request}
+        )
+        return Response(serializer.data)
+
+    def get_permissions(self):
+        permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+
 class ResetView(APIView):
     queryset = Profile.objects.all()
 
@@ -182,8 +203,11 @@ class ObtainAuthTokenUser(ObtainAuthToken):
         user = Profile.objects.get(id=token.user_id)
         return Response(
             {'token': token.key,
-             'profile': CurrentProfileSerializer(user).data}
-            )
+             'profile': ProfileSerializer(
+                user,
+                context={'request': request}
+                ).data}
+        )
 
 
 class UploaderView(APIView):

@@ -9,6 +9,12 @@ class Profile(AbstractUser):
     username = None
     email = models.EmailField('email address', unique=True)
     otp = models.CharField(max_length=32, blank=True)
+    image = models.ImageField(
+            storage=AzureStorage,
+            upload_to='profile/',
+            default='profile/default.svg'
+        )
+    balance = models.IntegerField(default=0)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -28,7 +34,8 @@ class Housing(models.Model):
     door = models.CharField(max_length=25, blank=True)
     house_dimension = models.IntegerField()
     price = models.IntegerField(default=0)
-    rating = models.IntegerField(default=-1)
+    rating = models.IntegerField(default=0)
+    num_ratings = models.IntegerField(default=0)
     description = models.TextField(blank=True)
     house_owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
@@ -88,3 +95,12 @@ class Reservation(models.Model):
              str(self.start_date),
              "--",
              str(self.end_date)])
+
+
+class Favourite(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    housing = models.ForeignKey(Housing, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return " ".join([str(self.user), "--", str(self.housing)])
