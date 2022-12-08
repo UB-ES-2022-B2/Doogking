@@ -13,6 +13,7 @@ from .serializers import ProfileSerializer, \
     HousingSerializer, \
     HousingImageSerializer, \
     ReservationSerializer, \
+    DetailedReservationSerializer, \
     CustomerReservationSerializer, \
     ChangePasswordSerializer
 import secrets
@@ -100,7 +101,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
         if self.action == 'create':
             return CustomerReservationSerializer
         else:
-            return ReservationSerializer
+            return DetailedReservationSerializer
 
     def get_queryset(self):
         queryset = Reservation.objects.all()
