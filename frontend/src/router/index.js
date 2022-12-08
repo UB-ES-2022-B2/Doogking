@@ -14,7 +14,7 @@ import PrivacyPolicy from '../components/PrivacyPolicy'
 import AboutUs from '../components/AboutUs'
 import MyHouseDetails from '../components/MyHouseDetails'
 import HouseRegistry from '../components/HouseRegistry'
-
+import ChangePassword from '../components/ChangePassword'
 
 Vue.use(Router)
 
@@ -83,9 +83,14 @@ export default new Router({
       component: AboutUs
     },
     {
-      path: '/HouseRegistry',
+      path: '/houseRegistry',
       name: 'HouseRegistry',
       component: HouseRegistry
+    },
+    {
+      path: '/changePassword',
+      name: 'ChangePassword',
+      component: ChangePassword
     }
   ]
 })
