@@ -137,7 +137,7 @@
         </div>
       </template>
     </Carousel>
-      <Carousel :value="myReservedHouses" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="3000">
+      <Carousel :value="myReservedHouses" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="3000">
         <template #header>
           <h5 style="text-align: left; margin-left: 6vw; color: white;">My houses reserved by other users</h5>
           <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
@@ -154,7 +154,7 @@
                     </figcaption>
                   </div>
                   <Toast/>
-                  <span id="favContainer" v-if="slotProps.housingdata.favorite==true">
+                  <span id="favContainer" v-if="slotProps.data.favorite==true">
                       <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
                   </span>
                   <span id="favContainer" v-else>
@@ -246,14 +246,13 @@ export default {
       }
       axios(config)
         .then((response) => {
-          this.numReservations = response.data.length
-          if (this.numReservations === 0) {
+          this.myReservations = response.data
+          if (response.data.length === 0) {
             this.myReservations = null
-          } else {
-            this.myReservations = response.data
           }
         })
         .catch((error) => {
+          this.myReservations = null
           this.error = error
         })
     },
@@ -262,15 +261,13 @@ export default {
       const pathReservations = 'https://doogking.azurewebsites.net/api/reservations/?owner=' + this.userId
       axios.get(pathReservations, headers)
         .then((response) => {
-          this.numReserved = response.data.length
-          if (this.numReserved === 0) {
+          this.myReservedHouses = response.data
+          if (response.data.length === 0) {
             this.myReservedHouses = null
-          } else {
-            this.myReservedHouses = response.data
           }
         })
         .catch((error) => {
-          // eslint-disable-next-line
+          this.myReservedHouses = null
           this.error = error
         })
     },
