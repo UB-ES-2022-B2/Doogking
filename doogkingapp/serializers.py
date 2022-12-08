@@ -89,6 +89,25 @@ class HousingSerializer(serializers.HyperlinkedModelSerializer):
                   'image']
 
 
+class HousingIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Housing
+        fields = ['url',
+                  'house_id',
+                  'city',
+                  'street',
+                  'street_number',
+                  'floor',
+                  'door',
+                  'house_dimension',
+                  'house_owner',
+                  'house_owner_name',
+                  'price',
+                  'rating',
+                  'description',
+                  'image']
+
+
 class HousingImageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = HousingImage
@@ -96,6 +115,14 @@ class HousingImageSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ReservationSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Reservation
+        fields = ['housing', 'start_date', 'end_date']
+
+
+class DetailedReservationSerializer(serializers.ModelSerializer):
+    housing = HousingIdSerializer(many=False, read_only=True)
+
     class Meta:
         model = Reservation
         fields = ['housing', 'start_date', 'end_date']
