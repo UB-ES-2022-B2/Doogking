@@ -49,7 +49,7 @@
 export default {
   data () {
     return {
-      logged: null,
+      logged: false,
       itemsNotLogged: [
         {
           label: 'Login',
@@ -84,57 +84,56 @@ export default {
       ],
       username: null,
       email: null,
-      user_id: null,
+      userId: null,
       token: null
     }
   },
   methods: {
     goToRegister () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/register'})
+      this.$router.push({path: '/register'})
     },
     goToLogin () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/login'})
+      this.$router.push({path: '/login'})
     },
     goToProfile () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
       if (this.logged) {
-        this.$router.push({ path: '/profile', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
+        this.$router.push({path: '/profile'})
       }
     },
     goToAboutUs () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/aboutUs', query: {username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id} })
+      this.$router.push({path: '/aboutUs'})
     },
     logOut () {
       this.logged = false
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/'})
+      localStorage.removeItem('username')
+      localStorage.removeItem('userId')
+      localStorage.removeItem('token')
+      localStorage.removeItem('email')
+      this.$router.push({path: '/'})
     },
     goToBusinessContact () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/businessContact', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
+      this.$router.push({path: '/businessContact'})
     },
     goToHomepage () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      if (this.logged) {
-        this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
-      } else {
-        // eslint-disable-next-line standard/object-curly-even-spacing
-        this.$router.push({ path: '/'})
-      }
+      this.$router.push({path: '/'})
+    }
+  },
+  mounted () {
+    if (localStorage.username) {
+      this.logged = true
+      this.username = localStorage.username
+    }
+    if (localStorage.userId) {
+      this.userId = localStorage.userId
+    }
+    if (localStorage.token) {
+      this.token = localStorage.token
+    }
+    if (localStorage.email) {
+      this.email = localStorage.email
     }
   },
   created () {
-    this.logged = this.$route.query.logged === 'true'
-    this.username = this.$route.query.username
-    this.email = this.$route.query.email
-    this.user_id = this.$route.query.user_id
-    this.token = this.$route.query.token
-    if (this.logged === undefined) {
-      this.logged = false
-    }
   }
 }
 </script>
@@ -149,7 +148,6 @@ export default {
 .nav-item .nav-link:hover {
   color: #8DD0FF;
 }
-
 .loginIcon:hover{
   color: #8DD0FF;
 }

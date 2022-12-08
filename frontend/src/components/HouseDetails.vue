@@ -8,7 +8,7 @@
         <Galleria id="galleriaHouse" :value="houseImages" :responsiveOptions="responsiveOptions" :numVisible="3"
                   :showItemNavigators="true" :showItemNavigatorsOnHover="true"
                   :circular="true" :autoPlay="true" :transitionInterval="3000"
-                  style="max-width: 39em; margin:1em;">
+                  style="width: 46vw; margin:1em;">
           <template #item="{item}">
             <img id="imageHouse" :src="item.image" :alt="item.alt" style="width: 100%; display: block;" />
           </template>
@@ -60,7 +60,7 @@
               <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
               <h5 style="margin-top: 1em">Login Error!</h5>
               <p style="text-align: center">
-                 You need to be logged in to make a reservation
+                You need to be logged in to make a reservation
               </p>
             </div>
             <template #footer>
@@ -176,7 +176,6 @@ import LoadingSpinner from './LoadingSpinner'
 import axios from 'axios'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
-
 export default {
   name: 'HouseDetails',
   components: {
@@ -187,7 +186,7 @@ export default {
   setup: () => ({ v$: useVuelidate() }),
   data () {
     return {
-      logged: null,
+      logged: false,
       username: null,
       token: null,
       house_id: null,
@@ -198,7 +197,7 @@ export default {
       validInDate: true,
       validOutDate: true,
       loaderActive: false,
-      user_id: null,
+      userId: null,
       submitted: false,
       showSuccessMessage: false,
       showErrorMessage: false,
@@ -263,7 +262,6 @@ export default {
       axios.get(pathHouses, headers)
         .then(response => (this.house = response.data))
         .catch((error) => {
-          // eslint-disable-next-line
           this.error = error
           this.showHouseMessage = true
         })
@@ -276,7 +274,7 @@ export default {
     makeReservation () {
       var data = JSON.stringify({
         'housing': 'https://doogking.azurewebsites.net/api/housing/' + this.house_id + '/',
-        'customer': 'https://doogking.azurewebsites.net/api/profiles/' + this.user_id + '/',
+        'customer': 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/',
         'start_date': this.checkInDate.getFullYear() + '-' + this.checkInDate.toLocaleString('default', { month: '2-digit' }) + '-' + this.checkInDate.toLocaleString('default', { day: '2-digit' }),
         'end_date': this.checkOutDate.getFullYear() + '-' + this.checkOutDate.toLocaleString('default', { month: '2-digit' }) + '-' + this.checkOutDate.toLocaleString('default', { day: '2-digit' })
       })
@@ -291,7 +289,6 @@ export default {
         },
         data: data
       }
-
       axios(config)
         .then((response) => {
           console.log(JSON.stringify(response.data))
@@ -342,13 +339,7 @@ export default {
       this.$router.push({ path: '/login'})
     },
     goToHomepage () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      if (this.logged) {
-        this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
-      } else {
-        // eslint-disable-next-line standard/object-curly-even-spacing
-        this.$router.push({ path: '/'})
-      }
+      this.$router.push({path: '/'})
     },
     checkInDateValid () {
       const today = new Date()
@@ -424,17 +415,23 @@ export default {
       }
     }
   },
-  created () {
-    this.logged = this.$route.query.logged === 'true'
-    this.username = this.$route.query.username
-    this.username = this.$route.query.username
-    this.email = this.$route.query.email
-    this.user_id = this.$route.query.user_id
-    this.token = this.$route.query.token
-    this.house_id = this.$route.query.house_id
-    if (this.logged === undefined) {
-      this.logged = false
+  mounted () {
+    if (localStorage.username) {
+      this.logged = true
+      this.username = localStorage.username
     }
+    if (localStorage.userId) {
+      this.userId = localStorage.userId
+    }
+    if (localStorage.token) {
+      this.token = localStorage.token
+    }
+    if (localStorage.email) {
+      this.email = localStorage.email
+    }
+  },
+  created () {
+    this.house_id = this.$route.query.house_id
     this.getHouse()
     this.getHouseImages()
     this.getReservations()
@@ -451,22 +448,17 @@ export default {
   display: flex;
   margin-left: 2em;
 }
-
 .houseDetails {
   flex: 1;
 }
-
 #fieldRowContainer {
   display: flex;
 }
-
 #fieldRow {
   float: left;
 }
-
 .houseDetails:first-child {
 }
-
 .flex-wrapper {
   background-color: #2A323D;
   display: flex;
@@ -476,24 +468,21 @@ export default {
   overflow-x: hidden;
   align-content: center;
 }
-
 #imageHouse{
-  height: 26em;
+  height: 30.7vw;
   border-radius: 2em 2em 0 0;
   border: 5px solid #1c1b29;
 }
-
 #thumbnailImage{
-  height: 5em;
-  width: 7em;
+  height: 6vw;
+  width: 8.5vw;
   border-radius: 0.5em;
   border: 3px solid #1c1b29;
 }
-
 .form-demo .card {
   margin-top: 1rem;
   border-radius: 1rem;
-  width: 35rem;
+  width: 41vw;
   background-color: #3d4755;
   color: white;
   margin-bottom: 1.5rem;
@@ -516,42 +505,35 @@ export default {
     width: 80%;
   }
 }
-
 #favContainer{
   position:absolute;
   top: 0.7em;
   right: 1em;
 }
-
 #favButtonGrid{
   color: indianred;
   background-color: #2A323D;
   border-color: #2A323D;
 }
-
 #favButtonGrid:hover{
   color: indianred;
   background-color: #2A323D;
   border-color: #2A323D;
 }
-
 #favButtonGrid:focus{
   color: indianred;
   background-color: #2A323D;
   border-color: #2A323D;
   box-shadow: 0 0 0 0.1em indianred;
 }
-
 #tagHost{
   position:absolute;
   top:1em;
   left:1.5em;
 }
-
 #priceContainer{
   font-size: 1em;
 }
-
 #priceContainer a{
   font-size: 1.5em;
 }
