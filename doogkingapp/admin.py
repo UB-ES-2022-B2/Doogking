@@ -24,6 +24,7 @@ class ProfileAdmin(UserAdmin):
             'password',
             'first_name',
             'last_name',
+            'balance',
             'image'
         )}),
         ('Dates', {'fields': ('last_login', 'date_joined')}),
