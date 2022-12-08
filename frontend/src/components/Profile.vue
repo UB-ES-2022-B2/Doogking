@@ -37,7 +37,7 @@
                   <div class="w-100"></div>
                   <div class="col"><fa :icon="['fas', 'envelope']"/>          {{email}}</div>
                   <div class="w-100"></div>
-                  <div class="col"><fa :icon="['fas', 'house']"/>       4</div>
+                  <div class="col"><fa :icon="['fas', 'house']"/>       {{numHouses}}</div>
                 </div>
               </div>
             </div>
@@ -119,7 +119,8 @@ export default {
       loaderActive: false,
       userId: null,
       token: null,
-      showLoginMessage: false
+      showLoginMessage: false,
+      numHouses: null
     }
   },
   methods: {
@@ -142,6 +143,12 @@ export default {
         .catch((error) => {
           this.error = error
         })
+    },
+    getNumHouses () {
+      const headers = {'Access-Control-Allow-Origin': '*'}
+      const pathHouses = 'https://doogking.azurewebsites.net/api/housing/?owner=' + this.userId
+      const promise = axios.get(pathHouses, headers)
+      Promise.resolve(promise).then((value) => (this.numHouses = value.data.length))
     },
     // eslint-disable-next-line camelcase
     seeMyHouseDetails (house_id) {
@@ -185,6 +192,7 @@ export default {
   },
   created () {
     this.getUserHouses()
+    this.getNumHouses()
     this.showLoader()
     setTimeout(() => {
       this.hideLoader()
