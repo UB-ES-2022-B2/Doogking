@@ -52,7 +52,7 @@
       </div>
       <Carousel :value="myHouses" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="3000">
         <template #header>
-          <h3 style="text-align: left; margin-left: 6vw; color: white;">My houses</h3>
+          <h5 style="text-align: left; margin-left: 6vw; color: white;">My houses</h5>
           <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
         </template>
         <template #item="slotProps">
@@ -95,7 +95,7 @@
       </Carousel>
     <Carousel :value="myReservations" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="3000">
       <template #header>
-        <h3 style="text-align: left; margin-left: 6vw; color: white;">My reservations</h3>
+        <h5 style="text-align: left; margin-left: 6vw; color: white;">My reservations</h5>
         <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
       </template>
       <template #item="slotProps">
@@ -104,9 +104,9 @@
             <div class="card" id="cardReservation" style="margin:auto;">
               <div id ="container-image" class="container">
                 <div id="container-effect">
-                  <img id="card-img" :src="slotProps.data.image" alt="img">
+                  <img id="card-img" :src="slotProps.data.housing.image" alt="img">
                   <figcaption>
-                    <Button id="buttonViewGrid" label="View house" @click="seeMyReservationDetails(slotProps.data.house_id, slotProps.data.start_date, slotProps.data.end_date)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
+                    <Button id="buttonViewGrid" label="View house" @click="seeMyReservationDetails(slotProps.data.housing.house_id, slotProps.data.start_date, slotProps.data.end_date)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
                   </figcaption>
                 </div>
                 <Toast/>
@@ -123,23 +123,23 @@
               </div>
               <div id="card-details" class="details">
                 <div class="flex align-items-center justify-content-between">
-                  <h6 style="color:white">{{slotProps.data.city}}</h6>
+                  <h6 style="color:white">{{slotProps.data.housing.city}}</h6>
                   <div class="flex align-items-center">
-                    <Tag id="tagHost" :value="slotProps.data.house_owner_name" icon="pi pi-user" style="color: white; background-color: #2A323D"></Tag>
-                    <Rating :value="slotProps.data.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
+                    <Tag id="tagHost" :value="slotProps.data.housing.house_owner_name" icon="pi pi-user" style="color: white; background-color: #2A323D"></Tag>
+                    <Rating :value="slotProps.data.housing.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
                   </div>
                 </div>
                 <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Start date: {{slotProps.data.start_date}}, End date: {{slotProps.data.end_date}}</p>
-                <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: -1.1em;">{{slotProps.data.street}}, {{slotProps.data.street_number}}, {{slotProps.data.floor}}, {{slotProps.data.door}}, {{slotProps.data.house_dimension}}</p>
+                <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: -1.1em;">{{slotProps.data.housing.street}}, {{slotProps.data.housing.street_number}}, {{slotProps.data.housing.floor}}, {{slotProps.data.housing.door}}, {{slotProps.data.housing.house_dimension}}</p>
               </div>
             </div>
           </div>
         </div>
       </template>
     </Carousel>
-      <Carousel :value="myReservedHouses" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="3000">
+      <Carousel :value="myReservedHouses" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="3000">
         <template #header>
-          <h3 style="text-align: left; margin-left: 6vw; color: white;">My houses reserved by other users</h3>
+          <h5 style="text-align: left; margin-left: 6vw; color: white;">My houses reserved by other users</h5>
           <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
         </template>
         <template #item="slotProps">
@@ -148,9 +148,9 @@
               <div class="card" id="cardReservation" style="margin:auto;">
                 <div id ="container-image" class="container">
                   <div id="container-effect">
-                    <img id="card-img" :src="slotProps.data.image" alt="img">
+                    <img id="card-img" :src="slotProps.data.housing.image" alt="img">
                     <figcaption>
-                      <Button id="buttonViewGrid" label="View house" @click="seeMyReservedDetails(slotProps.data.house_id, slotProps.data.start_date, slotProps.data.end_date)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
+                      <Button id="buttonViewGrid" label="View house" @click="seeMyReservedDetails(slotProps.data.housing.house_id, slotProps.data.start_date, slotProps.data.end_date)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
                     </figcaption>
                   </div>
                   <Toast/>
@@ -167,14 +167,14 @@
                 </div>
                 <div id="card-details" class="details">
                   <div class="flex align-items-center justify-content-between">
-                    <h6 style="color:white">{{slotProps.data.city}}</h6>
+                    <h6 style="color:white">{{slotProps.data.housing.city}}</h6>
                     <div class="flex align-items-center">
-                      <Tag id="tagHost" :value="slotProps.data.house_owner_name" icon="pi pi-user" style="color: white; background-color: #2A323D"></Tag>
-                      <Rating :value="slotProps.data.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
+                      <Tag id="tagHost" :value="slotProps.data.housing.house_owner_name" icon="pi pi-user" style="color: white; background-color: #2A323D"></Tag>
+                      <Rating :value="slotProps.data.housing.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
                     </div>
                   </div>
                   <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Start date: {{slotProps.data.start_date}}, End date: {{slotProps.data.end_date}}</p>
-                  <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: -1.1em;">{{slotProps.data.street}}, {{slotProps.data.street_number}}, {{slotProps.data.floor}}, {{slotProps.data.door}}, {{slotProps.data.house_dimension}}</p>
+                  <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: -1.1em;">{{slotProps.data.housing.street}}, {{slotProps.data.housing.street_number}}, {{slotProps.data.housing.floor}}, {{slotProps.data.housing.door}}, {{slotProps.data.housing.house_dimension}}</p>
                 </div>
               </div>
             </div>
@@ -246,30 +246,13 @@ export default {
       }
       axios(config)
         .then((response) => {
-          this.numReservations = response.data.length
-          for (let i = 0; i < this.numReservations; i++) {
-            const headers = {'Access-Control-Allow-Origin': '*'}
-            const houseId = response.data[i].housing.replace('http://doogking.azurewebsites.net/api/housing/', '').replace('/', '')
-            const pathHouses = 'https://doogking.azurewebsites.net/api/housing/' + houseId + '/'
-            axios.get(pathHouses, headers)
-              .then((res) => {
-                this.myReservations[i] = res.data
-                this.myReservations[i].start_date = response.data[i].start_date
-                this.myReservations[i].end_date = response.data[i].end_date
-              })
-              .catch((error) => {
-                this.error = error
-              })
-          }
-          if (this.numReservations === 1 || this.numReservations === 2) {
-            this.myReservations.splice(this.numReservations, 9)
-          } else if (this.numReservations === 0) {
+          this.myReservations = response.data
+          if (response.data.length === 0) {
             this.myReservations = null
-          } else {
-            this.myReservations.splice(this.numReservations, 12)
           }
         })
         .catch((error) => {
+          this.myReservations = null
           this.error = error
         })
     },
@@ -278,31 +261,13 @@ export default {
       const pathReservations = 'https://doogking.azurewebsites.net/api/reservations/?owner=' + this.userId
       axios.get(pathReservations, headers)
         .then((response) => {
-          this.numReserved = response.data.length
-          for (let i = 0; i < this.numReserved.length; i++) {
-            const headers = {'Access-Control-Allow-Origin': '*'}
-            const houseId = this.myReserved[i].housing.replace('http://doogking.azurewebsites.net/api/housing/', '').replace('/', '')
-            const pathHouses = 'https://doogking.azurewebsites.net/api/housing/' + houseId + '/'
-            axios.get(pathHouses, headers)
-              .then((res) => {
-                this.myReservedHouses[i] = res.data
-                this.myReservedHouses[i].start_date = response.data[i].start_date
-                this.myReservedHouses[i].end_date = response.data[i].end_date
-              })
-              .catch((error) => {
-                this.error = error
-              })
-          }
-          if (this.numReserved === 1 || this.numReserved === 2) {
-            this.myReservedHouses.splice(this.numReserved, 9)
-          } else if (this.numReserved === 0) {
+          this.myReservedHouses = response.data
+          if (response.data.length === 0) {
             this.myReservedHouses = null
-          } else {
-            this.myReservedHouses.splice(this.numReserved, 12)
           }
         })
         .catch((error) => {
-          // eslint-disable-next-line
+          this.myReservedHouses = null
           this.error = error
         })
     },
