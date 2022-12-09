@@ -208,10 +208,6 @@ class ChangePasswordView(UpdateAPIView):
     serializer_class = ChangePasswordSerializer
 
     def post(self, request):
-        #try:
-            #email = request.POST['email']
-        #except MultiValueDictKeyError:
-            #return Response({"message": "EMAIL"})
         email = request.data['email']
         old_pass = request.data['old_password']
         new_pass = request.data['new_password']
