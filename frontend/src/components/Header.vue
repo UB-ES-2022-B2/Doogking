@@ -109,6 +109,14 @@ export default {
       localStorage.removeItem('userId')
       localStorage.removeItem('token')
       localStorage.removeItem('email')
+      localStorage.removeItem('start_date')
+      localStorage.removeItem('end_date')
+      localStorage.removeItem('house_id')
+      localStorage.removeItem('pricePerDay')
+      localStorage.removeItem('totalPrice')
+      localStorage.removeItem('numberOfDays')
+      localStorage.removeItem('axiosStartDate')
+      localStorage.removeItem('axiosEndDate')
       this.$router.push({path: '/'})
     },
     goToBusinessContact () {
