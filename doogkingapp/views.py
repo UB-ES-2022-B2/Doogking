@@ -1,4 +1,5 @@
 from django.core.exceptions import PermissionDenied
+from django.core.exceptions import ValidationError
 from rest_framework import viewsets
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
@@ -212,17 +213,16 @@ class ChangePasswordView(UpdateAPIView):
         #except MultiValueDictKeyError:
             #return Response({"message": "EMAIL"})
         email = request.data['email']
-        #email = 'admin@doogking.com'
         old_pass = request.data['old_password']
         new_pass = request.data['new_password']
         new_pass2 = request.data['new_password2']
 
         user = Profile.objects.get(email=email)
         if not user.check_password(old_pass):
-            return Response({"old_password": ["Wrong password."]})
+            raise ValidationError({"old_password": ["Wrong password."]})
         if secrets.compare_digest(new_pass, new_pass2):
             user.set_password(new_pass)
             user.save()
             return Response({"message": "Password successfully changed!"})
         else:
-            raise PermissionDenied("No matching passwords")
+            raise ValidationError("No matching passwords")

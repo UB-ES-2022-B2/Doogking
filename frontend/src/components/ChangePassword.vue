@@ -116,7 +116,7 @@ export default {
       axios(config)
         .then((response) => {
           console.log(JSON.stringify(response.data))
-          this.showSuccessMessage = false
+          this.showSuccessMessage = true
         })
         .catch((error) => {
           this.error = error
