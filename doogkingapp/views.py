@@ -22,7 +22,7 @@ import requests
 from django.conf import settings
 from azure.storage.blob import BlobServiceClient
 from rest_framework.generics import UpdateAPIView
-from django.utils.datastructures import MultiValueDictKeyError
+
 
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all().order_by('-date_joined')
