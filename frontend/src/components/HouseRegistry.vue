@@ -16,7 +16,7 @@
             </FileUpload>
           </div>
           <div class="p-2" style="width:500px">
-            <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
+            <form class="p-fluid">
               <div class="field">
                 <div class="p-float-label">
                     <span class="p-float-label">
@@ -44,7 +44,7 @@
                   <h1></h1>
                   <div class="btn-group">
                     <div class="field">
-                      <Button id="submitButton" type="submit" label="Submit" @click='goPostHouse' class="mt-2" style="width:200px"/>
+                      <Button id="submitButton" type="submit" label="Submit" @click='goPostHouse($event)' class="mt-2" style="width:200px"/>
                     </div>
                   </div>
                 </div>
@@ -87,6 +87,7 @@ export default {
       price_per_day: null,
       desciption: null,
       numHouses: null,
+      images: [],
       addUserForm: {
         city: null,
         street: null,
@@ -124,19 +125,44 @@ export default {
       }
       console.log('Token ' + this.token)
       axios(config)
-        .then(function (response) {
-        }).catch(function (response) {})
+        .then((res) => {
+          this.goPostHouseImage(res.data.house_id)
+        })
+        .catch(function (response) {})
       this.$router.push({path: '/'})
     },
-    myUploader (event) {
-      alert(event.files[0].objectURL)
-      const formData = new FormData()
-      formData.append('file', event.files[0])
-      axios
-        .post('http://localhost:8000/api/upload/', formData)
-        .then(() => {
-          console.log('SUCCESS')
+    goPostHouseImage (houseId) {
+      for (let i = 0; i < this.images.length; i++) {
+        var data = JSON.stringify({
+          'housing': 'https://doogking.azurewebsites.net/api/housing/' + houseId + '/',
+          'index': i,
+          'image': this.images[i]
         })
+        var config = {
+          method: 'post',
+          url: 'https://doogking.azurewebsites.net/api/housing_images/',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Token ' + this.token,
+            'Content-Type': 'application/json'
+          },
+          data: data
+        }
+        console.log('Token ' + this.token)
+        axios(config)
+          .then(function (response) {
+          }).catch(function (response) {})
+      }
+    },
+    myUploader (event) {
+      // alert(event.files[0].objectURL)
+      const formData = new FormData()
+      for (let i = 0; i < event.files.length; i++) {
+        formData.append('file', event.files[i])
+        axios
+          .post('https://doogking.azurewebsites.net/api/upload/', formData)
+          .then(response => (this.images.push(response.data.uploaded_name)))
+      }
       this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 })
     },
     getNumHouses () {
