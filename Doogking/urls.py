@@ -38,6 +38,7 @@ urlpatterns = [
     path('api/upload/', views.UploaderView.as_view()),
     url(r'^api/housing_images/housing/(?P<housing_id>[0-9]+)/$',
         views.HousingImageViewSet.as_view({'get': 'select'})),
-
+    url(r'^api/profiles/favourites/(?P<user_id>[0-9]+)/$',
+        views.FavouriteViewSet.as_view({'get': 'select'})),
     url(r'^.*$', TemplateView.as_view(template_name='index.html')),
 ]

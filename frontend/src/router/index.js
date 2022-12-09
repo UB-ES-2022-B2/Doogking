@@ -15,6 +15,7 @@ import AboutUs from '../components/AboutUs'
 import MyHouseDetails from '../components/MyHouseDetails'
 import HouseRegistry from '../components/HouseRegistry'
 import ChangePassword from '../components/ChangePassword'
+import MyReservationDetails from '../components/MyReservationDetails'
 
 Vue.use(Router)
 
@@ -66,6 +67,11 @@ export default new Router({
       path: '/housedetails',
       name: 'HouseDetails',
       component: HouseDetails
+    },
+    {
+      path: '/myReservationDetails',
+      name: 'MyReservationDetails',
+      component: MyReservationDetails
     },
     {
       path: '/myHouseDetails',

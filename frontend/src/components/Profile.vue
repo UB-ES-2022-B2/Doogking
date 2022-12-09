@@ -50,9 +50,9 @@
           <hr>
         </div>
       </div>
-      <Carousel :value="houses" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="3000">
+      <Carousel :value="myHouses" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="3000">
         <template #header>
-          <h3 style="text-align: left; margin-left: 6vw; color: white;">My houses</h3>
+          <h5 style="text-align: left; margin-left: 6vw; color: white;">My houses</h5>
           <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
         </template>
         <template #item="slotProps">
@@ -86,7 +86,95 @@
                       <Rating :value="slotProps.data.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
                     </div>
                   </div>
-                  <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{slotProps.data.street}},{{slotProps.data.street_number}},{{slotProps.data.floor}},{{slotProps.data.door}},{{slotProps.data.house_dimension}}</p>
+                  <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{slotProps.data.street}}, {{slotProps.data.street_number}}, {{slotProps.data.floor}}, {{slotProps.data.door}}, {{slotProps.data.house_dimension}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </Carousel>
+    <Carousel :value="myReservations" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="3000">
+      <template #header>
+        <h5 style="text-align: left; margin-left: 6vw; color: white;">My reservations</h5>
+        <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
+      </template>
+      <template #item="slotProps">
+        <div class="product-item">
+          <div class="product-item-content">
+            <div class="card" id="cardReservation" style="margin:auto;">
+              <div id ="container-image" class="container">
+                <div id="container-effect">
+                  <img id="card-img" :src="slotProps.data.housing.image" alt="img">
+                  <figcaption>
+                    <Button id="buttonViewGrid" label="View house" @click="seeMyReservationDetails(slotProps.data.housing.house_id, slotProps.data.start_date, slotProps.data.end_date)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
+                  </figcaption>
+                </div>
+                <Toast/>
+                <span id="favContainer" v-if="slotProps.data.favorite==true">
+                      <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
+                  </span>
+                <span id="favContainer" v-else>
+                        <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
+                  </span>
+                <span id="priceContainer" class="text font-semibold" style="color:white"><a>{{slotProps.data.price}}€</a> day</span>
+                <span id="loaderContainer" v-if="loaderActive===true">
+                  <LoadingSpinnerGrid :active="true"/>
+                </span>
+              </div>
+              <div id="card-details" class="details">
+                <div class="flex align-items-center justify-content-between">
+                  <h6 style="color:white">{{slotProps.data.housing.city}}</h6>
+                  <div class="flex align-items-center">
+                    <Tag id="tagHost" :value="slotProps.data.housing.house_owner_name" icon="pi pi-user" style="color: white; background-color: #2A323D"></Tag>
+                    <Rating :value="slotProps.data.housing.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
+                  </div>
+                </div>
+                <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Start date: {{slotProps.data.start_date}}, End date: {{slotProps.data.end_date}}</p>
+                <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: -1.1em;">{{slotProps.data.housing.street}}, {{slotProps.data.housing.street_number}}, {{slotProps.data.housing.floor}}, {{slotProps.data.housing.door}}, {{slotProps.data.housing.house_dimension}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </Carousel>
+      <Carousel :value="myReservedHouses" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="3000">
+        <template #header>
+          <h5 style="text-align: left; margin-left: 6vw; color: white;">My houses reserved by other users</h5>
+          <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
+        </template>
+        <template #item="slotProps">
+          <div class="product-item">
+            <div class="product-item-content">
+              <div class="card" id="cardReservation" style="margin:auto;">
+                <div id ="container-image" class="container">
+                  <div id="container-effect">
+                    <img id="card-img" :src="slotProps.data.housing.image" alt="img">
+                    <figcaption>
+                      <Button id="buttonViewGrid" label="View house" @click="seeMyReservedDetails(slotProps.data.housing.house_id, slotProps.data.start_date, slotProps.data.end_date)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
+                    </figcaption>
+                  </div>
+                  <Toast/>
+                  <span id="favContainer" v-if="slotProps.data.favorite==true">
+                      <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
+                  </span>
+                  <span id="favContainer" v-else>
+                        <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
+                  </span>
+                  <span id="priceContainer" class="text font-semibold" style="color:white"><a>{{slotProps.data.price}}€</a> day</span>
+                  <span id="loaderContainer" v-if="loaderActive===true">
+                  <LoadingSpinnerGrid :active="true"/>
+                </span>
+                </div>
+                <div id="card-details" class="details">
+                  <div class="flex align-items-center justify-content-between">
+                    <h6 style="color:white">{{slotProps.data.housing.city}}</h6>
+                    <div class="flex align-items-center">
+                      <Tag id="tagHost" :value="slotProps.data.housing.house_owner_name" icon="pi pi-user" style="color: white; background-color: #2A323D"></Tag>
+                      <Rating :value="slotProps.data.housing.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
+                    </div>
+                  </div>
+                  <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Start date: {{slotProps.data.start_date}}, End date: {{slotProps.data.end_date}}</p>
+                  <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: -1.1em;">{{slotProps.data.housing.street}}, {{slotProps.data.housing.street_number}}, {{slotProps.data.housing.floor}}, {{slotProps.data.housing.door}}, {{slotProps.data.housing.house_dimension}}</p>
                 </div>
               </div>
             </div>
@@ -115,7 +203,11 @@ export default {
       logged: false,
       username: null,
       email: null,
-      houses: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+      myHouses: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+      numReservations: 0,
+      myReservations: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+      numReserved: 0,
+      myReservedHouses: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
       loaderActive: false,
       userId: null,
       token: null,
@@ -139,8 +231,44 @@ export default {
       const headers = {'Access-Control-Allow-Origin': '*'}
       const pathHouses = 'https://doogking.azurewebsites.net/api/housing/?owner=' + this.userId
       axios.get(pathHouses, headers)
-        .then(response => (this.houses = response.data))
+        .then(response => (this.myHouses = response.data))
         .catch((error) => {
+          this.error = error
+        })
+    },
+    getUserReservations () {
+      var config = {
+        method: 'get',
+        url: 'https://doogking.azurewebsites.net/api/reservations/?customer=' + this.userId,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Authorization': 'Token ' + this.token
+        }
+      }
+      axios(config)
+        .then((response) => {
+          this.myReservations = response.data
+          if (response.data.length === 0) {
+            this.myReservations = null
+          }
+        })
+        .catch((error) => {
+          this.myReservations = null
+          this.error = error
+        })
+    },
+    getUserReservedHouses () {
+      const headers = {'Access-Control-Allow-Origin': '*'}
+      const pathReservations = 'https://doogking.azurewebsites.net/api/reservations/?owner=' + this.userId
+      axios.get(pathReservations, headers)
+        .then((response) => {
+          this.myReservedHouses = response.data
+          if (response.data.length === 0) {
+            this.myReservedHouses = null
+          }
+        })
+        .catch((error) => {
+          this.myReservedHouses = null
           this.error = error
         })
     },
@@ -153,6 +281,22 @@ export default {
     // eslint-disable-next-line camelcase
     seeMyHouseDetails (house_id) {
       this.$router.push({path: '/myHouseDetails', query: {house_id: house_id}})
+    },
+    // eslint-disable-next-line camelcase
+    seeMyReservationDetails (house_id, start_date, end_date) {
+      // eslint-disable-next-line camelcase
+      localStorage.start_date = start_date
+      // eslint-disable-next-line camelcase
+      localStorage.end_date = end_date
+      this.$router.push({path: '/myReservationDetails', query: {house_id: house_id}})
+    },
+    // eslint-disable-next-line camelcase
+    seeMyReservedDetails (house_id, start_date, end_date) {
+      // eslint-disable-next-line camelcase
+      localStorage.start_date = start_date
+      // eslint-disable-next-line camelcase
+      localStorage.end_date = end_date
+      this.$router.push({path: '/myReservationDetails', query: {house_id: house_id}})
     },
     showLoader () {
       this.loaderActive = true
@@ -170,29 +314,31 @@ export default {
       if (!this.showLoginMessage) {
         this.$router.push({path: '/'})
       }
-    }
-  },
-  mounted () {
-    if (localStorage.username) {
-      this.logged = true
-      this.username = localStorage.username
-    }
-    if (localStorage.userId) {
-      this.userId = localStorage.userId
-    }
-    if (localStorage.token) {
-      this.token = localStorage.token
-    }
-    if (localStorage.email) {
-      this.email = localStorage.email
-    }
-    if (this.logged === false) {
-      this.showLoginMessage = true
+    },
+    loadLocalStorage () {
+      if (localStorage.username) {
+        this.logged = true
+        this.username = localStorage.username
+      }
+      if (localStorage.userId) {
+        this.userId = localStorage.userId
+      }
+      if (localStorage.token) {
+        this.token = localStorage.token
+      }
+      if (localStorage.email) {
+        this.email = localStorage.email
+      }
+      if (this.logged === false) {
+        this.showLoginMessage = true
+      }
     }
   },
   created () {
+    this.loadLocalStorage()
     this.getUserHouses()
-    this.getNumHouses()
+    this.getUserReservations()
+    this.getUserReservedHouses()
     this.showLoader()
     setTimeout(() => {
       this.hideLoader()
@@ -260,6 +406,20 @@ export default {
   width: 22.3vw;
   height: 22vw;
 }
+
+#cardReservation{
+  background-color: #1c1b29;
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.18);
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 22.3vw;
+  height: 23vw;
+}
+
 #container-image{
   position: relative;
   box-sizing: border-box;

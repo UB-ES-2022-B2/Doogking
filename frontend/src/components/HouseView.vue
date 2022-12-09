@@ -477,5 +477,4 @@ export default {
   outline-color: #1c1b29;
   box-shadow: 0 0 0 0.1em indianred;
 }
-
 </style>
