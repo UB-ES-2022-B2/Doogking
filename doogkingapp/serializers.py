@@ -42,7 +42,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('email','old_password', 'password', 'password2')
+        fields = ('email', 'old_password', 'password', 'password2')
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
