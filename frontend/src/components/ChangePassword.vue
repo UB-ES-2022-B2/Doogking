@@ -100,27 +100,23 @@ export default {
   },
   methods: {
     goUpdatePassword () {
-      var data = JSON.stringify({
+      var data = {
         'email': this.email,
         'old_password': this.addUserForm.oldPassword,
         'new_password': this.addUserForm.newPassword,
         'new_password2': this.addUserForm.newPassword2
-      })
+      }
       var config = {
         method: 'post',
-        url: 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/',
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Authorization': 'Token ' + this.token,
-          'Content-Type': 'application/json'
-        },
+        url: 'http://127.0.0.1:8000/api/change-password/',
+
         data: data
       }
       console.log('Token ' + this.token)
       axios(config)
         .then((response) => {
           console.log(JSON.stringify(response.data))
-          this.showErrorMessage = true
+          this.showSuccessMessage = false
         })
         .catch((error) => {
           this.error = error

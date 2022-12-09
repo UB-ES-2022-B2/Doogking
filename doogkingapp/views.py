@@ -20,7 +20,7 @@ import requests
 from django.conf import settings
 from azure.storage.blob import BlobServiceClient
 from rest_framework.generics import UpdateAPIView
-
+from django.utils.datastructures import MultiValueDictKeyError
 
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all().order_by('-date_joined')
@@ -207,7 +207,12 @@ class ChangePasswordView(UpdateAPIView):
     serializer_class = ChangePasswordSerializer
 
     def post(self, request):
+        #try:
+            #email = request.POST['email']
+        #except MultiValueDictKeyError:
+            #return Response({"message": "EMAIL"})
         email = request.data['email']
+        #email = 'admin@doogking.com'
         old_pass = request.data['old_password']
         new_pass = request.data['new_password']
         new_pass2 = request.data['new_password2']
