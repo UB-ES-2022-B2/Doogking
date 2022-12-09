@@ -31,7 +31,7 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 class CurrentProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['id', 'email', 'first_name', 'last_name']
+        fields = ['id', 'email', 'first_name', 'last_name', 'balance', 'image']
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):

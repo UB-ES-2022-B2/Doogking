@@ -9,6 +9,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from .models import Profile, Housing, HousingImage, Reservation, Favourite
 from .serializers import ProfileSerializer, \
+    CurrentProfileSerializer, \
     HousingSerializer, \
     HousingImageSerializer, \
     ReservationSerializer, \
@@ -203,7 +204,7 @@ class ObtainAuthTokenUser(ObtainAuthToken):
         user = Profile.objects.get(id=token.user_id)
         return Response(
             {'token': token.key,
-             'profile': ProfileSerializer(
+             'profile': CurrentProfileSerializer(
                 user,
                 context={'request': request}
                 ).data}
