@@ -138,3 +138,11 @@ class FavouriteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Favourite
         fields = ['user', 'housing']
+
+
+class DetailedFavouriteSerializer(serializers.ModelSerializer):
+    housing = HousingIdSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = Favourite
+        fields = ['user', 'housing']
