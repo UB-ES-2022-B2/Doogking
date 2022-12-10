@@ -50,7 +50,7 @@
           <hr>
         </div>
       </div>
-      <Carousel :value="myHouses" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="3000">
+      <Carousel :value="myHouses" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="4000">
         <template #header>
           <h5 style="text-align: left; margin-left: 6vw; color: white;">My houses</h5>
           <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
@@ -93,13 +93,58 @@
           </div>
         </template>
       </Carousel>
-    <Carousel :value="myReservations" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="3000">
+      <Carousel :value="myFavorites" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="4000">
+        <template #header>
+          <h5 style="text-align: left; margin-left: 6vw; color: white;">My favorite houses</h5>
+          <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
+        </template>
+        <template #item="slotProps">
+          <div v-if="slotProps.data.skeleton===true"></div>
+          <div class="product-item" v-else>
+            <div class="product-item-content">
+              <div class="card" style="margin:auto;">
+                <div id ="container-image" class="container">
+                  <div id="container-effect">
+                    <img id="card-img" :src="slotProps.data.housing.image" alt="img">
+                    <figcaption>
+                      <Button id="buttonViewGrid" label="View house" @click="seeMyHouseDetails(slotProps.data.housing.house_id)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
+                    </figcaption>
+                  </div>
+                  <Toast/>
+                  <span id="favContainer" v-if="slotProps.data.favorite==true">
+                      <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
+                  </span>
+                  <span id="favContainer" v-else>
+                        <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
+                  </span>
+                  <span id="priceContainer" class="text font-semibold" style="color:white"><a>{{slotProps.data.housing.price}}€</a> day</span>
+                  <span id="loaderContainer" v-if="loaderActive===true">
+                  <LoadingSpinnerGrid :active="true"/>
+                </span>
+                </div>
+                <div id="card-details" class="details">
+                  <div class="flex align-items-center justify-content-between">
+                    <h6 style="color:white">{{slotProps.data.housing.city}}</h6>
+                    <div class="flex align-items-center">
+                      <Tag id="tagHost" :value="slotProps.data.housing.house_owner_name" icon="pi pi-user" style="color: white; background-color: #2A323D"></Tag>
+                      <Rating :value="slotProps.data.housing.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
+                    </div>
+                  </div>
+                  <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{slotProps.data.housing.street}}, {{slotProps.data.housing.street_number}}, {{slotProps.data.housing.floor}}, {{slotProps.data.housing.door}}, {{slotProps.data.housing.house_dimension}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </Carousel>
+    <Carousel :value="myReservations" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="4000">
       <template #header>
         <h5 style="text-align: left; margin-left: 6vw; color: white;">My reservations</h5>
         <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
       </template>
       <template #item="slotProps">
-        <div class="product-item">
+        <div v-if="slotProps.data.skeleton===true"></div>
+        <div class="product-item" v-else>
           <div class="product-item-content">
             <div class="card" id="cardReservation" style="margin:auto;">
               <div id ="container-image" class="container">
@@ -137,13 +182,14 @@
         </div>
       </template>
     </Carousel>
-      <Carousel :value="myReservedHouses" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="3000">
+      <Carousel :value="myReservedHouses" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="4000">
         <template #header>
           <h5 style="text-align: left; margin-left: 6vw; color: white;">My houses reserved by other users</h5>
           <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
         </template>
         <template #item="slotProps">
-          <div class="product-item">
+          <div v-if="slotProps.data.skeleton===true"></div>
+          <div class="product-item" v-else>
             <div class="product-item-content">
               <div class="card" id="cardReservation" style="margin:auto;">
                 <div id ="container-image" class="container">
@@ -208,6 +254,8 @@ export default {
       myReservations: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
       numReserved: 0,
       myReservedHouses: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+      numFavorites: 0,
+      myFavorites: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
       loaderActive: false,
       userId: null,
       token: null,
@@ -258,6 +306,13 @@ export default {
           this.myReservations = response.data
           if (response.data.length === 0) {
             this.myReservations = null
+          } else if (response.data.length === 1) {
+            var secondHouse = {'skeleton': true}
+            var thirdHouse = {'skeleton': true}
+            this.myReservations = response.data.concat(secondHouse, thirdHouse)
+          } else if (response.data.length === 2) {
+            var thirdHouses = {'skeleton': true}
+            this.myReservations = response.data.concat(thirdHouses)
           }
         })
         .catch((error) => {
@@ -273,10 +328,45 @@ export default {
           this.myReservedHouses = response.data
           if (response.data.length === 0) {
             this.myReservedHouses = null
+          } else if (response.data.length === 1) {
+            var secondHouse = {'skeleton': true}
+            var thirdHouse = {'skeleton': true}
+            this.myReservedHouses = response.data.concat(secondHouse, thirdHouse)
+          } else if (response.data.length === 2) {
+            var thirdHouses = {'skeleton': true}
+            this.myReservedHouses = response.data.concat(thirdHouses)
           }
         })
         .catch((error) => {
           this.myReservedHouses = null
+          this.error = error
+        })
+    },
+    getUserFavorites () {
+      var config = {
+        method: 'get',
+        url: 'https://doogking.azurewebsites.net/api/profiles/favourites/' + this.userId + '/',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Authorization': 'Token ' + this.token
+        }
+      }
+      axios(config)
+        .then((response) => {
+          this.myFavorites = response.data
+          if (response.data.length === 0) {
+            this.myFavorites = null
+          } else if (response.data.length === 1) {
+            var secondHouse = {'skeleton': true}
+            var thirdHouse = {'skeleton': true}
+            this.myFavorites = response.data.concat(secondHouse, thirdHouse)
+          } else if (response.data.length === 2) {
+            var thirdHouses = {'skeleton': true}
+            this.myFavorites = response.data.concat(thirdHouses)
+          }
+        })
+        .catch((error) => {
+          this.myFavorites = null
           this.error = error
         })
     },
@@ -341,6 +431,7 @@ export default {
     this.getUserHouses()
     this.getUserReservations()
     this.getUserReservedHouses()
+    this.getUserFavorites()
     this.showLoader()
     setTimeout(() => {
       this.hideLoader()
