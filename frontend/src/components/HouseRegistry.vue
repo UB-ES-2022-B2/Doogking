@@ -142,7 +142,7 @@ export default {
         'door': this.addUserForm.door,
         'house_dimension': this.addUserForm.house_dimension,
         'price': this.addUserForm.price_per_day,
-        'desciption': this.addUserForm.desciption,
+        'description': this.addUserForm.desciption,
         'house_owner': 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/'
       })
       var config = {

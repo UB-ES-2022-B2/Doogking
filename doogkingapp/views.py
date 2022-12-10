@@ -16,6 +16,7 @@ from .serializers import ProfileSerializer, \
     DetailedReservationSerializer, \
     CustomerReservationSerializer, \
     FavouriteSerializer, \
+    DetailedFavouriteSerializer, \
     ChangePasswordSerializer
 import secrets
 import requests
@@ -144,10 +145,10 @@ class FavouriteViewSet(viewsets.ModelViewSet):
     queryset = Favourite.objects.all()
     serializer_class = FavouriteSerializer
 
-    @action(detail=False)
+    @action(detail=False, methods=['GET'])
     def select(self, request, user_id=None):
         queryset = Favourite.objects.filter(user__id=user_id)
-        serializer = FavouriteSerializer(
+        serializer = DetailedFavouriteSerializer(
             queryset,
             many=True,
             context={'request': request}

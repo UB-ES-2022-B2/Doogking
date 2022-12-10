@@ -18,15 +18,11 @@
             <a v-else class="nav-link" style="cursor: pointer" @click="goToBusinessContact">Support</a>
           </li>
           <li class="nav-item">
-            <a v-if="this.$route.name ==='Property'" class="nav-link" style="color: #8DD0FF; cursor: pointer">House registry</a>
-            <a href="https://doogking.azurewebsites.net/api/housing/" v-else class="nav-link" style="cursor: pointer" target="_blank">House registry</a>
-          </li>
-          <li class="nav-item">
             <a v-if="this.$route.name ==='AboutUs'" class="nav-link" @click="goToAboutUs" style="color: #8DD0FF; cursor: pointer"><fa :icon="['fas', 'circle-info'] " /></a>
             <a v-else class="nav-link" @click="goToAboutUs" style="cursor: pointer"><fa :icon="['fas', 'circle-info'] " /></a>
           </li>
         </ul>
-        <Button id="post" type="submit"  style="margin-right: 10px; border-radius: 12px" @click="addHouse" v-if="logged===true"><fa  style="margin-right:10px" :icon="['fas', 'plus']"/>Post House</Button>
+        <Button id="post" type="submit"  style="margin-right: 10px; margin-bottom: 0.4em; border-radius: 12px" @click="addHouse" v-if="logged===true"><fa  style="margin-right:10px" :icon="['fas', 'plus']"/>Post House</Button>
       </div>
       <!-- User dropdown -->
       <ul class="nav navbar-nav navbar-right" v-if="logged===false">
