@@ -25,36 +25,6 @@
       </div>
       <div id="detailsContainer" class="houseDetails">
         <div class="form-demo">
-          <Dialog :visible="showErrorMessage" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
-            <div class="flex align-items-center flex-column pt-6 px-3">
-              <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
-              <h5 style="margin-top: 1em">Reservation Error!</h5>
-              <p style="text-align: center">
-                There's a conflicting reservation with this date. Please enter a valid Check-in and Check-out date.
-              </p>
-            </div>
-            <template #footer>
-              <div class="flex justify-content-center">
-                <Button label="OK" @click="toggleDialogError" class="p-button-text" />
-              </div>
-            </template>
-          </Dialog>
-
-          <Dialog :visible="showLoginMessage" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
-            <div class="flex align-items-center flex-column pt-6 px-3">
-              <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
-              <h5 style="margin-top: 1em">Login Error!</h5>
-              <p style="text-align: center">
-                You need to be logged in to make a reservation
-              </p>
-            </div>
-            <template #footer>
-              <div class="flex justify-content-center">
-                <Button label="OK" @click="toggleDialogLogin" class="p-button-text" />
-              </div>
-            </template>
-          </Dialog>
-
           <Dialog :visible="showHouseMessage" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
             <div class="flex align-items-center flex-column pt-6 px-3">
               <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
@@ -91,7 +61,7 @@
                     <div id="fieldRow" style="margin-right: 1em">
                       <span id="priceContainer" class="text font-semibold"><a>{{house.price}}€</a> day</span>
                     </div>
-                    <div id="fieldRow" style="margin-top: 0.5em;position:absolute;right: 1em;">
+                    <div id="fieldRow" style="margin-top: 0.5em; position:absolute;right: 1em;">
                       <Rating :value="house.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating"></Rating>
                     </div>
                   </div>
@@ -99,25 +69,16 @@
                 <div class="field">
                   <hr style="margin-top: -1em;" class="solid"/>
                 </div>
-                <div class="field">
-                  <div class="p-float-label">
-                    <Calendar id="checkInDate" :showIcon="true" v-model="v$.checkInDate.$model" :disabledDates="invalidDates" :manualInput="false" :class="{'p-invalid':v$.checkInDate.$invalid && submitted || (checkInDate !== null && !validInDate)}"/>
-                    <label for="checkOutDate" :class="{'p-error':v$.checkInDate.$invalid && submitted}">Check-in*</label>
+                <div id="dateContainer">
+                  <div id="date" class="field">
+                    <Tag id="tagCheckIn" :value="'Check-in date:  ' + start_date" icon="pi pi-arrow-right" style="padding: 0.8em; color: white; background-color: #2A323D; position:absolute; left: 6vw;"></Tag>
                   </div>
-                  <small v-if="(v$.checkInDate.$invalid && submitted) || v$.checkInDate.$pending.$response" class="p-error">{{v$.checkInDate.required.$message.replace('Value', 'Check-in')}}</small>
-                  <small v-if="checkInDate !== null && !validInDate" class="p-error">Check-in date has to be greater or equal than current date.</small>
-                </div>
-                <div class="field">
-                  <div class="p-float-label">
-                    <Calendar id="checkOutDate" :showIcon="true" v-model="v$.checkOutDate.$model" :disabledDates="invalidDates" :manualInput="false" :class="{'p-invalid':v$.checkOutDate.$invalid && submitted || (checkOutDate !== null && checkInDate >= checkOutDate) || (checkOutDate !== null && !validOutDate)}"/>
-                    <label for="checkOutDate" :class="{'p-error':v$.checkOutDate.$invalid && submitted}">Check-out*</label>
+                  <div id="date" class="field">
+                    <Tag id="tagCheckIn" :value="'Check-out date:  ' + end_date" icon="pi pi-arrow-left" style="padding: 0.8em; color: white; background-color: #2A323D; position:absolute; right: 6vw;"></Tag>
                   </div>
-                  <small v-if="(v$.checkOutDate.$invalid && submitted) || v$.checkOutDate.$pending.$response" class="p-error">{{v$.checkOutDate.required.$message.replace('Value', 'Check-out')}}</small>
-                  <small v-if="checkOutDate !== null && checkInDate >= checkOutDate" class="p-error">Check-out date should be greater than check-in date.</small>
-                  <small v-if="checkOutDate !== null && !validOutDate" class="p-error">Check-out date has to be greater or equal than current date.</small>
                 </div>
                 <div class="field" style="margin-top:-0.2em;">
-                  <Accordion :multiple="true" :activeIndex="[]">
+                  <Accordion :multiple="true" :activeIndex="[0]">
                     <AccordionTab header="Description">
                       <p>{{house.description}}</p>
                     </AccordionTab>
@@ -126,23 +87,7 @@
                 <div class="field" style="margin-top: 3.2em" v-if="this.logged===true"></div>
                 <div class="field" style="margin-top: -0.5em" v-else></div>
                 <div class="field">
-                  <div id="fieldRowContainer">
-                    <div id="fieldRow" style="margin-right: 1em">
-                      <a>Total</a>
-                    </div>
-                    <div id="fieldRow" style="position:absolute; right: 1em;">
-                      <a>{{totalPrice}}€</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="field">
                   <hr style="margin-top: -1em;" class="solid"/>
-                </div>
-                <div class="field" style="margin-top: -1em;">
-                  <Button id="submitButton" type="submit" label="Reserve" class="mt-2"/>
-                </div>
-                <div class="field" style="margin-top: -1em" v-if="this.logged===false">
-                  <label>Want to reserve? <a id="loginLink" class="link" @click="goToLogin" style="cursor: pointer; color: #8DD0FF; text-decoration: none; margin-top: -1em">Login now!</a></label>
                 </div>
               </form>
             </div>
@@ -160,7 +105,7 @@ import Footer from './Footer'
 import LoadingSpinner from './LoadingSpinner'
 import axios from 'axios'
 import { useVuelidate } from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
+
 export default {
   name: 'HouseDetails',
   components: {
@@ -175,22 +120,19 @@ export default {
       username: null,
       token: null,
       house_id: null,
-      checkInDate: null,
-      checkOutDate: null,
       dates2: null,
-      numberOfDays: 0,
       totalPrice: 0,
       validInDate: true,
       validOutDate: true,
       loaderActive: false,
       userId: null,
-      submitted: false,
+      start_date: null,
+      end_date: null,
       showSuccessMessage: false,
       showErrorMessage: false,
       showLoginMessage: false,
       showHouseMessage: false,
       error: '',
-      invalidDates: [],
       house: {
         'city': 'City',
         'street': 'street',
@@ -216,31 +158,6 @@ export default {
       ]
     }
   },
-  watch: {
-    // whenever checkInDate or checkOutDate change, these functions will run
-    checkInDate () {
-      if (this.checkOutDate != null) {
-        this.getTotalPrice()
-      }
-      this.checkInDateValid()
-    },
-    checkOutDate () {
-      if (this.checkInDate != null) {
-        this.getTotalPrice()
-      }
-      this.checkOutDateValid()
-    }
-  },
-  validations () {
-    return {
-      checkInDate: {
-        required
-      },
-      checkOutDate: {
-        required
-      }
-    }
-  },
   methods: {
     getHouse () {
       const headers = {'Access-Control-Allow-Origin': '*'}
@@ -257,92 +174,12 @@ export default {
       const pathImageHouses = 'https://doogking.azurewebsites.net/api/housing_images/housing/' + this.house_id + '/'
       axios.get(pathImageHouses, headers).then(response => (this.houseImages = response.data))
     },
-    getReservations () {
-      const headers = {'Access-Control-Allow-Origin': '*'}
-      const pathReservations = 'https://doogking.azurewebsites.net/api/reservations/?housing=' + this.house_id
-      axios.get(pathReservations, headers)
-        .then((res) => {
-          for (let i = 0; i < res.data.length; i++) {
-            var reservationStartDate = new Date(res.data[i].start_date)
-            var reservationEndDate = new Date(res.data[i].end_date)
-            var differenceInTimeRes = reservationEndDate.getTime() - reservationStartDate.getTime()
-            // To calculate the no. of days between two dates
-            var differenceInDaysRes = differenceInTimeRes / (1000 * 3600 * 24)
-            let invalidDate = new Date(reservationStartDate.getTime())
-            for (let i = 0; i <= differenceInDaysRes; i++) {
-              this.invalidDates.push(new Date(invalidDate.getTime()))
-              invalidDate.setDate(invalidDate.getDate() + 1)
-            }
-          }
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          this.error = error
-        })
-    },
-    handleSubmit (isFormValid) {
-      this.submitted = true
-      if (isFormValid && (this.checkOutDate !== null) && (this.checkInDate !== null) &&
-        (this.checkInDate < this.checkOutDate) && (this.validInDate) && (this.validOutDate)) {
-        if (this.logged === true) {
-          this.goToPayment()
-        } else {
-          this.showLoginMessage = true
-        }
-      }
-    },
     goToLogin () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/login'})
     },
-    // eslint-disable-next-line camelcase
-    goToPayment () {
-      localStorage.start_date = this.checkInDate.toDateString()
-      localStorage.end_date = this.checkOutDate.toDateString()
-      localStorage.house_id = this.house_id
-      localStorage.pricePerDay = this.house.price
-      localStorage.totalPrice = this.totalPrice
-      localStorage.numberOfDays = this.numberOfDays
-      localStorage.axiosStartDate = this.checkInDate.getFullYear() + '-' + this.checkInDate.toLocaleString('default', { month: '2-digit' }) + '-' + this.checkInDate.toLocaleString('default', { day: '2-digit' })
-      localStorage.axiosEndDate = this.checkOutDate.getFullYear() + '-' + this.checkOutDate.toLocaleString('default', { month: '2-digit' }) + '-' + this.checkOutDate.toLocaleString('default', { day: '2-digit' })
-      this.$router.push({path: '/payment', query: {house_id: this.house_id}})
-    },
     goToHomepage () {
       this.$router.push({path: '/'})
-    },
-    checkInDateValid () {
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
-      if (this.checkInDate < today) {
-        this.validInDate = false
-      } else {
-        this.validInDate = true
-      }
-    },
-    checkOutDateValid () {
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
-      if (this.checkOutDate < today) {
-        this.validOutDate = false
-      } else {
-        this.validOutDate = true
-      }
-    },
-    getTotalPrice () {
-      if (this.checkInDate < this.checkOutDate) {
-        var date1 = new Date(this.checkInDate)
-        var date2 = new Date(this.checkOutDate)
-        var differenceInTime = date2.getTime() - date1.getTime()
-        // To calculate the no. of days between two dates
-        var differenceInDays = differenceInTime / (1000 * 3600 * 24)
-        this.numberOfDays = differenceInDays
-        this.totalPrice = differenceInDays * this.house.price
-        if (isNaN(this.totalPrice)) {
-          this.totalPrice = 0
-        }
-      } else {
-        this.totalPrice = 0
-      }
     },
     showLoader () {
       this.loaderActive = true
@@ -355,19 +192,9 @@ export default {
         this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites', life: 2000})
       }
     },
-    resetForm () {
-      this.checkOutDate = null
-      this.checkInDate = null
-    },
     toggleDialogError () {
       this.showErrorMessage = !this.showErrorMessage
       if (!this.showErrorMessage) {
-        this.resetForm()
-      }
-    },
-    toggleDialogLogin () {
-      this.showLoginMessage = !this.showLoginMessage
-      if (!this.showLoginMessage) {
         this.resetForm()
       }
     },
@@ -393,12 +220,17 @@ export default {
     if (localStorage.email) {
       this.email = localStorage.email
     }
+    if (localStorage.start_date) {
+      this.start_date = localStorage.start_date
+    }
+    if (localStorage.end_date) {
+      this.end_date = localStorage.end_date
+    }
   },
   created () {
     this.house_id = this.$route.query.house_id
     this.getHouse()
     this.getHouseImages()
-    this.getReservations()
     this.showLoader()
     setTimeout(() => {
       this.hideLoader()
@@ -412,17 +244,31 @@ export default {
   display: flex;
   margin-left: 2em;
 }
+
 .houseDetails {
   flex: 1;
 }
+
+#dateContainer {
+  display: flex;
+  margin-bottom: 2em;
+}
+
+#date {
+  flex: 1;
+}
+
 #fieldRowContainer {
   display: flex;
 }
+
 #fieldRow {
   float: left;
 }
+
 .houseDetails:first-child {
 }
+
 .flex-wrapper {
   background-color: #2A323D;
   display: flex;
@@ -432,17 +278,20 @@ export default {
   overflow-x: hidden;
   align-content: center;
 }
+
 #imageHouse{
   height: 30.7vw;
   border-radius: 2em 2em 0 0;
   border: 5px solid #1c1b29;
 }
+
 #thumbnailImage{
   height: 6vw;
   width: 8.5vw;
   border-radius: 0.5em;
   border: 3px solid #1c1b29;
 }
+
 .form-demo .card {
   margin-top: 1rem;
   border-radius: 1rem;
@@ -469,35 +318,42 @@ export default {
     width: 80%;
   }
 }
+
 #favContainer{
   position:absolute;
   top: 0.7em;
   right: 1em;
 }
+
 #favButtonGrid{
   color: indianred;
   background-color: #2A323D;
   border-color: #2A323D;
 }
+
 #favButtonGrid:hover{
   color: indianred;
   background-color: #2A323D;
   border-color: #2A323D;
 }
+
 #favButtonGrid:focus{
   color: indianred;
   background-color: #2A323D;
   border-color: #2A323D;
   box-shadow: 0 0 0 0.1em indianred;
 }
+
 #tagHost{
   position:absolute;
   top:1em;
   left:1.5em;
 }
+
 #priceContainer{
   font-size: 1em;
 }
+
 #priceContainer a{
   font-size: 1.5em;
 }

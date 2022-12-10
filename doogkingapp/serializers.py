@@ -1,12 +1,20 @@
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
-from .models import Profile, Housing, HousingImage, Reservation
+from .models import Profile, Housing, HousingImage, Reservation, Favourite
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Profile
-        fields = ['url', 'email', 'password', 'first_name', 'last_name']
+        fields = [
+            'url',
+            'email',
+            'password',
+            'first_name',
+            'last_name',
+            'balance',
+            'image',
+        ]
         extra_kwargs = {
             'password': {'write_only': True},
             'otp': {'read_only': True}
@@ -23,7 +31,7 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 class CurrentProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['id', 'email', 'first_name', 'last_name']
+        fields = ['id', 'email', 'first_name', 'last_name', 'balance', 'image']
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
@@ -76,6 +84,26 @@ class HousingSerializer(serializers.HyperlinkedModelSerializer):
                   'house_owner_name',
                   'price',
                   'rating',
+                  'num_ratings',
+                  'description',
+                  'image']
+
+
+class HousingIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Housing
+        fields = ['url',
+                  'house_id',
+                  'city',
+                  'street',
+                  'street_number',
+                  'floor',
+                  'door',
+                  'house_dimension',
+                  'house_owner',
+                  'house_owner_name',
+                  'price',
+                  'rating',
                   'description',
                   'image']
 
@@ -92,7 +120,21 @@ class ReservationSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['housing', 'start_date', 'end_date']
 
 
+class DetailedReservationSerializer(serializers.ModelSerializer):
+    housing = HousingIdSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = Reservation
+        fields = ['housing', 'start_date', 'end_date']
+
+
 class CustomerReservationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Reservation
         fields = ['housing', 'customer', 'start_date', 'end_date']
+
+
+class FavouriteSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Favourite
+        fields = ['user', 'housing']
