@@ -18,19 +18,14 @@
       </Dialog>
       <div id="app">
         <div class="body">
-          <div class="d-flex flex-row">
+          <div class="d-flex flex-row" style="margin-left:9vw; box-sizing: border-box; border: 1px solid var(--surface-border); border-radius: 3px; height: 18vw; width: 80vw">
             <div class="p-2" style="margin-left:50px">
-              <img class="mx-auto rounded-circle" src="@/assets/avatar.png" style="width:200px">
+              <img class="mx-auto rounded-circle" src="@/assets/avatar.png" style="margin-top: 1vw; width:200px">
             </div>
-            <div class="p-2" style="margin-right:200px">
-              <div class="info-containter" ><h2>{{username}}</h2>
-                <div class="reviewButton">
-                  <fa :icon="['fas', 'star']"/>
-                  <fa :icon="['fas', 'star']"/>
-                  <fa :icon="['fas', 'star']"/>
-                  <fa :icon="['fas', 'star']"/>
-                  <fa :icon="['fas', 'star-half']"/>
-                </div>
+            <div class="p-2" style="margin-right:200px; margin-top: 1vw; ">
+              <div class="info-containter" >
+                <h5>{{username}}</h5>
+                <hr style="width:15vw; color: white;" class="solid"/>
                 <div class="about-me"><h7>About me:</h7></div>
                 <div class="row">
                   <div class="col"><fa :icon="['fas', 'star']"/>      34 reviews</div>
@@ -41,7 +36,7 @@
                 </div>
               </div>
             </div>
-            <div class="profile2Button-button" align-content="left">
+            <div class="profile2Button-button" align-content="left" style="margin-top: 1vw;">
               <button class="btn btn-lg btn-block" type="submit" @click="goToEditProfile" name="editProfile" aria-label="Left Align"><fa :icon="['fas', 'pen-to-square']"/><h6>Edit Profile</h6></button>
               <button class="btn btn-lg btn-block" type="submit" style="color:#8dd0ff" @click="logOut" name="editProfile" aria-label="Left Align"><fa :icon="['fas', 'right-from-bracket']"/><h6>Log out</h6></button>
             </div>
