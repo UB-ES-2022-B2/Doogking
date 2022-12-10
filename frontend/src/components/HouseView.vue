@@ -47,11 +47,11 @@
                 </div>
               </div>
               <div class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
-                  <span v-if="slotProps.data.favorite==true">
-                      <Button id="favButtonList" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
+                  <span v-if="slotProps.data.url === 'favorite'">
+                      <Button id="favButtonList" icon="pi pi-heart-fill" @click="removeFavorite(slotProps.data.house_id)" class="p-button-rounded"/>
                   </span>
                 <span v-else>
-                      <Button id="favButtonList" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
+                      <Button id="favButtonList" icon="pi pi-heart" @click="addHouseToFavorites(slotProps.data.house_id), slotProps.data.url = 'favorite'" class="p-button-rounded"/>
                   </span>
                 <span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end">{{slotProps.data.price}}€ day</span>
                 <Button id="buttonViewList" label="View house" @click="seeHouseDetails(slotProps.data.house_id)" iconPos="right" class="buttonView"/>
@@ -69,11 +69,11 @@
                     <Button id="buttonViewGrid" label="View house" @click="seeHouseDetails(slotProps.data.house_id)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
                   </figcaption>
                 </div>
-                <span id="favContainer" v-if="slotProps.data.favorite==true">
-                      <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
+                <span id="favContainer" v-if="slotProps.data.url === 'favorite'">
+                  <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="removeFavorite(slotProps.data.house_id)" class="p-button-rounded"/>
                 </span>
                 <span id="favContainer" v-else>
-                        <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
+                  <Button id="favButtonGrid" icon="pi pi-heart" @click="addHouseToFavorites(slotProps.data.house_id), slotProps.data.url = 'favorite'" class="p-button-rounded"/>
                 </span>
                 <span id="priceContainer" class="text font-semibold"><a>{{slotProps.data.price}}€</a> day</span>
                 <span id="loaderContainer" v-if="loaderActive===true">
@@ -119,6 +119,7 @@ export default {
       checkOutDate: null,
       h: [],
       numHouses: null,
+      myFavorites: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
       loaderActive: false,
       selectedCities: [],
       cities: [
@@ -185,16 +186,73 @@ export default {
     seeHouseDetails (house_id) {
       this.$router.push({path: '/housedetails', query: {house_id: house_id}})
     },
-    changeFavorite () {
+    getUserFavorites () {
+      var config = {
+        method: 'get',
+        url: 'https://doogking.azurewebsites.net/api/profiles/favourites/' + this.userId + '/',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Authorization': 'Token ' + this.token
+        }
+      }
+      axios(config)
+        .then((response) => {
+          this.myFavorites = response.data
+          this.getHouses()
+        })
+        .catch((error) => {
+          this.error = error
+        })
+    },
+    // eslint-disable-next-line camelcase
+    addHouseToFavorites (house_id) {
       if (this.logged === false) {
         this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites', life: 2000})
+      } else {
+        var data = JSON.stringify({
+          // eslint-disable-next-line camelcase
+          'housing': 'https://doogking.azurewebsites.net/api/housing/' + house_id + '/',
+          'user': 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/'
+        })
+        var config = {
+          method: 'post',
+          url: 'https://doogking.azurewebsites.net/api/favourites/',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Token ' + this.token,
+            'Content-Type': 'application/json'
+          },
+          data: data
+        }
+        axios(config)
+          .then((response) => {
+            this.$toast.add({severity: 'info', summary: 'Favorite', detail: 'House added to your favorites list. You can see it in you profile', life: 3000})
+          })
+          .catch((error) => {
+            this.error = error
+          })
       }
     },
     getHouses () {
       // const pathHouses = 'http://127.0.0.1:8000/api/housing/'
       const headers = {'Access-Control-Allow-Origin': '*'}
       const pathHouses = 'https://doogking.azurewebsites.net/api/housing/'
-      axios.get(pathHouses, headers).then(response => (this.houses = response.data))
+      axios.get(pathHouses, headers)
+        .then((response) => {
+          this.houses = response.data
+          for (let i = 0; i < this.houses.length; i++) {
+            var found = false
+            for (let j = 0; j < this.myFavorites.length && found === false; j++) {
+              if (this.houses[i].house_id === this.myFavorites[j].housing.house_id) {
+                this.houses[i].url = 'favorite'
+                found = true
+              }
+            }
+          }
+        })
+        .catch((error) => {
+          this.error = error
+        })
     },
     getNumHouses () {
       const headers = {'Access-Control-Allow-Origin': '*'}
@@ -207,30 +265,32 @@ export default {
     },
     hideLoader () {
       this.loaderActive = false
-    }
-  },
-  mounted () {
-    if (localStorage.username) {
-      this.logged = true
-      this.username = localStorage.username
-    }
-    if (localStorage.userId) {
-      this.userId = localStorage.userId
-    }
-    if (localStorage.token) {
-      this.token = localStorage.token
-    }
-    if (localStorage.email) {
-      this.email = localStorage.email
+    },
+    loadLocalStorage () {
+      if (localStorage.username) {
+        this.logged = true
+        this.username = localStorage.username
+      }
+      if (localStorage.userId) {
+        this.userId = localStorage.userId
+      }
+      if (localStorage.token) {
+        this.token = localStorage.token
+      }
+      if (localStorage.email) {
+        this.email = localStorage.email
+        this.getUserFavorites()
+      }
     }
   },
   created () {
+    this.loadLocalStorage()
     this.getHouses()
     this.getNumHouses()
     this.showLoader()
     setTimeout(() => {
       this.hideLoader()
-    }, 500)
+    }, 800)
   }
 }
 </script>

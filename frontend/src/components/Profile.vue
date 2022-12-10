@@ -62,12 +62,6 @@
                     </figcaption>
                   </div>
                   <Toast/>
-                  <span id="favContainer" v-if="slotProps.data.favorite==true">
-                      <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
-                  </span>
-                  <span id="favContainer" v-else>
-                        <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
-                  </span>
                   <span id="priceContainer" class="text font-semibold" style="color:white"><a>{{slotProps.data.price}}€</a> day</span>
                   <span id="loaderContainer" v-if="loaderActive===true">
                   <LoadingSpinnerGrid :active="true"/>
@@ -102,15 +96,15 @@
                   <div id="container-effect">
                     <img id="card-img" :src="slotProps.data.housing.image" alt="img">
                     <figcaption>
-                      <Button id="buttonViewGrid" label="View house" @click="seeMyHouseDetails(slotProps.data.housing.house_id)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
+                      <Button id="buttonViewGrid" label="View house" @click="seeHouseDetails(slotProps.data.housing.house_id)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
                     </figcaption>
                   </div>
                   <Toast/>
-                  <span id="favContainer" v-if="slotProps.data.favorite==true">
-                      <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
+                  <span id="favContainer" v-if="slotProps.data.url === 'favorite'">
+                    <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="removeFavorite(slotProps.data.house_id)" class="p-button-rounded"/>
                   </span>
                   <span id="favContainer" v-else>
-                        <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
+                    <Button id="favButtonGrid" icon="pi pi-heart" @click="addHouseToFavorites(slotProps.data.house_id), slotProps.data.url = 'favorite'" class="p-button-rounded"/>
                   </span>
                   <span id="priceContainer" class="text font-semibold" style="color:white"><a>{{slotProps.data.housing.price}}€</a> day</span>
                   <span id="loaderContainer" v-if="loaderActive===true">
@@ -150,13 +144,13 @@
                   </figcaption>
                 </div>
                 <Toast/>
-                <span id="favContainer" v-if="slotProps.data.favorite==true">
-                      <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
-                  </span>
+                <span id="favContainer" v-if="slotProps.data.url === 'favorite'">
+                  <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="removeFavorite(slotProps.data.house_id)" class="p-button-rounded"/>
+                </span>
                 <span id="favContainer" v-else>
-                        <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
-                  </span>
-                <span id="priceContainer" class="text font-semibold" style="color:white"><a>{{slotProps.data.price}}€</a> day</span>
+                  <Button id="favButtonGrid" icon="pi pi-heart" @click="addHouseToFavorites(slotProps.data.housing.house_id), slotProps.data.url = 'favorite'" class="p-button-rounded"/>
+                </span>
+                <span id="priceContainer" class="text font-semibold" style="color:white"><a>{{slotProps.data.housing.price}}€</a> day</span>
                 <span id="loaderContainer" v-if="loaderActive===true">
                   <LoadingSpinnerGrid :active="true"/>
                 </span>
@@ -195,13 +189,7 @@
                     </figcaption>
                   </div>
                   <Toast/>
-                  <span id="favContainer" v-if="slotProps.data.favorite==true">
-                      <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
-                  </span>
-                  <span id="favContainer" v-else>
-                        <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
-                  </span>
-                  <span id="priceContainer" class="text font-semibold" style="color:white"><a>{{slotProps.data.price}}€</a> day</span>
+                  <span id="priceContainer" class="text font-semibold" style="color:white"><a>{{slotProps.data.housing.price}}€</a> day</span>
                   <span id="loaderContainer" v-if="loaderActive===true">
                   <LoadingSpinnerGrid :active="true"/>
                 </span>
@@ -309,6 +297,15 @@ export default {
             var thirdHouses = {'skeleton': true}
             this.myReservations = response.data.concat(thirdHouses)
           }
+          for (let i = 0; i < this.myReservations.length; i++) {
+            var found = false
+            for (let j = 0; j < this.myFavorites.length && found === false; j++) {
+              if (this.myReservations[i].housing.house_id === this.myFavorites[j].housing.house_id) {
+                this.myReservations[i].url = 'favorite'
+                found = true
+              }
+            }
+          }
         })
         .catch((error) => {
           this.myReservations = null
@@ -359,6 +356,9 @@ export default {
             var thirdHouses = {'skeleton': true}
             this.myFavorites = response.data.concat(thirdHouses)
           }
+          for (let i = 0; i < this.myFavorites.length; i++) {
+            this.myFavorites[i].url = 'favorite'
+          }
         })
         .catch((error) => {
           this.myFavorites = null
@@ -366,8 +366,41 @@ export default {
         })
     },
     // eslint-disable-next-line camelcase
+    addHouseToFavorites (house_id) {
+      if (this.logged === false) {
+        this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites', life: 2000})
+      } else {
+        var data = JSON.stringify({
+          // eslint-disable-next-line camelcase
+          'housing': 'https://doogking.azurewebsites.net/api/housing/' + house_id + '/',
+          'user': 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/'
+        })
+        var config = {
+          method: 'post',
+          url: 'https://doogking.azurewebsites.net/api/favourites/',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Token ' + this.token,
+            'Content-Type': 'application/json'
+          },
+          data: data
+        }
+        axios(config)
+          .then((response) => {
+            this.$toast.add({severity: 'info', summary: 'Favorite', detail: 'House added to your favorites list. You can see it in you profile', life: 3000})
+          })
+          .catch((error) => {
+            this.error = error
+          })
+      }
+    },
+    // eslint-disable-next-line camelcase
     seeMyHouseDetails (house_id) {
       this.$router.push({path: '/myHouseDetails', query: {house_id: house_id}})
+    },
+    // eslint-disable-next-line camelcase
+    seeHouseDetails (house_id) {
+      this.$router.push({path: '/housedetails', query: {house_id: house_id}})
     },
     // eslint-disable-next-line camelcase
     seeMyReservationDetails (house_id, start_date, end_date) {
@@ -383,7 +416,7 @@ export default {
       localStorage.start_date = start_date
       // eslint-disable-next-line camelcase
       localStorage.end_date = end_date
-      this.$router.push({path: '/myReservationDetails', query: {house_id: house_id}})
+      this.$router.push({path: '/myReservedDetails', query: {house_id: house_id}})
     },
     showLoader () {
       this.loaderActive = true
@@ -424,9 +457,9 @@ export default {
   created () {
     this.loadLocalStorage()
     this.getUserHouses()
+    this.getUserFavorites()
     this.getUserReservations()
     this.getUserReservedHouses()
-    this.getUserFavorites()
     this.showLoader()
     setTimeout(() => {
       this.hideLoader()
