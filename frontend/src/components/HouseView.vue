@@ -31,7 +31,6 @@
             <ConfirmPopup id="confirmPopup" ></ConfirmPopup>
             <Toast/>
             <Button id="removeFiltersBtn" @click="confirmRemoveFilters($event)" icon="pi pi-times" style="background-color: indianred; border-color: indianred; color: white; margin-top: 0.5em;"/>
-            <Button id="post" type="submit"  style="margin-left: 750px; border-radius: 12px" @click="addHouse" v-if="logged===true"><fa :icon="['fas', 'plus']"/>      Post now</Button>
           </div>
           <Divider id="gridDivider" v-if="layout=='grid'"></Divider>
         </template>
@@ -190,9 +189,6 @@ export default {
       if (this.logged === false) {
         this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites', life: 2000})
       }
-    },
-    addHouse () {
-      this.$router.push({path: '/houseRegistry'})
     },
     getHouses () {
       // const pathHouses = 'http://127.0.0.1:8000/api/housing/'
