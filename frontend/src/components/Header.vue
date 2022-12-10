@@ -26,6 +26,7 @@
             <a v-else class="nav-link" @click="goToAboutUs" style="cursor: pointer"><fa :icon="['fas', 'circle-info'] " /></a>
           </li>
         </ul>
+        <Button id="post" type="submit"  style="margin-right: 10px; border-radius: 12px" @click="addHouse" v-if="logged===true"><fa  style="margin-right:10px" :icon="['fas', 'plus']"/>Post House</Button>
       </div>
       <!-- User dropdown -->
       <ul class="nav navbar-nav navbar-right" v-if="logged===false">
@@ -102,6 +103,9 @@ export default {
     },
     goToAboutUs () {
       this.$router.push({path: '/aboutUs'})
+    },
+    addHouse () {
+      this.$router.push({path: '/houseRegistry'})
     },
     logOut () {
       this.logged = false
