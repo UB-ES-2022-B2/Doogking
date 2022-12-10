@@ -119,6 +119,7 @@ export default {
       localStorage.removeItem('axiosEndDate')
       localStorage.removeItem('currentMoney')
       this.$router.push({path: '/'})
+      this.$router.go()
     },
     goToBusinessContact () {
       this.$router.push({path: '/businessContact'})
