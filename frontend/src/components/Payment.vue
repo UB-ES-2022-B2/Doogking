@@ -25,7 +25,7 @@
                         <img src="https://i.imgur.com/2ISgYja.png" width="30">
                         <img src="https://i.imgur.com/W1vtnOV.png" width="30">
                         <img src="https://i.imgur.com/35tC99g.png" width="30">
-                        <img src="https://i.imgur.com/2ISgYja.png" width="30">
+                        <img src="https://cdn-icons-png.flaticon.com/512/349/349228.png" width="30">
                       </div>
                     </div>
                   </div>
@@ -147,27 +147,33 @@
                     <label for="checkOutDate">Check-out</label>
                   </div>
                 </div>
-                <div class="field" style="margin-top: 3.2em" v-if="this.logged===true"></div>
+                <div class="field" style="margin-top: 2.6em" v-if="this.logged===true"></div>
                 <div class="field" style="margin-top: -0.5em" v-else></div>
                 <div class="field">
                   <div id="fieldRowContainer">
                     <div id="fieldRow" style="margin-right: 1em; font-size: 0.8em;">
                       <a>Price per day</a>
                     </div>
-                    <div id="fieldRow" style="position:absolute; right: 1em; font-size: 0.8em;">
+                    <div id="fieldRow" style="position:absolute; right: 1em;">
                       <a>{{pricePerDay}}€</a>
                     </div>
                   </div>
+                </div>
+                <div class="field">
+                  <hr style="margin-top: -1em;" class="solid"/>
                 </div>
                 <div class="field">
                   <div id="fieldRowContainer">
                     <div id="fieldRow" style="margin-right: 1em;  font-size: 0.8em;">
                       <a>Number of days</a>
                     </div>
-                    <div id="fieldRow" style="position:absolute; right: 1em; font-size: 0.8em;">
-                      <a>{{numberOfDays}} day</a>
+                    <div id="fieldRow" style="position:absolute; right: 1em;">
+                      <a>{{numberOfDays}} days</a>
                     </div>
                   </div>
+                </div>
+                <div class="field">
+                  <hr style="margin-top: -1em;" class="solid"/>
                 </div>
                 <div class="field">
                   <div id="fieldRowContainer">
@@ -225,6 +231,7 @@ export default {
       axiosStartDate: null,
       axiosEndDate: null,
       expiryDate: null,
+      currentMoney: null,
       validExpiryDate: null,
       cvc: null,
       dates2: null,
@@ -318,11 +325,34 @@ export default {
         .then((response) => {
           console.log(JSON.stringify(response.data))
           this.showSuccessMessage = true
+          this.updateUserBalance()
         })
         .catch((error) => {
           console.log(error)
           this.error = error
           this.showErrorMessage = true
+        })
+    },
+    updateUserBalance () {
+      var data = JSON.stringify({
+        'balance': parseInt(this.currentMoney) - parseInt(this.totalPrice)
+      })
+      var config = {
+        method: 'patch',
+        url: 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Authorization': 'Token ' + this.token,
+          'Content-Type': 'application/json'
+        },
+        data: data
+      }
+      console.log('Token ' + this.token)
+      axios(config)
+        .then((response) => {
+        })
+        .catch((error) => {
+          this.error = error
         })
     },
     handleSubmit (isFormValid) {
@@ -446,6 +476,9 @@ export default {
       }
       if (localStorage.axiosEndDate) {
         this.axiosEndDate = localStorage.axiosEndDate
+      }
+      if (localStorage.currentMoney) {
+        this.currentMoney = localStorage.currentMoney
       }
     }
   },
