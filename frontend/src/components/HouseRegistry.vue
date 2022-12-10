@@ -1,8 +1,37 @@
 <template>
   <div class="flex-wrapper">
     <Header></Header>
+    <Dialog :visible="showSuccessMessage" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
+      <div class="flex align-items-center flex-column pt-6 px-3">
+        <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--green-500)' }"></i>
+        <h5 style="margin-top: 1em">Posted House Successful!</h5>
+        <p style="text-align: center">
+          Your house is been posted. Now other users can rent it!
+        </p>
+      </div>
+      <template #footer>
+        <div class="flex justify-content-center">
+          <Button label="OK" @click="toggleDialogSuccess" class="p-button-text" />
+        </div>
+      </template>
+    </Dialog>
+    <Dialog :visible="showErrorMessage" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
+      <div class="flex align-items-center flex-column pt-6 px-3">
+        <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
+        <h5 style="margin-top: 1em">Posted House Error!</h5>
+        <p style="text-align: center">
+          Please enter a valid house/images
+        </p>
+      </div>
+      <template #footer>
+        <div class="flex justify-content-center">
+          <Button label="OK" @click="toggleDialogError" class="p-button-text" />
+        </div>
+      </template>
+    </Dialog>
     <div id="app">
       <h2 style="color:white; margin-bottom: 40px; margin-left: 165px" class="d-flex justify-content-start">Hey {{username}}! Start listing your place</h2>
+      <h6 class="font-italic" style="color:white; margin-bottom: 5px; margin-right: 135px">To post a house, please upload your chosen images, then click on the upload button and then fill the house details</h6>
       <div class="body">
         <div class="d-flex flex-row">
           <div class="p-2" style="margin-left:150px">
@@ -44,7 +73,7 @@
                   <h1></h1>
                   <div class="btn-group">
                     <div class="field">
-                      <Button id="submitButton" type="submit" label="Submit" @click='goPostHouse($event)' class="mt-2" style="width:200px"/>
+                      <Button id="submitButton" type="button" label="Submit" @click='goPostHouse($event)' class="mt-2" style="width:200px"/>
                     </div>
                   </div>
                 </div>
@@ -87,7 +116,10 @@ export default {
       price_per_day: null,
       desciption: null,
       numHouses: null,
+      house_id: null,
       images: [],
+      showSuccessMessage: false,
+      showErrorMessage: false,
       addUserForm: {
         city: null,
         street: null,
@@ -127,49 +159,69 @@ export default {
       axios(config)
         .then((res) => {
           this.goPostHouseImage(res.data.house_id)
+          this.showSuccessMessage = true
         })
-        .catch(function (response) {})
-      this.$router.push({path: '/'})
+        .catch((response) => {
+          this.showErrorMessage = true
+        })
     },
     goPostHouseImage (houseId) {
       for (let i = 0; i < this.images.length; i++) {
-        var data = JSON.stringify({
-          'housing': 'https://doogking.azurewebsites.net/api/housing/' + houseId + '/',
-          'index': i,
-          'image': this.images[i]
-        })
+        const formData = new FormData()
+        formData.append('housing', 'https://doogking.azurewebsites.net/api/housing/' + houseId + '/')
+        formData.append('index', i)
+        formData.append('image', this.images[i])
         var config = {
           method: 'post',
           url: 'https://doogking.azurewebsites.net/api/housing_images/',
           headers: {
             'Access-Control-Allow-Origin': '*',
             'Authorization': 'Token ' + this.token,
-            'Content-Type': 'application/json'
+            'Content-Type': 'multipart/form-data'
           },
-          data: data
+          data: formData
         }
         console.log('Token ' + this.token)
         axios(config)
-          .then(function (response) {
+          .then((response) => {
+            this.showSuccessMessage = true
           }).catch(function (response) {})
       }
     },
     myUploader (event) {
-      // alert(event.files[0].objectURL)
-      const formData = new FormData()
       for (let i = 0; i < event.files.length; i++) {
-        formData.append('file', event.files[i])
-        axios
-          .post('https://doogking.azurewebsites.net/api/upload/', formData)
-          .then(response => (this.images.push(response.data.uploaded_name)))
+        this.images.push(event.files[i])
       }
-      this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 })
     },
     getNumHouses () {
       const headers = {'Access-Control-Allow-Origin': '*'}
       const pathHouses = 'https://doogking.azurewebsites.net/api/housing/'
       const promise = axios.get(pathHouses, headers)
       Promise.resolve(promise).then((value) => (this.numHouses = value.data.length))
+    },
+    toggleDialogSuccess () {
+      this.showSuccessMessage = !this.showSuccessMessage
+      if (!this.showSuccessMessage) {
+        this.$router.push({ path: '/' })
+        this.resetForm()
+      }
+    },
+    toggleDialogError () {
+      this.showErrorMessage = !this.showErrorMessage
+      if (!this.showErrorMessage) {
+        this.resetForm()
+      }
+    },
+    resetForm () {
+      this.addUserForm.street = ''
+      this.addUserForm.street_number = ''
+      this.addUserForm.floor = ''
+      this.addUserForm.door = ''
+      this.addUserForm.house_dimension = ''
+      this.addUserForm.city = ''
+      this.addUserForm.price_per_day = ''
+      this.addUserForm.desciption = ''
+      this.submitted = false
     }
   },
   mounted () {
