@@ -45,6 +45,7 @@
           <hr>
         </div>
       </div>
+      <Toast/>
       <Carousel :value="myHouses" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="4000">
         <template #header>
           <h5 style="text-align: left; margin-left: 6vw; color: white;">My houses</h5>
@@ -61,7 +62,6 @@
                       <Button id="buttonViewGrid" label="View house" @click="seeMyHouseDetails(slotProps.data.house_id)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
                     </figcaption>
                   </div>
-                  <Toast/>
                   <span id="priceContainer" class="text font-semibold" style="color:white"><a>{{slotProps.data.price}}€</a> day</span>
                   <span id="loaderContainer" v-if="loaderActive===true">
                   <LoadingSpinnerGrid :active="true"/>
@@ -99,12 +99,11 @@
                       <Button id="buttonViewGrid" label="View house" @click="seeHouseDetails(slotProps.data.housing.house_id)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
                     </figcaption>
                   </div>
-                  <Toast/>
-                  <span id="favContainer" v-if="slotProps.data.url === 'favorite'">
+                  <span id="favContainer" v-if="slotProps.data.housing.url === 'favorite'">
                     <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="removeFavorite(slotProps.data.house_id)" class="p-button-rounded"/>
                   </span>
                   <span id="favContainer" v-else>
-                    <Button id="favButtonGrid" icon="pi pi-heart" @click="addHouseToFavorites(slotProps.data.house_id), slotProps.data.url = 'favorite'" class="p-button-rounded"/>
+                    <Button id="favButtonGrid" icon="pi pi-heart" @click="addHouseToFavorites(slotProps.data.housing.house_id), slotProps.data.housing.url = 'favorite'" class="p-button-rounded"/>
                   </span>
                   <span id="priceContainer" class="text font-semibold" style="color:white"><a>{{slotProps.data.housing.price}}€</a> day</span>
                   <span id="loaderContainer" v-if="loaderActive===true">
@@ -143,12 +142,11 @@
                     <Button id="buttonViewGrid" label="View house" @click="seeMyReservationDetails(slotProps.data.housing.house_id, slotProps.data.start_date, slotProps.data.end_date)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
                   </figcaption>
                 </div>
-                <Toast/>
-                <span id="favContainer" v-if="slotProps.data.url === 'favorite'">
+                <span id="favContainer" v-if="slotProps.data.housing.url === 'favorite'">
                   <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="removeFavorite(slotProps.data.house_id)" class="p-button-rounded"/>
                 </span>
                 <span id="favContainer" v-else>
-                  <Button id="favButtonGrid" icon="pi pi-heart" @click="addHouseToFavorites(slotProps.data.housing.house_id), slotProps.data.url = 'favorite'" class="p-button-rounded"/>
+                  <Button id="favButtonGrid" icon="pi pi-heart" @click="addHouseToFavorites(slotProps.data.housing.house_id), slotProps.data.housing.url = 'favorite'" class="p-button-rounded"/>
                 </span>
                 <span id="priceContainer" class="text font-semibold" style="color:white"><a>{{slotProps.data.housing.price}}€</a> day</span>
                 <span id="loaderContainer" v-if="loaderActive===true">
@@ -188,7 +186,6 @@
                       <Button id="buttonViewGrid" label="View house" @click="seeMyReservedDetails(slotProps.data.housing.house_id, slotProps.data.start_date, slotProps.data.end_date)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
                     </figcaption>
                   </div>
-                  <Toast/>
                   <span id="priceContainer" class="text font-semibold" style="color:white"><a>{{slotProps.data.housing.price}}€</a> day</span>
                   <span id="loaderContainer" v-if="loaderActive===true">
                   <LoadingSpinnerGrid :active="true"/>
@@ -301,7 +298,7 @@ export default {
             var found = false
             for (let j = 0; j < this.myFavorites.length && found === false; j++) {
               if (this.myReservations[i].housing.house_id === this.myFavorites[j].housing.house_id) {
-                this.myReservations[i].url = 'favorite'
+                this.myReservations[i].housing.url = 'favorite'
                 found = true
               }
             }
@@ -357,7 +354,7 @@ export default {
             this.myFavorites = response.data.concat(thirdHouses)
           }
           for (let i = 0; i < this.myFavorites.length; i++) {
-            this.myFavorites[i].url = 'favorite'
+            this.myFavorites[i].housing.url = 'favorite'
           }
         })
         .catch((error) => {
