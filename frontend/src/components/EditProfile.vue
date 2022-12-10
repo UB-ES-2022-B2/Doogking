@@ -30,12 +30,30 @@
           </div>
         </template>
       </Dialog>
+      <Dialog :visible="imageProfileButton"  :style="{ width: '30vw' }" @update:visible="closeDialog" position="top">
+        <div class="flex align-items-center flex-column pt-6 px-5">
+          <h3>Upload your profile picture</h3>
+          <FileUpload  name="demo[]" :customUpload="true" @uploader="myUploader($event)" :multiple="true" accept="image/*" :maxFileSize="1000000">
+            <template #empty>
+              <div class="flex align-items-center justify-content-center flex-column">
+                <i class="pi pi-cloud-upload border-2 border-circle p-5 text-8xl text-400 border-400" />
+                <p class="mt-4 mb-0">Drag and drop files here to upload.</p>
+              </div>
+            </template>
+          </FileUpload>
+        </div>
+        <template #footer>
+        </template>
+      </Dialog>
       <div id="app">
         <div class="body">
           <h2 style="margin-right:150px; color: #8dd0ff">Hey {{username}}, edit your profile!</h2>
           <div class="d-flex flex-row">
             <div class="p-2" style="margin-left:50px">
-              <img class="mx-auto rounded-circle" src="@/assets/avatar.png" style="width:200px">
+              <img class="mx-auto rounded-circle" :src="profileImage" style="width:200px">
+              <div class="group-buttons">
+                <button class="btn btn-lg btn-block" type="submit" @click="goToChangeProfileImage">Update Profile</button>
+              </div>
             </div>
             <div class="p-2" style="margin-right:400px">
               <div class="info-containter" >
@@ -86,6 +104,8 @@ export default {
       token: null,
       showSuccessMessage: false,
       showErrorMessage: false,
+      imageProfileButton: false,
+      profileImage: null,
       addUserForm: {
         email: null,
         username: null
@@ -130,6 +150,9 @@ export default {
     goToChangePassword () {
       this.$router.push({path: '/changePassword'})
     },
+    goToChangeProfileImage () {
+      this.imageProfileButton = true
+    },
     deleteProfile () {
       var config = {
         method: 'delete',
@@ -169,6 +192,48 @@ export default {
       this.addUserForm.username = ''
       this.addUserForm.newPassword2 = ''
       this.submitted = false
+    },
+    myUploader (event) {
+      const formData = new FormData()
+      formData.append('image', event.files[0])
+      var config = {
+        method: 'patch',
+        url: 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Authorization': 'Token ' + this.token,
+          'Content-Type': 'multipart/form-data'
+        },
+        data: formData
+      }
+      console.log('Token ' + this.token)
+      axios(config)
+        .then((response) => {
+          this.showSuccessMessage = true
+        }).catch(function (response) {})
+    },
+    closeDialog () {
+      this.imageProfileButton = false
+    },
+    getProfileImage () {
+      // const pathHouses = 'http://127.0.0.1:8000/api/housing/'
+      var config = {
+        method: 'get',
+        url: 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Authorization': 'Token ' + this.token,
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+      console.log('Token ' + this.token)
+      axios(config)
+        .then(response => {
+          (this.profileImage = response.data.image)
+          console.log(this.profileImage)
+        })
+        .catch(function (response) {
+        })
     }
   },
   mounted () {
@@ -190,6 +255,13 @@ export default {
     }
   },
   created () {
+    if (localStorage.userId) {
+      this.userId = localStorage.userId
+    }
+    if (localStorage.token) {
+      this.token = localStorage.token
+    }
+    this.getProfileImage()
   }
 }
 </script>
