@@ -52,7 +52,7 @@
             <div class="p-2" style="margin-left:50px">
               <img class="mx-auto rounded-circle" :src="profileImage" style="width:200px">
               <div class="group-buttons">
-                <button class="btn btn-lg btn-block" type="submit" @click="goToChangeProfileImage">Update Profile</button>
+                <button class="btn btn-lg btn-block" type="submit" @click="goToChangeProfileImage">Update Image</button>
               </div>
             </div>
             <div class="p-2" style="margin-right:400px">
