@@ -55,13 +55,21 @@
                     <div id="fieldRow" style="margin-right: 1em">
                       <span id="priceContainer" class="text font-semibold"><a>{{house.price}}€</a> day</span>
                     </div>
-                    <div id="fieldRow" style="margin-top: 0.5em;position:absolute;right: 1em;">
+                    <div id="fieldRow" style="margin-top: 0.5em; position:absolute;right: 1em;">
                       <Rating :value="house.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating"></Rating>
                     </div>
                   </div>
                 </div>
                 <div class="field">
                   <hr style="margin-top: -1em;" class="solid"/>
+                </div>
+                <div id="dateContainer">
+                  <div id="date" class="field">
+                    <Tag id="tagCheckIn" :value="'Check-in date:  ' + start_date" icon="pi pi-arrow-right" style="padding: 0.8em; color: white; background-color: #2A323D; position:absolute; left: 6vw;"></Tag>
+                  </div>
+                  <div id="date" class="field">
+                    <Tag id="tagCheckIn" :value="'Check-out date:  ' + end_date" icon="pi pi-arrow-left" style="padding: 0.8em; color: white; background-color: #2A323D; position:absolute; right: 6vw;"></Tag>
+                  </div>
                 </div>
                 <div class="field" style="margin-top:-0.2em;">
                   <Accordion :multiple="true" :activeIndex="[0]">
@@ -112,6 +120,8 @@ export default {
       validOutDate: true,
       loaderActive: false,
       userId: null,
+      start_date: null,
+      end_date: null,
       showSuccessMessage: false,
       showErrorMessage: false,
       showLoginMessage: false,
@@ -204,6 +214,12 @@ export default {
     if (localStorage.email) {
       this.email = localStorage.email
     }
+    if (localStorage.start_date) {
+      this.start_date = localStorage.start_date
+    }
+    if (localStorage.end_date) {
+      this.end_date = localStorage.end_date
+    }
   },
   created () {
     this.house_id = this.$route.query.house_id
@@ -224,6 +240,15 @@ export default {
 }
 
 .houseDetails {
+  flex: 1;
+}
+
+#dateContainer {
+  display: flex;
+  margin-bottom: 2em;
+}
+
+#date {
   flex: 1;
 }
 

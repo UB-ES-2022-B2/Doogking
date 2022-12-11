@@ -43,6 +43,8 @@ import SplitButton from 'primevue/splitbutton'
 import Carousel from 'primevue/carousel'
 import FileUpload from 'primevue/fileupload'
 import Slider from 'primevue/slider'
+import InputMask from 'primevue/inputmask'
+import ToggleButton from 'primevue/togglebutton'
 
 library.add(fas, fab)
 Vue.component('fa', FontAwesomeIcon)
@@ -80,6 +82,8 @@ Vue.component('SplitButton', SplitButton)
 Vue.component('Carousel', Carousel)
 Vue.component('FileUpload', FileUpload)
 Vue.component('Slider', Slider)
+Vue.component('InputMask', InputMask)
+Vue.component('ToggleButton', ToggleButton)
 
 /* eslint-disable no-new */
 new Vue({

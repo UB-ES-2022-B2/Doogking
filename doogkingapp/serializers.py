@@ -1,12 +1,20 @@
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
-from .models import Profile, Housing, HousingImage, Reservation
+from .models import Profile, Housing, HousingImage, Reservation, Favourite
 
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Profile
-        fields = ['url', 'email', 'password', 'first_name', 'last_name']
+        fields = [
+            'url',
+            'email',
+            'password',
+            'first_name',
+            'last_name',
+            'balance',
+            'image',
+        ]
         extra_kwargs = {
             'password': {'write_only': True},
             'otp': {'read_only': True}
@@ -23,7 +31,7 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 class CurrentProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['id', 'email', 'first_name', 'last_name']
+        fields = ['id', 'email', 'first_name', 'last_name', 'balance', 'image']
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
@@ -31,7 +39,6 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
                                      validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
     old_password = serializers.CharField(write_only=True, required=True)
-    # email = serializers.EmailField('email address', unique=True)
 
     class Meta:
         model = Profile
@@ -76,8 +83,34 @@ class HousingSerializer(serializers.HyperlinkedModelSerializer):
                   'house_owner_name',
                   'price',
                   'rating',
+                  'num_ratings',
                   'description',
                   'image']
+        extra_kwargs = {
+            'rating': {'decimal_places': 0}
+        }
+
+
+class HousingIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Housing
+        fields = ['url',
+                  'house_id',
+                  'city',
+                  'street',
+                  'street_number',
+                  'floor',
+                  'door',
+                  'house_dimension',
+                  'house_owner',
+                  'house_owner_name',
+                  'price',
+                  'rating',
+                  'description',
+                  'image']
+        extra_kwargs = {
+            'rating': {'decimal_places': 0}
+        }
 
 
 class HousingImageSerializer(serializers.HyperlinkedModelSerializer):
@@ -92,7 +125,29 @@ class ReservationSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['housing', 'start_date', 'end_date']
 
 
+class DetailedReservationSerializer(serializers.ModelSerializer):
+    housing = HousingIdSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = Reservation
+        fields = ['housing', 'start_date', 'end_date']
+
+
 class CustomerReservationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Reservation
         fields = ['housing', 'customer', 'start_date', 'end_date']
+
+
+class FavouriteSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Favourite
+        fields = ['user', 'housing']
+
+
+class DetailedFavouriteSerializer(serializers.ModelSerializer):
+    housing = HousingIdSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = Favourite
+        fields = ['user', 'housing']

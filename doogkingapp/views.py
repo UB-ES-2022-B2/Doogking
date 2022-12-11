@@ -1,4 +1,5 @@
 from django.core.exceptions import PermissionDenied
+from django.core.exceptions import ValidationError
 from rest_framework import viewsets
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
@@ -7,13 +8,16 @@ from rest_framework import permissions
 from .permissions import IsOwnerOfProfile
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from .models import Profile, Housing, HousingImage, Reservation
+from .models import Profile, Housing, HousingImage, Reservation, Favourite
 from .serializers import ProfileSerializer, \
     CurrentProfileSerializer, \
     HousingSerializer, \
     HousingImageSerializer, \
     ReservationSerializer, \
+    DetailedReservationSerializer, \
     CustomerReservationSerializer, \
+    FavouriteSerializer, \
+    DetailedFavouriteSerializer, \
     ChangePasswordSerializer
 import secrets
 import requests
@@ -29,6 +33,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action == 'create':
             permission_classes = [permissions.AllowAny]
+        elif self.action == 'list':
+            permission_classes = [permissions.IsAdminUser]
         else:
             permission_classes = [
                 permissions.IsAdminUser | IsOwnerOfProfile
@@ -129,7 +135,7 @@ class ReservationViewSet(viewsets.ModelViewSet):
         if self.action == 'create':
             return CustomerReservationSerializer
         else:
-            return ReservationSerializer
+            return DetailedReservationSerializer
 
     def get_queryset(self):
         queryset = Reservation.objects.all()
@@ -163,6 +169,57 @@ class ReservationViewSet(viewsets.ModelViewSet):
                     "You can't access other customers reservations!"
                 )
         return queryset
+
+
+class FavouriteViewSet(viewsets.ModelViewSet):
+    queryset = Favourite.objects.all()
+    serializer_class = FavouriteSerializer
+
+    @action(detail=False, methods=['GET'])
+    def select(self, request, user_id=None):
+        queryset = Favourite.objects.filter(user__id=user_id)
+        serializer = DetailedFavouriteSerializer(
+            queryset,
+            many=True,
+            context={'request': request}
+        )
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['DELETE'])
+    def delete(self, request):
+        user_id = request.data['user']
+        housing_id = request.data['housing']
+        self.queryset.filter(user__id=user_id, housing_id=housing_id).delete()
+
+        return Response({"message": "Successfully removed from favourites"})
+
+    def get_permissions(self):
+        permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+
+class UpdateHousingRating(APIView):
+    queryset = Housing.objects.all()
+    url_kwargs = "housing_id"
+
+    def post(self, request, housing_id):
+        new_rating = request.data['rating']
+        housing = self.queryset.get(house_id=housing_id)
+
+        if housing:
+            mean = (housing.rating +
+                    (new_rating - housing.rating)/(housing.num_ratings+1))
+            housing.rating = mean
+            housing.num_ratings += 1
+            housing.save()
+
+            return Response({
+                "message": "Rating successfully updated!",
+                "rating": housing.rating
+            })
+
+        else:
+            return Response({"message": "Could not update rating"}, 500)
 
 
 class ResetView(APIView):
@@ -210,8 +267,11 @@ class ObtainAuthTokenUser(ObtainAuthToken):
         user = Profile.objects.get(id=token.user_id)
         return Response(
             {'token': token.key,
-             'profile': CurrentProfileSerializer(user).data}
-            )
+             'profile': CurrentProfileSerializer(
+                user,
+                context={'request': request}
+                ).data}
+        )
 
 
 class UploaderView(APIView):
@@ -230,55 +290,23 @@ class UploaderView(APIView):
         return Response({"message": "success", "uploaded_name": file.name})
 
 
-'''class ChangePasswordView(UpdateAPIView):
-
-    queryset = Profile.objects.all()
-    permission_classes = (IsAuthenticated,)
-    serializer_class = ChangePasswordSerializer
-    def post(self,request,id):
-        user = Profile.objects.get(id=id)
-        request_pass = request.data['password']
-        user.set_password(request_pass)
-        user.save()
-        return Response({"message": "Password successfully changed!"})
-'''
-
-
 class ChangePasswordView(UpdateAPIView):
-    """
-    An endpoint for changing password.
-    """
+    queryset = Profile.objects.all()
+    permission_classes = [permissions.AllowAny]
     serializer_class = ChangePasswordSerializer
-    model = Profile
 
-    # permission_classes = [permissions.IsAuthenticated]
+    def post(self, request):
+        email = request.data['email']
+        old_pass = request.data['old_password']
+        new_pass = request.data['new_password']
+        new_pass2 = request.data['new_password2']
 
-    def get_permissions(self):
-
-        permission_classes = [permissions.IsAuthenticated]
-        return [permission() for permission in permission_classes]
-
-    def get_object(self, queryset=None):
-        obj = self.request.user
-        return obj
-
-    def update(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        serializer = self.get_serializer(data=request.data)
-
-        if serializer.is_valid():
-            # Check old password
-            # if not self.object.check_password(
-            # serializer.data.get("old_password")):
-            #       return Response({"old_password": ["Wrong password."]})
-            # set_password also hashes the password that the user will get
-            self.object.set_password(serializer.data.get("new_password"))
-            self.object.save()
-            response = {
-                'status': 'success',
-                'code': 'HTTP_200_OK',
-                'message': 'Password updated successfully',
-                'data': []
-            }
-
-            return Response(response)
+        user = Profile.objects.get(email=email)
+        if not user.check_password(old_pass):
+            raise ValidationError({"old_password": ["Wrong password."]})
+        if secrets.compare_digest(new_pass, new_pass2):
+            user.set_password(new_pass)
+            user.save()
+            return Response({"message": "Password successfully changed!"})
+        else:
+            raise ValidationError("No matching passwords")

@@ -14,6 +14,10 @@ import PrivacyPolicy from '../components/PrivacyPolicy'
 import AboutUs from '../components/AboutUs'
 import MyHouseDetails from '../components/MyHouseDetails'
 import HouseRegistry from '../components/HouseRegistry'
+import ChangePassword from '../components/ChangePassword'
+import MyReservationDetails from '../components/MyReservationDetails'
+import MyReservedDetails from '../components/MyReservedDetails'
+import Payment from '../components/Payment'
 
 Vue.use(Router)
 
@@ -67,6 +71,16 @@ export default new Router({
       component: HouseDetails
     },
     {
+      path: '/myReservationDetails',
+      name: 'MyReservationDetails',
+      component: MyReservationDetails
+    },
+    {
+      path: '/myReservedDetails',
+      name: 'MyReservedDetails',
+      component: MyReservedDetails
+    },
+    {
       path: '/myHouseDetails',
       name: 'MyHouseDetails',
       component: MyHouseDetails
@@ -82,9 +96,19 @@ export default new Router({
       component: AboutUs
     },
     {
-      path: '/HouseRegistry',
+      path: '/houseRegistry',
       name: 'HouseRegistry',
       component: HouseRegistry
+    },
+    {
+      path: '/changePassword',
+      name: 'ChangePassword',
+      component: ChangePassword
+     },
+     {
+      path: '/payment',
+      name: 'Payment',
+      component: Payment
     }
   ]
 })

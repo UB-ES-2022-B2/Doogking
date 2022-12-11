@@ -45,6 +45,12 @@
               <h5 class="text-center" style="margin-top: 1.5em;">{{ house.city}}</h5>
               <a class="text-center" style="text-decoration: none; font-size: 15px; color: #a0a0a0;">{{house.street}}, {{house.street_number}}, {{house.floor}}, {{house.door}}, {{house.house_dimension}}</a>
               <Toast/>
+              <span id="favContainer" v-if="house.url === 'favorite'">
+                  <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="removeFavorite(house.house_id), house.url = 'not favorite'" class="p-button-rounded"/>
+                </span>
+              <span id="favContainer" v-else>
+                  <Button id="favButtonGrid" icon="pi pi-heart" @click="addHouseToFavorites(house.house_id), house.url = 'favorite'" class="p-button-rounded"/>
+                </span>
               <Tag id="tagHost" :value="house.house_owner_name" icon="pi pi-user" style="color: white; background-color: #2A323D"></Tag>
               <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
                 <div class="field">
@@ -55,13 +61,30 @@
                     <div id="fieldRow" style="margin-right: 1em">
                       <span id="priceContainer" class="text font-semibold"><a>{{house.price}}€</a> day</span>
                     </div>
-                    <div id="fieldRow" style="margin-top: 0.5em;position:absolute;right: 1em;">
-                      <Rating :value="house.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating"></Rating>
+                    <div v-if="logged">
+                      <div id="fieldRow" style="margin-top: 0.5em;position:absolute;right: 39.5%;" v-if="changingRating">
+                        <Rating id="yourRating" v-model="yourRating" :stars="5"/>
+                      </div>
+                      <div id="fieldRow" style="margin-top: 0.5em;position:absolute;right: 39.5%;" v-else>
+                        <Rating id="houseRating" :value="house.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating"></Rating>
+                      </div>
+                      <ToggleButton v-model="changingRating" onLabel="Add rating" offLabel="Change rating" onIcon="pi pi-send" offIcon="pi pi-pencil" style="width: 10em; position:absolute;right: 1vw; margin-top: -0.2em;" />
+                    </div>
+                    <div id="fieldRow" style="margin-top: 0.5em;position:absolute;right: 1em;" v-else>
+                      <Rating id="houseRating" :value="house.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating"></Rating>
                     </div>
                   </div>
                 </div>
                 <div class="field">
                   <hr style="margin-top: -1em;" class="solid"/>
+                </div>
+                <div id="dateContainer">
+                  <div id="date" class="field">
+                    <Tag id="tagCheckIn" :value="'Check-in date:  ' + start_date" icon="pi pi-arrow-right" style="padding: 0.8em; color: white; background-color: #2A323D; position:absolute; left: 6vw;"></Tag>
+                  </div>
+                  <div id="date" class="field">
+                    <Tag id="tagCheckIn" :value="'Check-out date:  ' + end_date" icon="pi pi-arrow-left" style="padding: 0.8em; color: white; background-color: #2A323D; position:absolute; right: 6vw;"></Tag>
+                  </div>
                 </div>
                 <div class="field" style="margin-top:-0.2em;">
                   <Accordion :multiple="true" :activeIndex="[0]">
@@ -109,9 +132,14 @@ export default {
       dates2: null,
       totalPrice: 0,
       validInDate: true,
+      yourRating: 0,
+      changingRating: false,
       validOutDate: true,
       loaderActive: false,
       userId: null,
+      start_date: null,
+      end_date: null,
+      myFavorites: [],
       showSuccessMessage: false,
       showErrorMessage: false,
       showLoginMessage: false,
@@ -142,13 +170,34 @@ export default {
       ]
     }
   },
+  watch: {
+    changingRating () {
+      if (this.changingRating === false) {
+        if (this.yourRating === null) {
+          this.yourRating = 0
+        }
+        this.addRating()
+        this.getHouse()
+      }
+    }
+  },
   methods: {
     getHouse () {
       const headers = {'Access-Control-Allow-Origin': '*'}
       const pathHouses = 'https://doogking.azurewebsites.net/api/housing/' + this.house_id + '/'
       axios.get(pathHouses, headers)
-        .then(response => (this.house = response.data))
+        .then((response) => {
+          this.house = response.data
+          var found = false
+          for (let j = 0; j < this.myFavorites.length && found === false; j++) {
+            if (this.house.house_id === this.myFavorites[j].housing.house_id) {
+              this.house.url = 'favorite'
+              found = true
+            }
+          }
+        })
         .catch((error) => {
+          alert(error)
           this.error = error
           this.showHouseMessage = true
         })
@@ -157,6 +206,105 @@ export default {
       const headers = {'Access-Control-Allow-Origin': '*'}
       const pathImageHouses = 'https://doogking.azurewebsites.net/api/housing_images/housing/' + this.house_id + '/'
       axios.get(pathImageHouses, headers).then(response => (this.houseImages = response.data))
+    },
+    getUserFavorites () {
+      var config = {
+        method: 'get',
+        url: 'https://doogking.azurewebsites.net/api/profiles/favourites/' + this.userId + '/',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Authorization': 'Token ' + this.token
+        }
+      }
+      axios(config)
+        .then((response) => {
+          this.myFavorites = response.data
+          this.getHouse()
+        })
+        .catch((error) => {
+          this.error = error
+        })
+    },
+    // eslint-disable-next-line camelcase
+    removeFavorite (house_id) {
+      if (this.logged === false) {
+        this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites.', life: 2000})
+      } else {
+        var data = JSON.stringify({
+          // eslint-disable-next-line camelcase
+          'housing': house_id,
+          'user': this.userId
+        })
+        var config = {
+          method: 'delete',
+          url: 'https://doogking.azurewebsites.net/api/favourites/',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Token ' + this.token,
+            'Content-Type': 'application/json'
+          },
+          data: data
+        }
+        axios(config)
+          .then((response) => {
+            this.$toast.add({severity: 'info', summary: 'Favorite', detail: 'House removed from your list of favorites.', life: 3000})
+          })
+          .catch((error) => {
+            this.error = error
+          })
+      }
+    },
+    addRating () {
+      var data = JSON.stringify({
+        // eslint-disable-next-line camelcase
+        'rating': this.yourRating
+      })
+      var config = {
+        method: 'post',
+        url: 'https://doogking.azurewebsites.net/api/housing_rating/' + this.house_id + '/',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Authorization': 'Token ' + this.token,
+          'Content-Type': 'application/json'
+        },
+        data: data
+      }
+      axios(config)
+        .then((response) => {
+          this.$toast.add({severity: 'info', summary: 'Rating', detail: 'Your rating has been successfully uploaded!', life: 3000})
+        })
+        .catch((error) => {
+          this.error = error
+        })
+    },
+    // eslint-disable-next-line camelcase
+    addHouseToFavorites (house_id) {
+      if (this.logged === false) {
+        this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites', life: 2000})
+      } else {
+        var data = JSON.stringify({
+          // eslint-disable-next-line camelcase
+          'housing': 'https://doogking.azurewebsites.net/api/housing/' + house_id + '/',
+          'user': 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/'
+        })
+        var config = {
+          method: 'post',
+          url: 'https://doogking.azurewebsites.net/api/favourites/',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Token ' + this.token,
+            'Content-Type': 'application/json'
+          },
+          data: data
+        }
+        axios(config)
+          .then((response) => {
+            this.$toast.add({severity: 'info', summary: 'Favorite', detail: 'House added to your favorites list. You can see it in you profile', life: 3000})
+          })
+          .catch((error) => {
+            this.error = error
+          })
+      }
     },
     goToLogin () {
       // eslint-disable-next-line standard/object-curly-even-spacing
@@ -188,25 +336,33 @@ export default {
         this.resetForm()
         this.goToHomepage()
       }
-    }
-  },
-  mounted () {
-    if (localStorage.username) {
-      this.logged = true
-      this.username = localStorage.username
-    }
-    if (localStorage.userId) {
-      this.userId = localStorage.userId
-    }
-    if (localStorage.token) {
-      this.token = localStorage.token
-    }
-    if (localStorage.email) {
-      this.email = localStorage.email
+    },
+    loadLocalStorage () {
+      if (localStorage.username) {
+        this.logged = true
+        this.username = localStorage.username
+      }
+      if (localStorage.userId) {
+        this.userId = localStorage.userId
+      }
+      if (localStorage.token) {
+        this.token = localStorage.token
+      }
+      if (localStorage.email) {
+        this.email = localStorage.email
+      }
+      if (localStorage.start_date) {
+        this.start_date = localStorage.start_date
+      }
+      if (localStorage.end_date) {
+        this.end_date = localStorage.end_date
+        this.getUserFavorites()
+      }
     }
   },
   created () {
     this.house_id = this.$route.query.house_id
+    this.loadLocalStorage()
     this.getHouse()
     this.getHouseImages()
     this.showLoader()
@@ -224,6 +380,15 @@ export default {
 }
 
 .houseDetails {
+  flex: 1;
+}
+
+#dateContainer {
+  display: flex;
+  margin-bottom: 2em;
+}
+
+#date {
   flex: 1;
 }
 

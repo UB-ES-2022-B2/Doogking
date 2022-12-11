@@ -1,8 +1,52 @@
 <template>
   <div class="flex-wrapper">
     <Header></Header>
+    <Dialog :visible="showSuccessMessage" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
+      <div class="flex align-items-center flex-column pt-6 px-3">
+        <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--green-500)' }"></i>
+        <h5 style="margin-top: 1em">Posted House Successful!</h5>
+        <p style="text-align: center">
+          Your house has been posted. Now other users can rent it!
+        </p>
+      </div>
+      <template #footer>
+        <div class="flex justify-content-center">
+          <Button label="OK" @click="toggleDialogSuccess" class="p-button-text" />
+        </div>
+      </template>
+    </Dialog>
+    <Dialog :visible="showErrorMessage" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
+      <div class="flex align-items-center flex-column pt-6 px-3">
+        <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
+        <h5 style="margin-top: 1em">Posted House Error!</h5>
+        <p style="text-align: center">
+          Please enter a valid house/images.
+        </p>
+      </div>
+      <template #footer>
+        <div class="flex justify-content-center">
+          <Button label="OK" @click="toggleDialogError" class="p-button-text" />
+        </div>
+      </template>
+    </Dialog>
+    <Dialog :visible="showImagesMessage" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
+      <div class="flex align-items-center flex-column pt-6 px-3">
+        <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
+        <h5 style="margin-top: 1em">Missing images!</h5>
+        <p style="text-align: center">
+          You have to upload at least one image before submitting your new house.
+        </p>
+      </div>
+      <template #footer>
+        <div class="flex justify-content-center">
+          <Button label="OK" @click="toggleDialogImages" class="p-button-text" />
+        </div>
+      </template>
+    </Dialog>
     <div id="app">
-      <h2 style="color:white; margin-bottom: 40px; margin-left: 165px" class="d-flex justify-content-start">Hey {{username}}! Start listing your place</h2>
+      <h5 style="color:white; margin-left: 165px" class="d-flex justify-content-start">Hey {{username}}! Start listing your place</h5>
+      <hr style="width:24.3vw; color: white; margin-bottom: 40px; margin-left: 165px" class="solid"/>
+      <h6 class="font-italic" style="color:white; margin-bottom: 5px; margin-right: 135px">To post a house, please upload your chosen images, then click on the upload button and then fill the house details</h6>
       <div class="body">
         <div class="d-flex flex-row">
           <div class="p-2" style="margin-left:150px">
@@ -15,45 +59,45 @@
               </template>
             </FileUpload>
           </div>
-            <div class="p-2" style="width:500px">
-              <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
-                <div class="field">
-                  <div class="p-float-label">
+          <div class="p-2" style="width:500px">
+            <form class="p-fluid">
+              <div class="field">
+                <div class="p-float-label">
                     <span class="p-float-label">
                       <InputText id="street" type="text" class="form-control" v-model="addUserForm.street" aria-describedby="inputGroupPrepend2" placeholder="Street" />
                     </span>
-                    <h1></h1>
-                    <span class="p-float-label" style="margin-right:30px">
+                  <h1></h1>
+                  <span class="p-float-label" style="margin-right:30px">
                       <InputText id="street number" type="text" autofocus v-model="addUserForm.street_number" aria-describedby="inputGroupPrepend2" style="width:130px" placeholder="Street Number"/>
                       <InputText id="floor" type="text" v-model="addUserForm.floor" aria-describedby="inputGroupPrepend2" style="width:80px" placeholder="Floor"/>
                       <InputText id="door" type="text" v-model="addUserForm.door" aria-describedby="inputGroupPrepend2" style="width:80px" placeholder="Door"/>
                       <InputText id="house_dimension" type="text" v-model="addUserForm.house_dimension" aria-describedby="inputGroupPrepend2" style="width:150px" placeholder="House Dimension"/>
                     </span>
-                    <h1></h1>
+                  <h1></h1>
                   <div class="p-float-label">
-                    <InputText id="city" type="text" v-model="value" placeholder="City" />
+                    <InputText id="city" type="text" class="form-control" v-model="addUserForm.city" aria-describedby="inputGroupPrepend2" placeholder="City" />
                   </div>
-                    <h1></h1>
-                    <span class="p-float-label">
-                <InputText id="price" type="number" class="form-control" v-model="addUserForm.price" aria-describedby="inputGroupPrepend2" placeholder="Price per day" />
+                  <h1></h1>
+                  <span class="p-float-label">
+                <InputText id="price" type="number" class="form-control" v-model="addUserForm.price_per_day" aria-describedby="inputGroupPrepend2" placeholder="Price per day" />
               </span>
-                    <h1></h1>
-                    <span class="p-float-label">
+                  <h1></h1>
+                  <span class="p-float-label">
                 <InputText id="description" type="text" class="form-control" v-model="addUserForm.desciption" aria-describedby="inputGroupPrepend2" style="height:100px" placeholder="Description"/>
               </span>
-                    <h1></h1>
-                    <div class="btn-group">
-                      <div class="field">
-                        <Button id="submitButton" type="submit" label="Submit" @click='goPostHouse' class="mt-2" style="width:200px"/>
-                      </div>
+                  <h1></h1>
+                  <div class="btn-group">
+                    <div class="field">
+                      <Button id="submitButton" type="button" label="Submit" @click='goPostHouse($event)' class="mt-2" style="width:200px"/>
                     </div>
                   </div>
                 </div>
-              </form>
-            </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
+    </div>
     <Footer id="footer"></Footer>
   </div>
 </template>
@@ -75,10 +119,11 @@ export default {
       logged: null,
       username: null,
       email: null,
-      user_id: null,
+      userId: null,
       token: null,
       street: null,
       street_number: null,
+      uploadedFiles: false,
       floor: null,
       door: null,
       house_dimension: null,
@@ -86,7 +131,14 @@ export default {
       house_owner_name: null,
       price_per_day: null,
       desciption: null,
+      numHouses: null,
+      house_id: null,
+      images: [],
+      showSuccessMessage: false,
+      showErrorMessage: false,
+      showImagesMessage: false,
       addUserForm: {
+        city: null,
         street: null,
         street_number: null,
         floor: null,
@@ -99,53 +151,125 @@ export default {
   },
   methods: {
     goPostHouse () {
-      var data = JSON.stringify({
-        'street': this.addUserForm.street,
-        'street_number': this.addUserForm.street_number,
-        'floor': this.addUserForm.floor,
-        'door': this.addUserForm.door,
-        'house_dimension': this.addUserForm.house_dimension,
-        'house_owner': 'https://doogking.azurewebsites.net/api/profile/' + this.user_id + '/',
-        'house_owner_name': this.username,
-        'price_per_day': this.addUserForm.price_per_day,
-        'desciption': this.addUserForm.desciption
-      })
-      var config = {
-        method: 'post',
-        url: 'https://doogking.azurewebsites.net/api/housing/' + this.user_id + '/',
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Authorization': 'Token ' + this.token,
-          'Content-Type': 'application/json'
-        },
-        data: data
+      if (this.uploadedFiles === false) {
+        this.showImagesMessage = true
+      } else {
+        var data = JSON.stringify({
+          'city': this.addUserForm.city,
+          'street': this.addUserForm.street,
+          'street_number': this.addUserForm.street_number,
+          'floor': this.addUserForm.floor,
+          'door': this.addUserForm.door,
+          'house_dimension': this.addUserForm.house_dimension,
+          'price': this.addUserForm.price_per_day,
+          'description': this.addUserForm.desciption,
+          'house_owner': 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/'
+        })
+        var config = {
+          method: 'post',
+          url: 'https://doogking.azurewebsites.net/api/housing/',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Token ' + this.token,
+            'Content-Type': 'application/json'
+          },
+          data: data
+        }
+        console.log('Token ' + this.token)
+        axios(config)
+          .then((res) => {
+            this.goPostHouseImage(res.data.house_id)
+            this.showSuccessMessage = true
+          })
+          .catch((response) => {
+            this.showErrorMessage = true
+          })
       }
-      console.log('Token ' + this.token)
-      axios(config)
-        .then(function (response) {
-        }).catch(function (response) {})
+    },
+    goPostHouseImage (houseId) {
+      for (let i = 0; i < this.images.length; i++) {
+        const formData = new FormData()
+        formData.append('housing', 'https://doogking.azurewebsites.net/api/housing/' + houseId + '/')
+        formData.append('index', i)
+        formData.append('image', this.images[i])
+        var config = {
+          method: 'post',
+          url: 'https://doogking.azurewebsites.net/api/housing_images/',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Token ' + this.token,
+            'Content-Type': 'multipart/form-data'
+          },
+          data: formData
+        }
+        console.log('Token ' + this.token)
+        axios(config)
+          .then((response) => {
+            this.showSuccessMessage = true
+          }).catch(function (response) {})
+      }
     },
     myUploader (event) {
-      alert(event.files[0].objectURL)
-      const formData = new FormData()
-      formData.append('file', event.files[0])
-      axios
-        .post('http://localhost:8000/api/upload/', formData)
-        .then(() => {
-          console.log('SUCCESS')
-        })
-      this.$toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 })
+      this.uploadedFiles = true
+      for (let i = 0; i < event.files.length; i++) {
+        this.images.push(event.files[i])
+      }
+    },
+    getNumHouses () {
+      const headers = {'Access-Control-Allow-Origin': '*'}
+      const pathHouses = 'https://doogking.azurewebsites.net/api/housing/'
+      const promise = axios.get(pathHouses, headers)
+      Promise.resolve(promise).then((value) => (this.numHouses = value.data.length))
+    },
+    toggleDialogSuccess () {
+      this.showSuccessMessage = !this.showSuccessMessage
+      if (!this.showSuccessMessage) {
+        this.$router.push({ path: '/' })
+        this.resetForm()
+      }
+    },
+    toggleDialogError () {
+      this.showErrorMessage = !this.showErrorMessage
+      if (!this.showErrorMessage) {
+        this.resetForm()
+      }
+    },
+    toggleDialogImages () {
+      this.showImagesMessage = !this.showImagesMessage
+      if (!this.showImagesMessage) {
+        this.resetForm()
+      }
+    },
+    resetForm () {
+      this.addUserForm.street = ''
+      this.addUserForm.street_number = ''
+      this.addUserForm.floor = ''
+      this.addUserForm.door = ''
+      this.addUserForm.house_dimension = ''
+      this.addUserForm.city = ''
+      this.addUserForm.price_per_day = ''
+      this.addUserForm.desciption = ''
+      this.submitted = false
+    }
+  },
+  mounted () {
+    if (localStorage.username) {
+      this.logged = true
+      this.username = localStorage.username
+    }
+    if (localStorage.userId) {
+      this.userId = localStorage.userId
+    }
+    if (localStorage.token) {
+      this.token = localStorage.token
+    }
+    if (localStorage.email) {
+      this.email = localStorage.email
     }
   },
   created () {
-    this.logged = this.$route.query.logged === 'true'
-    this.username = this.$route.query.username
-    this.email = this.$route.query.email
-    this.user_id = this.$route.query.user_id
-    this.token = this.$route.query.token
-    if (this.logged === undefined) {
-      this.logged = false
-    }
+    this.house_id = this.$route.query.house_id
+    this.getNumHouses()
   }
 }
 </script>
