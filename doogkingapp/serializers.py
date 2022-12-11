@@ -87,6 +87,9 @@ class HousingSerializer(serializers.HyperlinkedModelSerializer):
                   'num_ratings',
                   'description',
                   'image']
+        extra_kwargs = {
+            'rating': {'decimal_places': 0}
+        }
 
 
 class HousingIdSerializer(serializers.ModelSerializer):
@@ -106,6 +109,9 @@ class HousingIdSerializer(serializers.ModelSerializer):
                   'rating',
                   'description',
                   'image']
+        extra_kwargs = {
+            'rating': {'decimal_places': 0}
+        }
 
 
 class HousingImageSerializer(serializers.HyperlinkedModelSerializer):
