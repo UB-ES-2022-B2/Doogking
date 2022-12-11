@@ -100,7 +100,7 @@
                     </figcaption>
                   </div>
                   <span id="favContainer" v-if="slotProps.data.housing.url === 'favorite'">
-                    <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="removeFavorite(slotProps.data.house_id)" class="p-button-rounded"/>
+                    <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="removeFavorite(slotProps.data.housing.house_id), slotProps.data.housing.url = 'not favorite'" class="p-button-rounded"/>
                   </span>
                   <span id="favContainer" v-else>
                     <Button id="favButtonGrid" icon="pi pi-heart" @click="addHouseToFavorites(slotProps.data.housing.house_id), slotProps.data.housing.url = 'favorite'" class="p-button-rounded"/>
@@ -143,7 +143,7 @@
                   </figcaption>
                 </div>
                 <span id="favContainer" v-if="slotProps.data.housing.url === 'favorite'">
-                  <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="removeFavorite(slotProps.data.house_id)" class="p-button-rounded"/>
+                  <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="removeFavorite(slotProps.data.housing.house_id), slotProps.data.housing.url = 'not favorite'" class="p-button-rounded"/>
                 </span>
                 <span id="favContainer" v-else>
                   <Button id="favButtonGrid" icon="pi pi-heart" @click="addHouseToFavorites(slotProps.data.housing.house_id), slotProps.data.housing.url = 'favorite'" class="p-button-rounded"/>
@@ -362,6 +362,35 @@ export default {
           this.myFavorites = null
           this.error = error
         })
+    },
+    // eslint-disable-next-line camelcase
+    removeFavorite (house_id) {
+      if (this.logged === false) {
+        this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites.', life: 2000})
+      } else {
+        var data = JSON.stringify({
+          // eslint-disable-next-line camelcase
+          'housing': house_id,
+          'user': this.userId
+        })
+        var config = {
+          method: 'delete',
+          url: 'https://doogking.azurewebsites.net/api/favourites/',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Token ' + this.token,
+            'Content-Type': 'application/json'
+          },
+          data: data
+        }
+        axios(config)
+          .then((response) => {
+            this.$toast.add({severity: 'info', summary: 'Favorite', detail: 'House removed from your list of favorites.', life: 3000})
+          })
+          .catch((error) => {
+            this.error = error
+          })
+      }
     },
     // eslint-disable-next-line camelcase
     addHouseToFavorites (house_id) {
