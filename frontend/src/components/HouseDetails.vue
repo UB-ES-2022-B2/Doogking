@@ -91,8 +91,17 @@
                     <div id="fieldRow" style="margin-right: 1em">
                       <span id="priceContainer" class="text font-semibold"><a>{{house.price}}€</a> day</span>
                     </div>
-                    <div id="fieldRow" style="margin-top: 0.5em;position:absolute;right: 1em;">
-                      <Rating :value="house.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating"></Rating>
+                    <div v-if="logged">
+                      <div id="fieldRow" style="margin-top: 0.5em;position:absolute;right: 40%;" v-if="changingRating">
+                        <Rating id="yourRating" v-model="yourRating" :stars="5"/>
+                      </div>
+                      <div id="fieldRow" style="margin-top: 0.5em;position:absolute;right: 40%;" v-else>
+                        <Rating id="houseRating" :value="house.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating"></Rating>
+                      </div>
+                      <ToggleButton v-model="changingRating" onLabel="Add rating" offLabel="Change rating" onIcon="pi pi-send" offIcon="pi pi-pencil" style="width: 10em; position:absolute;right: 1vw; margin-top: -0.2em;" />
+                    </div>
+                    <div id="fieldRow" style="margin-top: 0.5em;position:absolute;right: 1em;" v-else>
+                      <Rating id="houseRating" :value="house.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating"></Rating>
                     </div>
                   </div>
                 </div>
@@ -178,9 +187,11 @@ export default {
       checkInDate: null,
       checkOutDate: null,
       dates2: null,
+      yourRating: 0,
       numberOfDays: 0,
       totalPrice: 0,
       validInDate: true,
+      changingRating: true,
       validOutDate: true,
       loaderActive: false,
       userId: null,
