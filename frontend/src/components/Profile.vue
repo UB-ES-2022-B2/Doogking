@@ -20,7 +20,7 @@
         <div class="body">
           <div class="d-flex flex-row" style="margin-left:9vw; box-sizing: border-box; border: 1px solid var(--surface-border); border-radius: 3px; height: 18vw; width: 80vw">
             <div class="p-2" style="margin-left:50px">
-              <img class="mx-auto rounded-circle" src="@/assets/avatar.png" style="margin-top: 1vw; width:200px">
+              <img class="mx-auto rounded-circle" :src="profileImage" style="margin-top: 1vw; width:200px">
             </div>
             <div class="p-2" style="margin-right:200px; margin-top: 1vw; ">
               <div class="info-containter" >
