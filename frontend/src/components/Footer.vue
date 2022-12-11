@@ -21,11 +21,11 @@
         <div class="footer-col">
           <h4>Housing</h4>
           <ul>
-            <li><a href="#" @click="addHouse" id="goToAddHouse">House Registry</a></li>
-            <li><a href="#" @click="goToProfile" id="goToHouses" v-if="logged" >Your houses</a></li>
+            <li><a href="#" @click="addHouse" id="goToAddHouse" v-if="logged">House Registry</a></li>
+            <li><a href="#" @click="goToProfile" id="goToHouses" v-if="logged">Your houses</a></li>
             <li><a href="#" @click="goToProfile" id="goToFavorites" v-if="logged" >Favorites</a></li>
-            <li><a href="#" @click="goToProfile" id="goToReservations" v-if="logged" >Your reservations</a></li>
-            <li><a href="#" @click="goToProfile" id="goToReserved" v-if="logged" >Your reserved houses</a></li>
+            <li><a href="#" @click="goToProfile" id="goToReservations" v-if="logged">Your reservations</a></li>
+            <li><a href="#" @click="goToProfile" id="goToReserved" v-if="logged">Your reserved houses</a></li>
           </ul>
         </div>
         <div class="footer-col">
