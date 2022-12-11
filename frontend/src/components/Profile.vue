@@ -345,7 +345,6 @@ export default {
         .then((response) => {
           this.myFavorites = response.data
           this.myFavoritesLength = this.myFavorites.length
-          alert(this.myFavoritesLength)
           if (response.data.length === 0) {
             this.myFavorites = null
           } else if (response.data.length === 1) {
