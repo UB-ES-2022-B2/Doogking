@@ -155,6 +155,14 @@ class FavouriteViewSet(viewsets.ModelViewSet):
         )
         return Response(serializer.data)
 
+    @action(detail=False, methods=['DELETE'])
+    def delete(self, request):
+        user_id = request.data['user']
+        housing_id = request.data['housing']
+        self.queryset.filter(user__id=user_id, housing_id=housing_id).delete()
+
+        return Response({"message": "Successfully removed from favourites"})
+
     def get_permissions(self):
         permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
