@@ -39,7 +39,6 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
                                      validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
     old_password = serializers.CharField(write_only=True, required=True)
-    # email = serializers.EmailField('email address', unique=True)
 
     class Meta:
         model = Profile

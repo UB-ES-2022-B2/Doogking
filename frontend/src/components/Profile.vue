@@ -28,11 +28,9 @@
                 <hr style="width:15vw; color: white;" class="solid"/>
                 <div class="about-me"><h7>About me:</h7></div>
                 <div class="row">
-                  <div class="col"><fa :icon="['fas', 'star']"/>      34 reviews</div>
-                  <div class="w-100"></div>
                   <div class="col"><fa :icon="['fas', 'envelope']"/>          {{email}}</div>
                   <div class="w-100"></div>
-                  <div class="col"><fa :icon="['fas', 'house']"/>       4</div>
+                  <div class="col"><fa :icon="['fas', 'house']"/>       {{numHouses}}</div>
                 </div>
               </div>
             </div>
@@ -239,7 +237,9 @@ export default {
       loaderActive: false,
       userId: null,
       token: null,
-      showLoginMessage: false
+      showLoginMessage: false,
+      profileImage: null,
+      numHouses: null
     }
   },
   methods: {
@@ -330,6 +330,12 @@ export default {
           this.myReservedHouses = null
           this.error = error
         })
+    },
+    getNumHouses () {
+      const headers = {'Access-Control-Allow-Origin': '*'}
+      const pathHouses = 'https://doogking.azurewebsites.net/api/housing/?owner=' + this.userId
+      const promise = axios.get(pathHouses, headers)
+      Promise.resolve(promise).then((value) => (this.numHouses = value.data.length))
     },
     getUserFavorites () {
       var config = {
@@ -462,6 +468,26 @@ export default {
         this.$router.push({path: '/'})
       }
     },
+    getProfileImage () {
+      // const pathHouses = 'http://127.0.0.1:8000/api/housing/'
+      var config = {
+        method: 'get',
+        url: 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Authorization': 'Token ' + this.token,
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+      console.log('Token ' + this.token)
+      axios(config)
+        .then(response => {
+          (this.profileImage = response.data.image)
+          console.log(this.profileImage)
+        })
+        .catch(function (response) {
+        })
+    },
     loadLocalStorage () {
       if (localStorage.username) {
         this.logged = true
@@ -490,6 +516,13 @@ export default {
     setTimeout(() => {
       this.hideLoader()
     }, 500)
+    if (localStorage.userId) {
+      this.userId = localStorage.userId
+    }
+    if (localStorage.token) {
+      this.token = localStorage.token
+    }
+    this.getProfileImage()
   }
 }
 </script>
