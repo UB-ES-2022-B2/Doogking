@@ -143,7 +143,7 @@ export default {
         'new_password2': this.newPassword2
       }
       var config = {
-        method: 'put',
+        method: 'post',
         url: 'https://doogking.azurewebsites.net/api/change-password/',
         headers: {
           'Access-Control-Allow-Origin': '*',
