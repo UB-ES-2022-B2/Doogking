@@ -35,7 +35,7 @@
           <div class="col-3 text-left">
             <h5>Price range per day: {{priceRangeValue}}</h5>
             <Slider id="priceRange" v-model="priceRangeValue" :step="5" :min="0" :max="500" :range="true"/>
-            <h9>Note: min: 0, max: 500</h9>
+            <h9>Note: min: 0, max: 500 TEST: {{checkInDate}}</h9>
           </div>
           <Divider id="gridDivider" v-if="layout=='grid'"></Divider>
         </template>
@@ -188,10 +188,27 @@ export default {
       this.maxPrice = this.priceRangeValue[1]
       // var pathHouses = 'http://127.0.0.1:8000/api/housing'
       var pathHouses = 'http://127.0.0.1:8000/api/housing/?min_price=' + this.minPrice + '&max_price=' + this.maxPrice
+      // Filter Cities
       if (this.selectedCities !== null) {
         for (let i = 0; i < this.selectedCities.length; i++) {
           pathHouses += '&city=' + this.selectedCities[i].name
         }
+      }
+      if (this.checkOutDate !== null && this.checkInDate !== null) {
+        // Check In
+        const checkInString = this.checkInDate.toString()
+        var checkIn = checkInString.substring(11, 15) + '-'
+        var month = checkInString.substring(4, 7)
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        checkIn += (months.indexOf(month) + 1).toLocaleString('en-US', {minimumIntegerDigits: 2}) + '-' +
+          this.checkInDate.substring(8, 10)
+        // Check Out
+        const checkOutString = this.checkInDate.toString()
+        var checkOut = checkOutString.substring(11, 15) + '-'
+        month = checkOutString.substring(4, 7)
+        checkOut += (months.indexOf(month) + 1).toLocaleString('en-US', {minimumIntegerDigits: 2}) + '-' +
+          this.checkInDate.substring(8, 10)
+        pathHouses += '&check_in=' + checkIn + '&check_out=' + checkOut
       }
       const headers = {'Access-Control-Allow-Origin': '*'}
       // const pathHouses = 'https://doogking.azurewebsites.net/api/housing/?min_price=22&max_price=30'
