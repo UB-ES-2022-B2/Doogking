@@ -331,13 +331,12 @@ export default {
           this.error = error
         })
     },
-
     getNumHouses () {
       const headers = {'Access-Control-Allow-Origin': '*'}
       const pathHouses = 'https://doogking.azurewebsites.net/api/housing/?owner=' + this.userId
       const promise = axios.get(pathHouses, headers)
       Promise.resolve(promise).then((value) => (this.numHouses = value.data.length))
-
+    },
     getUserFavorites () {
       var config = {
         method: 'get',
