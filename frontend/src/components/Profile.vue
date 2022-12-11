@@ -235,6 +235,7 @@ export default {
       numReserved: 0,
       myReservedHouses: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
       numFavorites: 0,
+      myFavoritesLength: 0,
       myFavorites: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
       loaderActive: false,
       userId: null,
@@ -296,7 +297,7 @@ export default {
           }
           for (let i = 0; i < this.myReservations.length; i++) {
             var found = false
-            for (let j = 0; j < this.myFavorites.length && found === false; j++) {
+            for (let j = 0; j < this.myFavoritesLength && found === false; j++) {
               if (this.myReservations[i].housing.house_id === this.myFavorites[j].housing.house_id) {
                 this.myReservations[i].housing.url = 'favorite'
                 found = true
@@ -343,6 +344,8 @@ export default {
       axios(config)
         .then((response) => {
           this.myFavorites = response.data
+          this.myFavoritesLength = this.myFavorites.length
+          alert(this.myFavoritesLength)
           if (response.data.length === 0) {
             this.myFavorites = null
           } else if (response.data.length === 1) {
@@ -353,7 +356,7 @@ export default {
             var thirdHouses = {'skeleton': true}
             this.myFavorites = response.data.concat(thirdHouses)
           }
-          for (let i = 0; i < this.myFavorites.length; i++) {
+          for (let i = 0; i < this.myFavoritesLength; i++) {
             this.myFavorites[i].housing.url = 'favorite'
           }
           this.getUserReservations()
