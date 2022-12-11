@@ -34,8 +34,8 @@
           </div>
           <div class="col-3 text-left">
             <h5>Price range per day: {{priceRangeValue}}</h5>
-            <Slider id="priceRange" v-model="priceRangeValue" :step="5" :min="0" :max="200" :range="true"/>
-            <h9>Note: min: 5, max: 200</h9>
+            <Slider id="priceRange" v-model="priceRangeValue" :step="5" :min="0" :max="500" :range="true"/>
+            <h9>Note: min: 0, max: 500</h9>
           </div>
           <Divider id="gridDivider" v-if="layout=='grid'"></Divider>
         </template>
@@ -113,7 +113,7 @@ export default {
       checkInDate: null,
       checkOutDate: null,
       selectedCities: null,
-      priceRangeValue: [5, 200],
+      priceRangeValue: [0, 500],
       minPrice: null,
       maxPrice: null,
       h: [],
@@ -183,9 +183,12 @@ export default {
       }
     },
     getHouses () {
-      // const pathHouses = 'http://127.0.0.1:8000/api/housing/'
+      this.minPrice = this.priceRangeValue[0]
+      this.maxPrice = this.priceRangeValue[1]
+      // var pathHouses = 'http://127.0.0.1:8000/api/housing'
+      var pathHouses = 'http://127.0.0.1:8000/api/housing/?min_price=' + this.minPrice + '&max_price=' + this.maxPrice
       const headers = {'Access-Control-Allow-Origin': '*'}
-      const pathHouses = 'https://doogking.azurewebsites.net/api/housing/'
+      // const pathHouses = 'https://doogking.azurewebsites.net/api/housing/?min_price=22&max_price=30'
       axios.get(pathHouses, headers).then(response => (this.houses = response.data))
     }
   },

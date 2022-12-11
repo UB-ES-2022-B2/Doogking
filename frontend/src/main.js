@@ -42,6 +42,7 @@ import Checkbox from 'primevue/checkbox'
 import SplitButton from 'primevue/splitbutton'
 import Carousel from 'primevue/carousel'
 import FileUpload from 'primevue/fileupload'
+import Slider from 'primevue/slider'
 
 library.add(fas, fab)
 Vue.component('fa', FontAwesomeIcon)
@@ -78,6 +79,7 @@ Vue.component('Checkbox', Checkbox)
 Vue.component('SplitButton', SplitButton)
 Vue.component('Carousel', Carousel)
 Vue.component('FileUpload', FileUpload)
+Vue.component('Slider', Slider)
 
 /* eslint-disable no-new */
 new Vue({
