@@ -31,7 +31,7 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
 class CurrentProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['id', 'email', 'first_name', 'last_name']
+        fields = ['id', 'email', 'first_name', 'last_name', 'balance', 'image']
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
@@ -86,6 +86,9 @@ class HousingSerializer(serializers.HyperlinkedModelSerializer):
                   'num_ratings',
                   'description',
                   'image']
+        extra_kwargs = {
+            'rating': {'decimal_places': 0}
+        }
 
 
 class HousingIdSerializer(serializers.ModelSerializer):
@@ -105,6 +108,9 @@ class HousingIdSerializer(serializers.ModelSerializer):
                   'rating',
                   'description',
                   'image']
+        extra_kwargs = {
+            'rating': {'decimal_places': 0}
+        }
 
 
 class HousingImageSerializer(serializers.HyperlinkedModelSerializer):
@@ -134,6 +140,14 @@ class CustomerReservationSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class FavouriteSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Favourite
+        fields = ['user', 'housing']
+
+
+class DetailedFavouriteSerializer(serializers.ModelSerializer):
+    housing = HousingIdSerializer(many=False, read_only=True)
+
     class Meta:
         model = Favourite
         fields = ['user', 'housing']

@@ -45,12 +45,6 @@
               <h5 class="text-center" style="margin-top: 1.5em;">{{ house.city}}</h5>
               <a class="text-center" style="text-decoration: none; font-size: 15px; color: #a0a0a0;">{{house.street}}, {{house.street_number}}, {{house.floor}}, {{house.door}}, {{house.house_dimension}}</a>
               <Toast/>
-              <span id="favContainer" v-if="house.favorite==true">
-                        <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
-                      </span>
-              <span id="favContainer" v-else>
-                        <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
-                      </span>
               <Tag id="tagHost" :value="house.house_owner_name" icon="pi pi-user" style="color: white; background-color: #2A323D"></Tag>
               <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
                 <div class="field">

@@ -18,12 +18,14 @@
       </Dialog>
       <div id="app">
         <div class="body">
-          <div class="d-flex flex-row">
+          <div class="d-flex flex-row" style="margin-left:9vw; box-sizing: border-box; border: 1px solid var(--surface-border); border-radius: 3px; height: 18vw; width: 80vw">
             <div class="p-2" style="margin-left:50px">
-              <img class="mx-auto rounded-circle" :src="profileImage"  style="width:200px">
+              <img class="mx-auto rounded-circle" src="@/assets/avatar.png" style="margin-top: 1vw; width:200px">
             </div>
-            <div class="p-2" style="margin-right:200px">
-              <div class="info-containter" ><h2>{{username}}</h2>
+            <div class="p-2" style="margin-right:200px; margin-top: 1vw; ">
+              <div class="info-containter" >
+                <h5>{{username}}</h5>
+                <hr style="width:15vw; color: white;" class="solid"/>
                 <div class="about-me"><h7>About me:</h7></div>
                 <div class="row">
                   <div class="col"><fa :icon="['fas', 'envelope']"/>          {{email}}</div>
@@ -32,7 +34,7 @@
                 </div>
               </div>
             </div>
-            <div class="profile2Button-button" align-content="left">
+            <div class="profile2Button-button" align-content="left" style="margin-top: 1vw;">
               <button class="btn btn-lg btn-block" type="submit" @click="goToEditProfile" name="editProfile" aria-label="Left Align"><fa :icon="['fas', 'pen-to-square']"/><h6>Edit Profile</h6></button>
               <button class="btn btn-lg btn-block" type="submit" style="color:#8dd0ff" @click="logOut" name="editProfile" aria-label="Left Align"><fa :icon="['fas', 'right-from-bracket']"/><h6>Log out</h6></button>
             </div>
@@ -41,7 +43,8 @@
           <hr>
         </div>
       </div>
-      <Carousel :value="myHouses" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="3000">
+      <Toast/>
+      <Carousel :value="myHouses" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="4000">
         <template #header>
           <h5 style="text-align: left; margin-left: 6vw; color: white;">My houses</h5>
           <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
@@ -57,13 +60,6 @@
                       <Button id="buttonViewGrid" label="View house" @click="seeMyHouseDetails(slotProps.data.house_id)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
                     </figcaption>
                   </div>
-                  <Toast/>
-                  <span id="favContainer" v-if="slotProps.data.favorite==true">
-                      <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
-                  </span>
-                  <span id="favContainer" v-else>
-                        <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
-                  </span>
                   <span id="priceContainer" class="text font-semibold" style="color:white"><a>{{slotProps.data.price}}€</a> day</span>
                   <span id="loaderContainer" v-if="loaderActive===true">
                   <LoadingSpinnerGrid :active="true"/>
@@ -84,13 +80,57 @@
           </div>
         </template>
       </Carousel>
-    <Carousel :value="myReservations" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="3000">
+      <Carousel :value="myFavorites" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="4000">
+        <template #header>
+          <h5 style="text-align: left; margin-left: 6vw; color: white;">My favorite houses</h5>
+          <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
+        </template>
+        <template #item="slotProps">
+          <div v-if="slotProps.data.skeleton===true"></div>
+          <div class="product-item" v-else>
+            <div class="product-item-content">
+              <div class="card" style="margin:auto;">
+                <div id ="container-image" class="container">
+                  <div id="container-effect">
+                    <img id="card-img" :src="slotProps.data.housing.image" alt="img">
+                    <figcaption>
+                      <Button id="buttonViewGrid" label="View house" @click="seeHouseDetails(slotProps.data.housing.house_id)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
+                    </figcaption>
+                  </div>
+                  <span id="favContainer" v-if="slotProps.data.housing.url === 'favorite'">
+                    <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="removeFavorite(slotProps.data.housing.house_id), slotProps.data.housing.url = 'not favorite'" class="p-button-rounded"/>
+                  </span>
+                  <span id="favContainer" v-else>
+                    <Button id="favButtonGrid" icon="pi pi-heart" @click="addHouseToFavorites(slotProps.data.housing.house_id), slotProps.data.housing.url = 'favorite'" class="p-button-rounded"/>
+                  </span>
+                  <span id="priceContainer" class="text font-semibold" style="color:white"><a>{{slotProps.data.housing.price}}€</a> day</span>
+                  <span id="loaderContainer" v-if="loaderActive===true">
+                  <LoadingSpinnerGrid :active="true"/>
+                </span>
+                </div>
+                <div id="card-details" class="details">
+                  <div class="flex align-items-center justify-content-between">
+                    <h6 style="color:white">{{slotProps.data.housing.city}}</h6>
+                    <div class="flex align-items-center">
+                      <Tag id="tagHost" :value="slotProps.data.housing.house_owner_name" icon="pi pi-user" style="color: white; background-color: #2A323D"></Tag>
+                      <Rating :value="slotProps.data.housing.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating" style="padding-bottom: 0.5em"></Rating>
+                    </div>
+                  </div>
+                  <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{slotProps.data.housing.street}}, {{slotProps.data.housing.street_number}}, {{slotProps.data.housing.floor}}, {{slotProps.data.housing.door}}, {{slotProps.data.housing.house_dimension}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </Carousel>
+    <Carousel :value="myReservations" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="4000">
       <template #header>
         <h5 style="text-align: left; margin-left: 6vw; color: white;">My reservations</h5>
         <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
       </template>
       <template #item="slotProps">
-        <div class="product-item">
+        <div v-if="slotProps.data.skeleton===true"></div>
+        <div class="product-item" v-else>
           <div class="product-item-content">
             <div class="card" id="cardReservation" style="margin:auto;">
               <div id ="container-image" class="container">
@@ -100,14 +140,13 @@
                     <Button id="buttonViewGrid" label="View house" @click="seeMyReservationDetails(slotProps.data.housing.house_id, slotProps.data.start_date, slotProps.data.end_date)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
                   </figcaption>
                 </div>
-                <Toast/>
-                <span id="favContainer" v-if="slotProps.data.favorite==true">
-                      <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
-                  </span>
+                <span id="favContainer" v-if="slotProps.data.housing.url === 'favorite'">
+                  <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="removeFavorite(slotProps.data.housing.house_id), slotProps.data.housing.url = 'not favorite'" class="p-button-rounded"/>
+                </span>
                 <span id="favContainer" v-else>
-                        <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
-                  </span>
-                <span id="priceContainer" class="text font-semibold" style="color:white"><a>{{slotProps.data.price}}€</a> day</span>
+                  <Button id="favButtonGrid" icon="pi pi-heart" @click="addHouseToFavorites(slotProps.data.housing.house_id), slotProps.data.housing.url = 'favorite'" class="p-button-rounded"/>
+                </span>
+                <span id="priceContainer" class="text font-semibold" style="color:white"><a>{{slotProps.data.housing.price}}€</a> day</span>
                 <span id="loaderContainer" v-if="loaderActive===true">
                   <LoadingSpinnerGrid :active="true"/>
                 </span>
@@ -128,13 +167,14 @@
         </div>
       </template>
     </Carousel>
-      <Carousel :value="myReservedHouses" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="3000">
+      <Carousel :value="myReservedHouses" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="4000">
         <template #header>
           <h5 style="text-align: left; margin-left: 6vw; color: white;">My houses reserved by other users</h5>
           <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
         </template>
         <template #item="slotProps">
-          <div class="product-item">
+          <div v-if="slotProps.data.skeleton===true"></div>
+          <div class="product-item" v-else>
             <div class="product-item-content">
               <div class="card" id="cardReservation" style="margin:auto;">
                 <div id ="container-image" class="container">
@@ -144,14 +184,7 @@
                       <Button id="buttonViewGrid" label="View house" @click="seeMyReservedDetails(slotProps.data.housing.house_id, slotProps.data.start_date, slotProps.data.end_date)" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
                     </figcaption>
                   </div>
-                  <Toast/>
-                  <span id="favContainer" v-if="slotProps.data.favorite==true">
-                      <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
-                  </span>
-                  <span id="favContainer" v-else>
-                        <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
-                  </span>
-                  <span id="priceContainer" class="text font-semibold" style="color:white"><a>{{slotProps.data.price}}€</a> day</span>
+                  <span id="priceContainer" class="text font-semibold" style="color:white"><a>{{slotProps.data.housing.price}}€</a> day</span>
                   <span id="loaderContainer" v-if="loaderActive===true">
                   <LoadingSpinnerGrid :active="true"/>
                 </span>
@@ -199,6 +232,8 @@ export default {
       myReservations: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
       numReserved: 0,
       myReservedHouses: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+      numFavorites: 0,
+      myFavorites: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
       loaderActive: false,
       userId: null,
       token: null,
@@ -214,6 +249,15 @@ export default {
       localStorage.removeItem('userId')
       localStorage.removeItem('token')
       localStorage.removeItem('email')
+      localStorage.removeItem('start_date')
+      localStorage.removeItem('end_date')
+      localStorage.removeItem('house_id')
+      localStorage.removeItem('pricePerDay')
+      localStorage.removeItem('totalPrice')
+      localStorage.removeItem('numberOfDays')
+      localStorage.removeItem('axiosStartDate')
+      localStorage.removeItem('axiosEndDate')
+      localStorage.removeItem('currentMoney')
       this.$router.push({path: '/'})
     },
     goToEditProfile () {
@@ -242,6 +286,22 @@ export default {
           this.myReservations = response.data
           if (response.data.length === 0) {
             this.myReservations = null
+          } else if (response.data.length === 1) {
+            var secondHouse = {'skeleton': true}
+            var thirdHouse = {'skeleton': true}
+            this.myReservations = response.data.concat(secondHouse, thirdHouse)
+          } else if (response.data.length === 2) {
+            var thirdHouses = {'skeleton': true}
+            this.myReservations = response.data.concat(thirdHouses)
+          }
+          for (let i = 0; i < this.myReservations.length; i++) {
+            var found = false
+            for (let j = 0; j < this.myFavorites.length && found === false; j++) {
+              if (this.myReservations[i].housing.house_id === this.myFavorites[j].housing.house_id) {
+                this.myReservations[i].housing.url = 'favorite'
+                found = true
+              }
+            }
           }
         })
         .catch((error) => {
@@ -257,6 +317,13 @@ export default {
           this.myReservedHouses = response.data
           if (response.data.length === 0) {
             this.myReservedHouses = null
+          } else if (response.data.length === 1) {
+            var secondHouse = {'skeleton': true}
+            var thirdHouse = {'skeleton': true}
+            this.myReservedHouses = response.data.concat(secondHouse, thirdHouse)
+          } else if (response.data.length === 2) {
+            var thirdHouses = {'skeleton': true}
+            this.myReservedHouses = response.data.concat(thirdHouses)
           }
         })
         .catch((error) => {
@@ -264,15 +331,110 @@ export default {
           this.error = error
         })
     },
+
     getNumHouses () {
       const headers = {'Access-Control-Allow-Origin': '*'}
       const pathHouses = 'https://doogking.azurewebsites.net/api/housing/?owner=' + this.userId
       const promise = axios.get(pathHouses, headers)
       Promise.resolve(promise).then((value) => (this.numHouses = value.data.length))
+
+    getUserFavorites () {
+      var config = {
+        method: 'get',
+        url: 'https://doogking.azurewebsites.net/api/profiles/favourites/' + this.userId + '/',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Authorization': 'Token ' + this.token
+        }
+      }
+      axios(config)
+        .then((response) => {
+          this.myFavorites = response.data
+          if (response.data.length === 0) {
+            this.myFavorites = null
+          } else if (response.data.length === 1) {
+            var secondHouse = {'skeleton': true}
+            var thirdHouse = {'skeleton': true}
+            this.myFavorites = response.data.concat(secondHouse, thirdHouse)
+          } else if (response.data.length === 2) {
+            var thirdHouses = {'skeleton': true}
+            this.myFavorites = response.data.concat(thirdHouses)
+          }
+          for (let i = 0; i < this.myFavorites.length; i++) {
+            this.myFavorites[i].housing.url = 'favorite'
+          }
+          this.getUserReservations()
+        })
+        .catch((error) => {
+          this.myFavorites = null
+          this.error = error
+        })
+    },
+    // eslint-disable-next-line camelcase
+    removeFavorite (house_id) {
+      if (this.logged === false) {
+        this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites.', life: 2000})
+      } else {
+        var data = JSON.stringify({
+          // eslint-disable-next-line camelcase
+          'housing': house_id,
+          'user': this.userId
+        })
+        var config = {
+          method: 'delete',
+          url: 'https://doogking.azurewebsites.net/api/favourites/',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Token ' + this.token,
+            'Content-Type': 'application/json'
+          },
+          data: data
+        }
+        axios(config)
+          .then((response) => {
+            this.$toast.add({severity: 'info', summary: 'Favorite', detail: 'House removed from your list of favorites.', life: 3000})
+          })
+          .catch((error) => {
+            this.error = error
+          })
+      }
+    },
+    // eslint-disable-next-line camelcase
+    addHouseToFavorites (house_id) {
+      if (this.logged === false) {
+        this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites', life: 2000})
+      } else {
+        var data = JSON.stringify({
+          // eslint-disable-next-line camelcase
+          'housing': 'https://doogking.azurewebsites.net/api/housing/' + house_id + '/',
+          'user': 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/'
+        })
+        var config = {
+          method: 'post',
+          url: 'https://doogking.azurewebsites.net/api/favourites/',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Token ' + this.token,
+            'Content-Type': 'application/json'
+          },
+          data: data
+        }
+        axios(config)
+          .then((response) => {
+            this.$toast.add({severity: 'info', summary: 'Favorite', detail: 'House added to your favorites list. You can see it in you profile', life: 3000})
+          })
+          .catch((error) => {
+            this.error = error
+          })
+      }
     },
     // eslint-disable-next-line camelcase
     seeMyHouseDetails (house_id) {
       this.$router.push({path: '/myHouseDetails', query: {house_id: house_id}})
+    },
+    // eslint-disable-next-line camelcase
+    seeHouseDetails (house_id) {
+      this.$router.push({path: '/housedetails', query: {house_id: house_id}})
     },
     // eslint-disable-next-line camelcase
     seeMyReservationDetails (house_id, start_date, end_date) {
@@ -288,7 +450,7 @@ export default {
       localStorage.start_date = start_date
       // eslint-disable-next-line camelcase
       localStorage.end_date = end_date
-      this.$router.push({path: '/myReservationDetails', query: {house_id: house_id}})
+      this.$router.push({path: '/myReservedDetails', query: {house_id: house_id}})
     },
     showLoader () {
       this.loaderActive = true
@@ -349,7 +511,7 @@ export default {
   created () {
     this.loadLocalStorage()
     this.getUserHouses()
-    this.getUserReservations()
+    this.getUserFavorites()
     this.getUserReservedHouses()
     this.showLoader()
     setTimeout(() => {

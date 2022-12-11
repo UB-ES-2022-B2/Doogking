@@ -10,12 +10,14 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from .models import Profile, Housing, HousingImage, Reservation, Favourite
 from .serializers import ProfileSerializer, \
+    CurrentProfileSerializer, \
     HousingSerializer, \
     HousingImageSerializer, \
     ReservationSerializer, \
     DetailedReservationSerializer, \
     CustomerReservationSerializer, \
     FavouriteSerializer, \
+    DetailedFavouriteSerializer, \
     ChangePasswordSerializer
 import secrets
 import requests
@@ -144,19 +146,51 @@ class FavouriteViewSet(viewsets.ModelViewSet):
     queryset = Favourite.objects.all()
     serializer_class = FavouriteSerializer
 
-    @action(detail=False)
+    @action(detail=False, methods=['GET'])
     def select(self, request, user_id=None):
         queryset = Favourite.objects.filter(user__id=user_id)
-        serializer = FavouriteSerializer(
+        serializer = DetailedFavouriteSerializer(
             queryset,
             many=True,
             context={'request': request}
         )
         return Response(serializer.data)
 
+    @action(detail=False, methods=['DELETE'])
+    def delete(self, request):
+        user_id = request.data['user']
+        housing_id = request.data['housing']
+        self.queryset.filter(user__id=user_id, housing_id=housing_id).delete()
+
+        return Response({"message": "Successfully removed from favourites"})
+
     def get_permissions(self):
         permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
+
+
+class UpdateHousingRating(APIView):
+    queryset = Housing.objects.all()
+    url_kwargs = "housing_id"
+
+    def post(self, request, housing_id):
+        new_rating = request.data['rating']
+        housing = self.queryset.get(house_id=housing_id)
+
+        if housing:
+            mean = (housing.rating +
+                    (new_rating - housing.rating)/(housing.num_ratings+1))
+            housing.rating = mean
+            housing.num_ratings += 1
+            housing.save()
+
+            return Response({
+                "message": "Rating successfully updated!",
+                "rating": housing.rating
+            })
+
+        else:
+            return Response({"message": "Could not update rating"}, 500)
 
 
 class ResetView(APIView):
@@ -204,7 +238,7 @@ class ObtainAuthTokenUser(ObtainAuthToken):
         user = Profile.objects.get(id=token.user_id)
         return Response(
             {'token': token.key,
-             'profile': ProfileSerializer(
+             'profile': CurrentProfileSerializer(
                 user,
                 context={'request': request}
                 ).data}

@@ -26,6 +26,7 @@ router.register(r'profiles', views.ProfileViewSet)
 router.register(r'housing', views.HousingViewSet)
 router.register(r'housing_images', views.HousingImageViewSet)
 router.register(r'reservations', views.ReservationViewSet)
+router.register(r'favourites', views.FavouriteViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),
@@ -36,6 +37,10 @@ urlpatterns = [
     path('api/deleteProfile/<int:id>', views. ProfileViewSet.delete,
          name='delete'),
     path('api/upload/', views.UploaderView.as_view()),
+    path('api/change-password/', views.ChangePasswordView.as_view(),
+         name='change-password'),
+    url('^api/housing_rating/(?P<housing_id>[0-9]+)/$',
+        views.UpdateHousingRating.as_view()),
     url(r'^api/housing_images/housing/(?P<housing_id>[0-9]+)/$',
         views.HousingImageViewSet.as_view({'get': 'select'})),
     url(r'^api/profiles/favourites/(?P<user_id>[0-9]+)/$',

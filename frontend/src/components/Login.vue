@@ -157,7 +157,7 @@ export default {
       axios.post(path, parameters, headers)
         .then((res) => {
           this.username = res.data.profile.first_name + res.data.profile.last_name
-          this.persist(res.data.profile.first_name + res.data.profile.last_name, res.data.profile.id, res.data.token, this.email)
+          this.persist(res.data.profile.first_name + res.data.profile.last_name, res.data.profile.id, res.data.token, this.email, res.data.profile.balance)
           this.showSuccessMessage = true
         })
         .catch((error) => {
@@ -174,11 +174,12 @@ export default {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/forgotPassword'})
     },
-    persist (username, userId, token, email) {
+    persist (username, userId, token, email, currentMoney) {
       localStorage.username = username
       localStorage.userId = userId
       localStorage.token = token
       localStorage.email = email
+      localStorage.currentMoney = currentMoney
     }
   }
 }

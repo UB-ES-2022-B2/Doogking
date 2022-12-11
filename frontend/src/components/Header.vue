@@ -18,14 +18,11 @@
             <a v-else class="nav-link" style="cursor: pointer" @click="goToBusinessContact">Support</a>
           </li>
           <li class="nav-item">
-            <a v-if="this.$route.name ==='Property'" class="nav-link" style="color: #8DD0FF; cursor: pointer">House registry</a>
-            <a href="https://doogking.azurewebsites.net/api/housing/" v-else class="nav-link" style="cursor: pointer" target="_blank">House registry</a>
-          </li>
-          <li class="nav-item">
             <a v-if="this.$route.name ==='AboutUs'" class="nav-link" @click="goToAboutUs" style="color: #8DD0FF; cursor: pointer"><fa :icon="['fas', 'circle-info'] " /></a>
             <a v-else class="nav-link" @click="goToAboutUs" style="cursor: pointer"><fa :icon="['fas', 'circle-info'] " /></a>
           </li>
         </ul>
+        <Button id="post" type="submit"  style="margin-right: 10px; margin-bottom: 0.5em; border-radius: 12px" @click="addHouse" v-if="logged===true"><fa  style="margin-right:10px" :icon="['fas', 'plus']"/>Post House</Button>
       </div>
       <!-- User dropdown -->
       <ul class="nav navbar-nav navbar-right" v-if="logged===false">
@@ -103,13 +100,26 @@ export default {
     goToAboutUs () {
       this.$router.push({path: '/aboutUs'})
     },
+    addHouse () {
+      this.$router.push({path: '/houseRegistry'})
+    },
     logOut () {
       this.logged = false
       localStorage.removeItem('username')
       localStorage.removeItem('userId')
       localStorage.removeItem('token')
       localStorage.removeItem('email')
+      localStorage.removeItem('start_date')
+      localStorage.removeItem('end_date')
+      localStorage.removeItem('house_id')
+      localStorage.removeItem('pricePerDay')
+      localStorage.removeItem('totalPrice')
+      localStorage.removeItem('numberOfDays')
+      localStorage.removeItem('axiosStartDate')
+      localStorage.removeItem('axiosEndDate')
+      localStorage.removeItem('currentMoney')
       this.$router.push({path: '/'})
+      this.$router.go()
     },
     goToBusinessContact () {
       this.$router.push({path: '/businessContact'})

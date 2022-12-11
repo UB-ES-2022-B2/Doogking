@@ -25,21 +25,6 @@
       </div>
       <div id="detailsContainer" class="houseDetails">
         <div class="form-demo">
-          <Dialog :visible="showSuccessMessage" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
-            <div class="flex align-items-center flex-column pt-6 px-3">
-              <i class="pi pi-check-circle" :style="{fontSize: '5rem', color: 'var(--green-500)' }"></i>
-              <h5 style="margin-top: 1em">Reservation Successful!</h5>
-              <p style="text-align: center">
-                Reservation created with Start date: <b>{{ this.checkInDate }}</b> and End date: <b>{{ this.checkOutDate }}</b>.
-              </p>
-            </div>
-            <template #footer>
-              <div class="flex justify-content-center">
-                <Button label="OK" @click="toggleDialogSuccess" class="p-button-text" />
-              </div>
-            </template>
-          </Dialog>
-
           <Dialog :visible="showErrorMessage" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
             <div class="flex align-items-center flex-column pt-6 px-3">
               <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
@@ -90,12 +75,12 @@
               <h5 class="text-center" style="margin-top: 1.5em;">{{ house.city}}</h5>
               <a class="text-center" style="text-decoration: none; font-size: 15px; color: #a0a0a0;">{{house.street}}, {{house.street_number}}, {{house.floor}}, {{house.door}}, {{house.house_dimension}}</a>
               <Toast/>
-              <span id="favContainer" v-if="house.favorite==true">
-                        <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
-                      </span>
+              <span id="favContainer" v-if="house.url === 'favorite'">
+                  <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="removeFavorite(house.house_id), house.url = 'not favorite'" class="p-button-rounded"/>
+                </span>
               <span id="favContainer" v-else>
-                        <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
-                      </span>
+                  <Button id="favButtonGrid" icon="pi pi-heart" @click="addHouseToFavorites(house.house_id), house.url = 'favorite'" class="p-button-rounded"/>
+                </span>
               <Tag id="tagHost" :value="house.house_owner_name" icon="pi pi-user" style="color: white; background-color: #2A323D"></Tag>
               <form @submit.prevent="handleSubmit(!v$.$invalid)" class="p-fluid">
                 <div class="field">
@@ -193,6 +178,7 @@ export default {
       checkInDate: null,
       checkOutDate: null,
       dates2: null,
+      numberOfDays: 0,
       totalPrice: 0,
       validInDate: true,
       validOutDate: true,
@@ -202,6 +188,7 @@ export default {
       showSuccessMessage: false,
       showErrorMessage: false,
       showLoginMessage: false,
+      myFavorites: [],
       showHouseMessage: false,
       error: '',
       invalidDates: [],
@@ -260,7 +247,16 @@ export default {
       const headers = {'Access-Control-Allow-Origin': '*'}
       const pathHouses = 'https://doogking.azurewebsites.net/api/housing/' + this.house_id + '/'
       axios.get(pathHouses, headers)
-        .then(response => (this.house = response.data))
+        .then((response) => {
+          this.house = response.data
+          var found = false
+          for (let j = 0; j < this.myFavorites.length && found === false; j++) {
+            if (this.house.house_id === this.myFavorites[j].housing.house_id) {
+              this.house.url = 'favorite'
+              found = true
+            }
+          }
+        })
         .catch((error) => {
           this.error = error
           this.showHouseMessage = true
@@ -270,35 +266,6 @@ export default {
       const headers = {'Access-Control-Allow-Origin': '*'}
       const pathImageHouses = 'https://doogking.azurewebsites.net/api/housing_images/housing/' + this.house_id + '/'
       axios.get(pathImageHouses, headers).then(response => (this.houseImages = response.data))
-    },
-    makeReservation () {
-      var data = JSON.stringify({
-        'housing': 'https://doogking.azurewebsites.net/api/housing/' + this.house_id + '/',
-        'customer': 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/',
-        'start_date': this.checkInDate.getFullYear() + '-' + this.checkInDate.toLocaleString('default', { month: '2-digit' }) + '-' + this.checkInDate.toLocaleString('default', { day: '2-digit' }),
-        'end_date': this.checkOutDate.getFullYear() + '-' + this.checkOutDate.toLocaleString('default', { month: '2-digit' }) + '-' + this.checkOutDate.toLocaleString('default', { day: '2-digit' })
-      })
-      console.log(this.checkInDate.getFullYear() + '-' + this.checkInDate.getMonth() + '-' + this.checkInDate.getDate())
-      var config = {
-        method: 'post',
-        url: 'https://doogking.azurewebsites.net/api/reservations/',
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Authorization': 'Token ' + this.token,
-          'Content-Type': 'application/json'
-        },
-        data: data
-      }
-      axios(config)
-        .then((response) => {
-          console.log(JSON.stringify(response.data))
-          this.showSuccessMessage = true
-        })
-        .catch((error) => {
-          console.log(error)
-          this.error = error
-          this.showErrorMessage = true
-        })
     },
     getReservations () {
       const headers = {'Access-Control-Allow-Origin': '*'}
@@ -323,12 +290,88 @@ export default {
           this.error = error
         })
     },
+    getUserFavorites () {
+      var config = {
+        method: 'get',
+        url: 'https://doogking.azurewebsites.net/api/profiles/favourites/' + this.userId + '/',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Authorization': 'Token ' + this.token
+        }
+      }
+      axios(config)
+        .then((response) => {
+          this.myFavorites = response.data
+          this.getHouse()
+        })
+        .catch((error) => {
+          this.error = error
+        })
+    },
+    // eslint-disable-next-line camelcase
+    removeFavorite (house_id) {
+      if (this.logged === false) {
+        this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites.', life: 2000})
+      } else {
+        var data = JSON.stringify({
+          // eslint-disable-next-line camelcase
+          'housing': house_id,
+          'user': this.userId
+        })
+        var config = {
+          method: 'delete',
+          url: 'https://doogking.azurewebsites.net/api/favourites/',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Token ' + this.token,
+            'Content-Type': 'application/json'
+          },
+          data: data
+        }
+        axios(config)
+          .then((response) => {
+            this.$toast.add({severity: 'info', summary: 'Favorite', detail: 'House removed from your list of favorites.', life: 3000})
+          })
+          .catch((error) => {
+            this.error = error
+          })
+      }
+    },
+    // eslint-disable-next-line camelcase
+    addHouseToFavorites (house_id) {
+      if (this.logged === false) {
+        this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites', life: 2000})
+      } else {
+        var data = JSON.stringify({
+          // eslint-disable-next-line camelcase
+          'housing': 'https://doogking.azurewebsites.net/api/housing/' + house_id + '/',
+          'user': 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/'
+        })
+        var config = {
+          method: 'post',
+          url: 'https://doogking.azurewebsites.net/api/favourites/',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Token ' + this.token,
+            'Content-Type': 'application/json'
+          },
+          data: data
+        }
+        axios(config)
+          .then((response) => {
+            this.$toast.add({severity: 'info', summary: 'Favorite', detail: 'House added to your favorites list. You can see it in you profile', life: 3000})
+          })
+          .catch((error) => {
+            this.error = error
+          })
+      }
+    },
     handleSubmit (isFormValid) {
       this.submitted = true
       if (isFormValid && (this.checkOutDate !== null) && (this.checkInDate !== null) &&
         (this.checkInDate < this.checkOutDate) && (this.validInDate) && (this.validOutDate)) {
         if (this.logged === true) {
-          this.makeReservation()
+          this.goToPayment()
         } else {
           this.showLoginMessage = true
         }
@@ -337,6 +380,18 @@ export default {
     goToLogin () {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/login'})
+    },
+    // eslint-disable-next-line camelcase
+    goToPayment () {
+      localStorage.start_date = this.checkInDate.toDateString()
+      localStorage.end_date = this.checkOutDate.toDateString()
+      localStorage.house_id = this.house_id
+      localStorage.pricePerDay = this.house.price
+      localStorage.totalPrice = this.totalPrice
+      localStorage.numberOfDays = this.numberOfDays
+      localStorage.axiosStartDate = this.checkInDate.getFullYear() + '-' + this.checkInDate.toLocaleString('default', { month: '2-digit' }) + '-' + this.checkInDate.toLocaleString('default', { day: '2-digit' })
+      localStorage.axiosEndDate = this.checkOutDate.getFullYear() + '-' + this.checkOutDate.toLocaleString('default', { month: '2-digit' }) + '-' + this.checkOutDate.toLocaleString('default', { day: '2-digit' })
+      this.$router.push({path: '/payment', query: {house_id: this.house_id}})
     },
     goToHomepage () {
       this.$router.push({path: '/'})
@@ -366,6 +421,7 @@ export default {
         var differenceInTime = date2.getTime() - date1.getTime()
         // To calculate the no. of days between two dates
         var differenceInDays = differenceInTime / (1000 * 3600 * 24)
+        this.numberOfDays = differenceInDays
         this.totalPrice = differenceInDays * this.house.price
         if (isNaN(this.totalPrice)) {
           this.totalPrice = 0
@@ -389,12 +445,6 @@ export default {
       this.checkOutDate = null
       this.checkInDate = null
     },
-    toggleDialogSuccess () {
-      this.showSuccessMessage = !this.showSuccessMessage
-      if (!this.showSuccessMessage) {
-        this.$router.go()
-      }
-    },
     toggleDialogError () {
       this.showErrorMessage = !this.showErrorMessage
       if (!this.showErrorMessage) {
@@ -413,25 +463,27 @@ export default {
         this.resetForm()
         this.goToHomepage()
       }
-    }
-  },
-  mounted () {
-    if (localStorage.username) {
-      this.logged = true
-      this.username = localStorage.username
-    }
-    if (localStorage.userId) {
-      this.userId = localStorage.userId
-    }
-    if (localStorage.token) {
-      this.token = localStorage.token
-    }
-    if (localStorage.email) {
-      this.email = localStorage.email
+    },
+    loadLocalStorage () {
+      if (localStorage.username) {
+        this.logged = true
+        this.username = localStorage.username
+      }
+      if (localStorage.userId) {
+        this.userId = localStorage.userId
+      }
+      if (localStorage.token) {
+        this.token = localStorage.token
+      }
+      if (localStorage.email) {
+        this.email = localStorage.email
+        this.getUserFavorites()
+      }
     }
   },
   created () {
     this.house_id = this.$route.query.house_id
+    this.loadLocalStorage()
     this.getHouse()
     this.getHouseImages()
     this.getReservations()

@@ -22,6 +22,7 @@ class HouseRegistryTest(StaticLiveServerTestCase):
         super().tearDownClass()
 
     def test_house_registry_fields(self):
+        self.selenium.get(self.live_server_url+"/HouseRegistry")
         house_registry = self.selenium.find_element(By.ID, "houseRegistry")
         self.selenium.execute_script("arguments[0].click();", house_registry)
         self.selenium.implicitly_wait(100)
