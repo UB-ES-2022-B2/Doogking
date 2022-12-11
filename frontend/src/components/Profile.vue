@@ -20,7 +20,7 @@
         <div class="body">
           <div class="d-flex flex-row" style="margin-left:9vw; box-sizing: border-box; border: 1px solid var(--surface-border); border-radius: 3px; height: 18vw; width: 80vw">
             <div class="p-2" style="margin-left:50px">
-              <img class="mx-auto rounded-circle" src="@/assets/avatar.png" style="margin-top: 1vw; width:200px">
+              <img class="mx-auto rounded-circle" :src="profileImage" style="margin-top: 1vw; width:200px">
             </div>
             <div class="p-2" style="margin-right:200px; margin-top: 1vw; ">
               <div class="info-containter" >
@@ -28,11 +28,9 @@
                 <hr style="width:15vw; color: white;" class="solid"/>
                 <div class="about-me"><h7>About me:</h7></div>
                 <div class="row">
-                  <div class="col"><fa :icon="['fas', 'star']"/>      34 reviews</div>
-                  <div class="w-100"></div>
                   <div class="col"><fa :icon="['fas', 'envelope']"/>          {{email}}</div>
                   <div class="w-100"></div>
-                  <div class="col"><fa :icon="['fas', 'house']"/>       4</div>
+                  <div class="col"><fa :icon="['fas', 'house']"/>       {{numHouses}}</div>
                 </div>
               </div>
             </div>
@@ -235,11 +233,14 @@ export default {
       numReserved: 0,
       myReservedHouses: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
       numFavorites: 0,
+      myFavoritesLength: 0,
       myFavorites: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
       loaderActive: false,
       userId: null,
       token: null,
-      showLoginMessage: false
+      showLoginMessage: false,
+      profileImage: null,
+      numHouses: null
     }
   },
   methods: {
@@ -296,7 +297,7 @@ export default {
           }
           for (let i = 0; i < this.myReservations.length; i++) {
             var found = false
-            for (let j = 0; j < this.myFavorites.length && found === false; j++) {
+            for (let j = 0; j < this.myFavoritesLength && found === false; j++) {
               if (this.myReservations[i].housing.house_id === this.myFavorites[j].housing.house_id) {
                 this.myReservations[i].housing.url = 'favorite'
                 found = true
@@ -331,6 +332,12 @@ export default {
           this.error = error
         })
     },
+    getNumHouses () {
+      const headers = {'Access-Control-Allow-Origin': '*'}
+      const pathHouses = 'https://doogking.azurewebsites.net/api/housing/?owner=' + this.userId
+      const promise = axios.get(pathHouses, headers)
+      Promise.resolve(promise).then((value) => (this.numHouses = value.data.length))
+    },
     getUserFavorites () {
       var config = {
         method: 'get',
@@ -343,6 +350,7 @@ export default {
       axios(config)
         .then((response) => {
           this.myFavorites = response.data
+          this.myFavoritesLength = this.myFavorites.length
           if (response.data.length === 0) {
             this.myFavorites = null
           } else if (response.data.length === 1) {
@@ -353,7 +361,7 @@ export default {
             var thirdHouses = {'skeleton': true}
             this.myFavorites = response.data.concat(thirdHouses)
           }
-          for (let i = 0; i < this.myFavorites.length; i++) {
+          for (let i = 0; i < this.myFavoritesLength; i++) {
             this.myFavorites[i].housing.url = 'favorite'
           }
           this.getUserReservations()
@@ -462,6 +470,26 @@ export default {
         this.$router.push({path: '/'})
       }
     },
+    getProfileImage () {
+      // const pathHouses = 'http://127.0.0.1:8000/api/housing/'
+      var config = {
+        method: 'get',
+        url: 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Authorization': 'Token ' + this.token,
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+      console.log('Token ' + this.token)
+      axios(config)
+        .then(response => {
+          (this.profileImage = response.data.image)
+          console.log(this.profileImage)
+        })
+        .catch(function (response) {
+        })
+    },
     loadLocalStorage () {
       if (localStorage.username) {
         this.logged = true
@@ -490,6 +518,13 @@ export default {
     setTimeout(() => {
       this.hideLoader()
     }, 500)
+    if (localStorage.userId) {
+      this.userId = localStorage.userId
+    }
+    if (localStorage.token) {
+      this.token = localStorage.token
+    }
+    this.getProfileImage()
   }
 }
 </script>

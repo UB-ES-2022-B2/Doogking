@@ -1,4 +1,5 @@
 from django.core.exceptions import PermissionDenied
+from django.core.exceptions import ValidationError
 from rest_framework import viewsets
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
@@ -260,55 +261,23 @@ class UploaderView(APIView):
         return Response({"message": "success", "uploaded_name": file.name})
 
 
-'''class ChangePasswordView(UpdateAPIView):
-
-    queryset = Profile.objects.all()
-    permission_classes = (IsAuthenticated,)
-    serializer_class = ChangePasswordSerializer
-    def post(self,request,id):
-        user = Profile.objects.get(id=id)
-        request_pass = request.data['password']
-        user.set_password(request_pass)
-        user.save()
-        return Response({"message": "Password successfully changed!"})
-'''
-
-
 class ChangePasswordView(UpdateAPIView):
-    """
-    An endpoint for changing password.
-    """
+    queryset = Profile.objects.all()
+    permission_classes = [permissions.AllowAny]
     serializer_class = ChangePasswordSerializer
-    model = Profile
 
-    # permission_classes = [permissions.IsAuthenticated]
+    def post(self, request):
+        email = request.data['email']
+        old_pass = request.data['old_password']
+        new_pass = request.data['new_password']
+        new_pass2 = request.data['new_password2']
 
-    def get_permissions(self):
-
-        permission_classes = [permissions.IsAuthenticated]
-        return [permission() for permission in permission_classes]
-
-    def get_object(self, queryset=None):
-        obj = self.request.user
-        return obj
-
-    def update(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        serializer = self.get_serializer(data=request.data)
-
-        if serializer.is_valid():
-            # Check old password
-            # if not self.object.check_password(
-            # serializer.data.get("old_password")):
-            #       return Response({"old_password": ["Wrong password."]})
-            # set_password also hashes the password that the user will get
-            self.object.set_password(serializer.data.get("new_password"))
-            self.object.save()
-            response = {
-                'status': 'success',
-                'code': 'HTTP_200_OK',
-                'message': 'Password updated successfully',
-                'data': []
-            }
-
-            return Response(response)
+        user = Profile.objects.get(email=email)
+        if not user.check_password(old_pass):
+            raise ValidationError({"old_password": ["Wrong password."]})
+        if secrets.compare_digest(new_pass, new_pass2):
+            user.set_password(new_pass)
+            user.save()
+            return Response({"message": "Password successfully changed!"})
+        else:
+            raise ValidationError("No matching passwords")
