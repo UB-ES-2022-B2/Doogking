@@ -92,10 +92,10 @@
                       <span id="priceContainer" class="text font-semibold"><a>{{house.price}}€</a> day</span>
                     </div>
                     <div v-if="logged">
-                      <div id="fieldRow" style="margin-top: 0.5em;position:absolute;right: 40%;" v-if="changingRating">
+                      <div id="fieldRow" style="margin-top: 0.5em;position:absolute; right: 39.5%" v-if="changingRating">
                         <Rating id="yourRating" v-model="yourRating" :stars="5"/>
                       </div>
-                      <div id="fieldRow" style="margin-top: 0.5em;position:absolute;right: 40%;" v-else>
+                      <div id="fieldRow" style="margin-top: 0.5em;position:absolute; right: 39.5%" v-else>
                         <Rating id="houseRating" :value="house.rating" :stars="5" :readonly="true" :cancel="false" class="ui-rating"></Rating>
                       </div>
                       <ToggleButton v-model="changingRating" onLabel="Add rating" offLabel="Change rating" onIcon="pi pi-send" offIcon="pi pi-pencil" style="width: 10em; position:absolute;right: 1vw; margin-top: -0.2em;" />
@@ -191,7 +191,7 @@ export default {
       numberOfDays: 0,
       totalPrice: 0,
       validInDate: true,
-      changingRating: true,
+      changingRating: false,
       validOutDate: true,
       loaderActive: false,
       userId: null,
@@ -241,6 +241,15 @@ export default {
         this.getTotalPrice()
       }
       this.checkOutDateValid()
+    },
+    changingRating () {
+      if (this.changingRating === false) {
+        if (this.yourRating === null) {
+          this.yourRating = 0
+        }
+        this.addRating()
+        this.getHouse()
+      }
     }
   },
   validations () {
@@ -347,6 +356,29 @@ export default {
             this.error = error
           })
       }
+    },
+    addRating () {
+      var data = JSON.stringify({
+        // eslint-disable-next-line camelcase
+        'rating': this.yourRating
+      })
+      var config = {
+        method: 'post',
+        url: 'https://doogking.azurewebsites.net/api/housing_rating/' + this.house_id + '/',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Authorization': 'Token ' + this.token,
+          'Content-Type': 'application/json'
+        },
+        data: data
+      }
+      axios(config)
+        .then((response) => {
+          this.$toast.add({severity: 'info', summary: 'Rating', detail: 'Your rating has been successfully uploaded!', life: 3000})
+        })
+        .catch((error) => {
+          this.error = error
+        })
     },
     // eslint-disable-next-line camelcase
     addHouseToFavorites (house_id) {
