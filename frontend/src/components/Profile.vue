@@ -356,6 +356,7 @@ export default {
           for (let i = 0; i < this.myFavorites.length; i++) {
             this.myFavorites[i].housing.url = 'favorite'
           }
+          this.getUserReservations()
         })
         .catch((error) => {
           this.myFavorites = null
@@ -455,7 +456,6 @@ export default {
     this.loadLocalStorage()
     this.getUserHouses()
     this.getUserFavorites()
-    this.getUserReservations()
     this.getUserReservedHouses()
     this.showLoader()
     setTimeout(() => {
