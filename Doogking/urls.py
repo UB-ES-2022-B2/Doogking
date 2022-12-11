@@ -20,6 +20,7 @@ from rest_framework import routers
 from doogkingapp import views
 from django.conf.urls import url
 
+
 router = routers.DefaultRouter()
 router.register(r'profiles', views.ProfileViewSet)
 router.register(r'housing', views.HousingViewSet)
@@ -32,6 +33,7 @@ urlpatterns = [
     path('api/login/', views.ObtainAuthTokenUser.as_view()),
     path('admin/', admin.site.urls),
     path('api/reset/', views.ResetView.as_view()),
+    path('api/change-password/', views.ChangePasswordView.as_view()),
     path('api/deleteProfile/<int:id>', views. ProfileViewSet.delete,
          name='delete'),
     path('api/upload/', views.UploaderView.as_view()),
