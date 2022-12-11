@@ -37,6 +37,8 @@ urlpatterns = [
     path('api/upload/', views.UploaderView.as_view()),
     path('api/change-password/', views.ChangePasswordView.as_view(),
          name='change-password'),
+    url('^api/housing_rating/(?P<housing_id>[0-9]+)/$',
+        views.UpdateHousingRating.as_view()),
     url(r'^api/housing_images/housing/(?P<housing_id>[0-9]+)/$',
         views.HousingImageViewSet.as_view({'get': 'select'})),
     url(r'^api/profiles/favourites/(?P<user_id>[0-9]+)/$',

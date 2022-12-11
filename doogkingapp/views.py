@@ -155,9 +155,41 @@ class FavouriteViewSet(viewsets.ModelViewSet):
         )
         return Response(serializer.data)
 
+    @action(detail=False, methods=['DELETE'])
+    def delete(self, request):
+        user_id = request.data['user']
+        housing_id = request.data['housing']
+        self.queryset.filter(user__id=user_id, housing_id=housing_id).delete()
+
+        return Response({"message": "Successfully removed from favourites"})
+
     def get_permissions(self):
         permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
+
+
+class UpdateHousingRating(APIView):
+    queryset = Housing.objects.all()
+    url_kwargs = "housing_id"
+
+    def post(self, request, housing_id):
+        new_rating = request.data['rating']
+        housing = self.queryset.get(house_id=housing_id)
+
+        if housing:
+            mean = (housing.rating +
+                    (new_rating - housing.rating)/(housing.num_ratings+1))
+            housing.rating = mean
+            housing.num_ratings += 1
+            housing.save()
+
+            return Response({
+                "message": "Rating successfully updated!",
+                "rating": housing.rating
+            })
+
+        else:
+            return Response({"message": "Could not update rating"}, 500)
 
 
 class ResetView(APIView):
