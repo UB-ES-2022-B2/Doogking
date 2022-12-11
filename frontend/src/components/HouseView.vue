@@ -187,7 +187,8 @@ export default {
       this.minPrice = this.priceRangeValue[0]
       this.maxPrice = this.priceRangeValue[1]
       // var pathHouses = 'http://127.0.0.1:8000/api/housing'
-      var pathHouses = 'http://127.0.0.1:8000/api/housing/?min_price=' + this.minPrice + '&max_price=' + this.maxPrice
+      // var pathHouses = 'http://127.0.0.1:8000/api/housing/?min_price=' + this.minPrice + '&max_price=' + this.maxPrice
+      var pathHouses = 'https://doogking.azurewebsites.net/api/housing/?min_price=' + this.minPrice + '&max_price=' + this.maxPrice
       // Filter Cities
       if (this.selectedCities !== null) {
         for (let i = 0; i < this.selectedCities.length; i++) {
@@ -211,7 +212,6 @@ export default {
         pathHouses += '&check_in=' + checkIn + '&check_out=' + checkOut
       }
       const headers = {'Access-Control-Allow-Origin': '*'}
-      // const pathHouses = 'https://doogking.azurewebsites.net/api/housing/?min_price=22&max_price=30'
       axios.get(pathHouses, headers).then(response => (this.houses = response.data))
     }
   },
@@ -448,7 +448,7 @@ export default {
 }
 
 #calendarIcon >>> p-calendar >>> p-calendar-w-btn{
-  bacground-color: white;
+  background-color: white;
   color: white;
 }
 
