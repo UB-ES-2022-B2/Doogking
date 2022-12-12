@@ -1,4 +1,4 @@
-name: Regression tests
+name: Functional tests
 on:
   push:
     branches:
@@ -50,12 +50,9 @@ jobs:
     - name: Functional test housing
       run: |
         python3 manage.py test tests.test_housing_view
-    - name: Functional tests header
+    - name: Functional tests card
       run: |
-        python3 manage.py test tests.test_header
-    - name: Functional tests footer
+        python3 manage.py test tests.test_payment
+    - name: Functional tests posting
       run: |
-        python3 manage.py test tests.test_footer
-    - name: Functional tests my houses
-      run: |
-        python3 manage.py test tests.test_my_houses
+        python3 manage.py test tests.test_house_registry

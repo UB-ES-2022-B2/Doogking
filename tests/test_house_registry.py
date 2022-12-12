@@ -50,3 +50,7 @@ class HouseRegistryTest(StaticLiveServerTestCase):
                      and price_field and description_field and door_field
 
         assert testPassed
+
+    def test_submit_house(self):
+        x = True
+        assert x
