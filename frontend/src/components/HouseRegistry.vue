@@ -64,26 +64,26 @@
               <div class="field">
                 <div class="p-float-label">
                     <span class="p-float-label">
-                      <InputText id="street" type="text" class="form-control" v-model="addUserForm.street" aria-describedby="inputGroupPrepend2" placeholder="Street" />
+                      <InputText id="street" type="text" class="form-control" v-model="addUserForm.street" aria-describedby="inputGroupPrepend2" style="background-color:#20262E;color:white" placeholder="Street" />
                     </span>
                   <h1></h1>
                   <span class="p-float-label" style="margin-right:30px">
-                      <InputText id="street_number" type="text" autofocus v-model="addUserForm.street_number" aria-describedby="inputGroupPrepend2" style="width:130px" placeholder="Street Number"/>
+                      <InputText id="street_number" type="text" autofocus v-model="addUserForm.street_number" v-on:keydown="isNumber($event)" aria-describedby="inputGroupPrepend2" style="width:130px" placeholder="Street Number"/>
                       <InputText id="floor" type="text" v-model="addUserForm.floor" aria-describedby="inputGroupPrepend2" style="width:80px" placeholder="Floor"/>
                       <InputText id="door" type="text" v-model="addUserForm.door" aria-describedby="inputGroupPrepend2" style="width:80px" placeholder="Door"/>
-                      <InputText id="house_dimension" type="text" v-model="addUserForm.house_dimension" aria-describedby="inputGroupPrepend2" style="width:150px" placeholder="House Dimension"/>
+                      <InputText id="house_dimension" type="text" v-on:keydown="isNumber($event)" v-model="addUserForm.house_dimension" aria-describedby="inputGroupPrepend2" style="width:150px" placeholder="House Dimension"/>
                     </span>
                   <h1></h1>
                   <div class="p-float-label">
-                    <InputText id="city" type="text" class="form-control" v-model="addUserForm.city" aria-describedby="inputGroupPrepend2" placeholder="City" />
+                    <InputText id="city" type="text" class="form-control" v-model="addUserForm.city" style="background-color:#20262E;color:white" aria-describedby="inputGroupPrepend2" placeholder="City" />
                   </div>
                   <h1></h1>
                   <span class="p-float-label">
-                <InputText id="price" type="number" class="form-control" v-model="addUserForm.price_per_day" aria-describedby="inputGroupPrepend2" placeholder="Price per day" />
+                <InputText id="price" type="text" v-on:keydown="isNumber($event)" v-model="addUserForm.price_per_day"  aria-describedby="inputGroupPrepend2" placeholder="Price per day" />
               </span>
                   <h1></h1>
                   <span class="p-float-label">
-                <InputText id="description" type="text" class="form-control" v-model="addUserForm.description" aria-describedby="inputGroupPrepend2" style="height:100px" placeholder="Description"/>
+                <Textarea id="description" type="text" class="form-control" v-model="addUserForm.description" rows="5" cols="30" aria-describedby="inputGroupPrepend2" style="height:100px;background-color:#20262E;color:white" placeholder="Description"/>
               </span>
                   <h1></h1>
                   <div class="btn-group">
@@ -205,8 +205,9 @@ export default {
         console.log('Token ' + this.token)
         axios(config)
           .then((response) => {
-            this.showSuccessMessage = true
-          }).catch(function (response) {})
+          }).catch(function (response) {
+            this.showImagesMessage = true
+          })
       }
     },
     myUploader (event) {
@@ -250,6 +251,11 @@ export default {
       this.addUserForm.price_per_day = ''
       this.addUserForm.description = ''
       this.submitted = false
+    },
+    isNumber (event, message) {
+      if (!/\d/.test(event.key) &&
+    (event.key !== '.' || /\./.test(message))
+      ) { return event.preventDefault() }
     }
   },
   mounted () {
