@@ -35,7 +35,7 @@
           <div class="col-3 text-left">
             <h5>Price range per day: {{priceRangeValue}}</h5>
             <Slider id="priceRange" v-model="priceRangeValue" :step="5" :min="0" :max="500" :range="true"/>
-            <h9>Note: min: 0, max: 500 TEST: {{checkInDate}}</h9>
+            <h9>Note: min: 0, max: 500</h9>
           </div>
           <Divider id="gridDivider" v-if="layout=='grid'"></Divider>
         </template>
@@ -52,11 +52,11 @@
                 </div>
               </div>
               <div class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
-                  <span v-if="slotProps.data.url === 'favorite'">
-                      <Button id="favButtonList" icon="pi pi-heart-fill" @click="removeFavorite(slotProps.data.house_id), slotProps.data.url = 'not favorite'" class="p-button-rounded"/>
+                  <span v-if="slotProps.data.favorite==true">
+                      <Button id="favButtonList" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
                   </span>
                 <span v-else>
-                      <Button id="favButtonList" icon="pi pi-heart" @click="addHouseToFavorites(slotProps.data.house_id), slotProps.data.url = 'favorite'" class="p-button-rounded"/>
+                      <Button id="favButtonList" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
                   </span>
                 <span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end">{{slotProps.data.price}}€ day</span>
                 <Button id="buttonViewList" label="View house" iconPos="right" class="buttonView"/>
@@ -74,12 +74,12 @@
                     <Button id="buttonViewGrid" label="View house" class="buttonView" style="background-color: #1c1b29; color: white; border-radius: 1em; opacity: 0.7;"/>
                   </figcaption>
                 </div>
-                <span id="favContainer" v-if="slotProps.data.url === 'favorite'">
-                  <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="removeFavorite(slotProps.data.house_id), slotProps.data.url = 'not favorite'" class="p-button-rounded"/>
-                </span>
+                <span id="favContainer" v-if="slotProps.data.favorite==true">
+                        <Button id="favButtonGrid" icon="pi pi-heart-fill" @click="changeFavorite()" class="p-button-rounded"/>
+                      </span>
                 <span id="favContainer" v-else>
-                  <Button id="favButtonGrid" icon="pi pi-heart" @click="addHouseToFavorites(slotProps.data.house_id), slotProps.data.url = 'favorite'" class="p-button-rounded"/>
-                </span>
+                        <Button id="favButtonGrid" icon="pi pi-heart" @click="changeFavorite()" class="p-button-rounded"/>
+                      </span>
                 <span id="priceContainer" class="text font-semibold"><a>{{slotProps.data.price}}€</a> day</span>
               </div>
               <div id="card-details" class="details">
@@ -117,10 +117,6 @@ export default {
       minPrice: null,
       maxPrice: null,
       h: [],
-      numHouses: null,
-      myFavorites: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
-      loaderActive: false,
-      selectedCities: [],
       cities: [
         {name: 'Barcelona', code: 'BCN'},
         {name: 'Girona', code: 'GI'},
@@ -182,88 +178,16 @@ export default {
       // eslint-disable-next-line standard/object-curly-even-spacing
       this.$router.push({ path: '/login'})
     },
-    getUserFavorites () {
-      var config = {
-        method: 'get',
-        url: 'https://doogking.azurewebsites.net/api/profiles/favourites/' + this.userId + '/',
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Authorization': 'Token ' + this.token
-        }
-      }
-      axios(config)
-        .then((response) => {
-          this.myFavorites = response.data
-          this.getHouses()
-        })
-        .catch((error) => {
-          this.error = error
-        })
-    },
-    // eslint-disable-next-line camelcase
-    removeFavorite (house_id) {
+    changeFavorite () {
       if (this.logged === false) {
-        this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites.', life: 2000})
-      } else {
-        var data = JSON.stringify({
-          // eslint-disable-next-line camelcase
-          'housing': house_id,
-          'user': this.userId
-        })
-        var config = {
-          method: 'delete',
-          url: 'https://doogking.azurewebsites.net/api/favourites/',
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Authorization': 'Token ' + this.token,
-            'Content-Type': 'application/json'
-          },
-          data: data
-        }
-        axios(config)
-          .then((response) => {
-            this.$toast.add({severity: 'info', summary: 'Favorite', detail: 'House removed from your list of favorites.', life: 3000})
-          })
-          .catch((error) => {
-            this.error = error
-          })
-      }
-    },
-    // eslint-disable-next-line camelcase
-    addHouseToFavorites (house_id) {
-      if (this.logged === false) {
-        this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites.', life: 2000})
-      } else {
-        var data = JSON.stringify({
-          // eslint-disable-next-line camelcase
-          'housing': 'https://doogking.azurewebsites.net/api/housing/' + house_id + '/',
-          'user': 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/'
-        })
-        var config = {
-          method: 'post',
-          url: 'https://doogking.azurewebsites.net/api/favourites/',
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Authorization': 'Token ' + this.token,
-            'Content-Type': 'application/json'
-          },
-          data: data
-        }
-        axios(config)
-          .then((response) => {
-            this.$toast.add({severity: 'info', summary: 'Favorite', detail: 'House added to your favorites list. You can see it in you profile.', life: 3000})
-          })
-          .catch((error) => {
-            this.error = error
-          })
+        this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites', life: 2000})
       }
     },
     getHouses () {
       this.minPrice = this.priceRangeValue[0]
       this.maxPrice = this.priceRangeValue[1]
-      // var pathHouses = 'http://127.0.0.1:8000/api/housing'
-      // var pathHouses = 'http://127.0.0.1:8000/api/housing/?min_price=' + this.minPrice + '&max_price=' + this.maxPrice
-      var pathHouses = 'https://doogking.azurewebsites.net/api/housing/?min_price=' + this.minPrice + '&max_price=' + this.maxPrice
+      // local: 127.0.0.1:8000, cloud: doogking.azurewebsites.net
+      var pathHouses = 'http://doogking.azurewebsites.net/api/housing/?min_price=' + this.minPrice + '&max_price=' + this.maxPrice
       // Filter Cities
       if (this.selectedCities !== null) {
         for (let i = 0; i < this.selectedCities.length; i++) {
@@ -287,61 +211,12 @@ export default {
         pathHouses += '&check_in=' + checkIn + '&check_out=' + checkOut
       }
       const headers = {'Access-Control-Allow-Origin': '*'}
-      const pathHouses = 'https://doogking.azurewebsites.net/api/housing/'
-      axios.get(pathHouses, headers)
-        .then((response) => {
-          this.houses = response.data
-          for (let i = 0; i < this.houses.length; i++) {
-            var found = false
-            for (let j = 0; j < this.myFavorites.length && found === false; j++) {
-              if (this.houses[i].house_id === this.myFavorites[j].housing.house_id) {
-                this.houses[i].url = 'favorite'
-                found = true
-              }
-            }
-          }
-        })
-        .catch((error) => {
-          this.error = error
-        })
-    },
-    getNumHouses () {
-      const headers = {'Access-Control-Allow-Origin': '*'}
-      const pathHouses = 'https://doogking.azurewebsites.net/api/housing/'
-      const promise = axios.get(pathHouses, headers)
-      Promise.resolve(promise).then((value) => (this.numHouses = value.data.length))
-    },
-    showLoader () {
-      this.loaderActive = true
-    },
-    hideLoader () {
-      this.loaderActive = false
-    },
-    loadLocalStorage () {
-      if (localStorage.username) {
-        this.logged = true
-        this.username = localStorage.username
-      }
-      if (localStorage.userId) {
-        this.userId = localStorage.userId
-      }
-      if (localStorage.token) {
-        this.token = localStorage.token
-      }
-      if (localStorage.email) {
-        this.email = localStorage.email
-        this.getUserFavorites()
-      }
+      axios.get(pathHouses, headers).then(response => (this.houses = response.data))
     }
   },
   created () {
-    this.loadLocalStorage()
+    this.logged = this.$route.query.logged === 'true'
     this.getHouses()
-    this.getNumHouses()
-    this.showLoader()
-    setTimeout(() => {
-      this.hideLoader()
-    }, 800)
   }
 }
 </script>
@@ -572,7 +447,7 @@ export default {
 }
 
 #calendarIcon >>> p-calendar >>> p-calendar-w-btn{
-  background-color: white;
+  bacground-color: white;
   color: white;
 }
 
