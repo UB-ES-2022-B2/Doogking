@@ -54,7 +54,7 @@
               <template #empty>
                 <div class="flex align-items-center justify-content-center flex-column">
                   <i class="pi pi-cloud-upload border-2 border-circle p-5 text-8xl text-400 border-400" />
-                  <p class="mt-4 mb-0">Drag and drop files here to upload.</p>
+                  <p class="mt-4 mb-0">Drag and drop images here.</p>
                 </div>
               </template>
             </FileUpload>
@@ -68,7 +68,7 @@
                     </span>
                   <h1></h1>
                   <span class="p-float-label" style="margin-right:30px">
-                      <InputText id="street number" type="text" autofocus v-model="addUserForm.street_number" aria-describedby="inputGroupPrepend2" style="width:130px" placeholder="Street Number"/>
+                      <InputText id="street_number" type="text" autofocus v-model="addUserForm.street_number" aria-describedby="inputGroupPrepend2" style="width:130px" placeholder="Street Number"/>
                       <InputText id="floor" type="text" v-model="addUserForm.floor" aria-describedby="inputGroupPrepend2" style="width:80px" placeholder="Floor"/>
                       <InputText id="door" type="text" v-model="addUserForm.door" aria-describedby="inputGroupPrepend2" style="width:80px" placeholder="Door"/>
                       <InputText id="house_dimension" type="text" v-model="addUserForm.house_dimension" aria-describedby="inputGroupPrepend2" style="width:150px" placeholder="House Dimension"/>
@@ -83,7 +83,7 @@
               </span>
                   <h1></h1>
                   <span class="p-float-label">
-                <InputText id="description" type="text" class="form-control" v-model="addUserForm.desciption" aria-describedby="inputGroupPrepend2" style="height:100px" placeholder="Description"/>
+                <InputText id="description" type="text" class="form-control" v-model="addUserForm.description" aria-describedby="inputGroupPrepend2" style="height:100px" placeholder="Description"/>
               </span>
                   <h1></h1>
                   <div class="btn-group">
@@ -145,7 +145,7 @@ export default {
         door: null,
         house_dimension: null,
         price_per_day: null,
-        desciption: null
+        description: null
       }
     }
   },
@@ -162,7 +162,7 @@ export default {
           'door': this.addUserForm.door,
           'house_dimension': this.addUserForm.house_dimension,
           'price': this.addUserForm.price_per_day,
-          'description': this.addUserForm.desciption,
+          'description': this.addUserForm.description,
           'house_owner': 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/'
         })
         var config = {
@@ -248,7 +248,7 @@ export default {
       this.addUserForm.house_dimension = ''
       this.addUserForm.city = ''
       this.addUserForm.price_per_day = ''
-      this.addUserForm.desciption = ''
+      this.addUserForm.description = ''
       this.submitted = false
     }
   },
