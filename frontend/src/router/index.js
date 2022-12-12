@@ -104,8 +104,8 @@ export default new Router({
       path: '/changePassword',
       name: 'ChangePassword',
       component: ChangePassword
-     },
-     {
+    },
+    {
       path: '/payment',
       name: 'Payment',
       component: Payment

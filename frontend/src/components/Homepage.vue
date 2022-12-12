@@ -1,8 +1,8 @@
 <template>
-  <div class="flex-wrapper">
-  <Header></Header>
+  <div className="flex-wrapper">
+    <Header></Header>
     <HouseView id="houseView"></HouseView>
-  <Footer id="footer"></Footer>
+    <Footer id="footer"></Footer>
   </div>
 </template>
 
@@ -19,8 +19,7 @@ export default {
     HouseView
   },
   data () {
-    return {
-    }
+    return {}
   },
   created () {
   }
@@ -43,12 +42,12 @@ export default {
   align-content: center;
 }
 
-#houseView{
+#houseView {
   flex: 1;
   min-height: 0vh;
 }
 
-#footer{
+#footer {
   flex: 1;
 }
 </style>

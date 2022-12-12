@@ -60,6 +60,35 @@ class HousingViewSet(viewsets.ModelViewSet):
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
 
+    def get_queryset(self):
+        queryset = Housing.objects.all()
+
+        cities = self.request.GET.getlist('city')
+        owner = self.request.query_params.get('owner')
+        min_price = self.request.query_params.get('min_price')
+        max_price = self.request.query_params.get('max_price')
+        check_in = self.request.query_params.get('check_in')
+        check_out = self.request.query_params.get('check_out')
+
+        if cities:
+            queryset = queryset.filter(city__in=cities)
+        if owner:
+            queryset = queryset.filter(house_owner__id=owner)
+        if min_price:
+            queryset = queryset.filter(price__gte=min_price)
+        if max_price:
+            queryset = queryset.filter(price__lte=max_price)
+        if check_in and check_out:
+            # First get all reservations which overlap the given range
+            booked = Reservation.objects.filter(
+                start_date__lte=check_out,
+                end_date__gte=check_in
+            ).values('housing_id')
+            # Get their associated house and exclude them
+            queryset = queryset.exclude(house_id__in=booked)
+
+        return queryset
+
 
 class HousingImageViewSet(viewsets.ModelViewSet):
     queryset = HousingImage.objects.all()
