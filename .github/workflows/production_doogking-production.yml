@@ -1,0 +1,90 @@
+name: PRODUCTION - Build and deploy to azure
+
+on:
+  push:
+    branches:
+    - production
+
+  workflow_dispatch:
+
+jobs:
+  build_frontend:
+    name: Generate static files of the Vue frontend
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 17
+        cache: npm
+        cache-dependency-path: '**/package-lock.json'
+
+    - name: Installing npm requirements
+      working-directory: ./frontend/
+      run: npm install --force
+
+    - name: Generate vue static files
+      working-directory: ./frontend/
+      run: npm run build
+
+    - name: Upload artifacts to runner
+      uses: actions/upload-artifact@v3
+      with:
+        name: vue_build
+        path: ./frontend/dist/
+
+  build_enviroment:
+    name: Configure django deploy environment
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python version
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.7'
+
+    - name: Create and start virtual environment
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Upload app and as artifact to runner
+      uses: actions/upload-artifact@v3
+      with:
+        name: backend
+        path: |
+            .
+            !venv/
+  azure_deploy:
+    name: Deploy everything to azure
+    runs-on: ubuntu-18.04
+    needs: [build_frontend, build_enviroment]
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download backend artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: backend
+          path: .
+
+      - name: Download frontend artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: vue_build
+          path: ./frontend/dist/
+
+      - name: Deploy to azure
+        uses: azure/webapps-deploy@v2
+        id: deploy
+        with:
+          app-name: 'doogking-production'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PRODUCTION_PUBLISH_PROFILE }}

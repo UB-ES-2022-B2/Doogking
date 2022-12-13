@@ -1,10 +1,11 @@
 <template>
   <div class="flex-wrapper">
-  <Header></Header>
+    <Header></Header>
     <HouseView id="houseView"></HouseView>
-  <Footer id="footer"></Footer>
+    <Footer id="footer"></Footer>
   </div>
 </template>
+
 <script>
 import Header from './Header'
 import Footer from './Footer'
@@ -18,23 +19,9 @@ export default {
     HouseView
   },
   data () {
-    return {
-      logged: null,
-      username: null,
-      email: null,
-      user_id: null,
-      token: null
-    }
+    return {}
   },
   created () {
-    this.logged = this.$route.query.logged === 'true'
-    this.username = this.$route.query.username
-    this.email = this.$route.query.email
-    this.user_id = this.$route.query.user_id
-    this.token = this.$route.query.token
-    if (this.logged === undefined) {
-      this.logged = false
-    }
   }
 }
 </script>
@@ -55,12 +42,12 @@ export default {
   align-content: center;
 }
 
-#houseView{
+#houseView {
   flex: 1;
   min-height: 0vh;
 }
 
-#footer{
+#footer {
   flex: 1;
 }
 </style>
