@@ -40,6 +40,12 @@ import Password from 'primevue/password'
 import InputText from 'primevue/inputtext'
 import Checkbox from 'primevue/checkbox'
 import SplitButton from 'primevue/splitbutton'
+import Carousel from 'primevue/carousel'
+import FileUpload from 'primevue/fileupload'
+import Slider from 'primevue/slider'
+import InputMask from 'primevue/inputmask'
+import ToggleButton from 'primevue/togglebutton'
+import Textarea from 'primevue/textarea'
 
 library.add(fas, fab)
 Vue.component('fa', FontAwesomeIcon)
@@ -74,6 +80,12 @@ Vue.component('Password', Password)
 Vue.component('InputText', InputText)
 Vue.component('Checkbox', Checkbox)
 Vue.component('SplitButton', SplitButton)
+Vue.component('Carousel', Carousel)
+Vue.component('FileUpload', FileUpload)
+Vue.component('Slider', Slider)
+Vue.component('InputMask', InputMask)
+Vue.component('ToggleButton', ToggleButton)
+Vue.component('Textarea', Textarea)
 
 /* eslint-disable no-new */
 new Vue({

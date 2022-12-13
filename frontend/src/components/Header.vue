@@ -18,14 +18,11 @@
             <a v-else class="nav-link" style="cursor: pointer" @click="goToBusinessContact">Support</a>
           </li>
           <li class="nav-item">
-            <a v-if="this.$route.name ==='Property'" class="nav-link" style="color: #8DD0FF; cursor: pointer">House registry</a>
-            <a href="https://doogking.azurewebsites.net/api/housing/" v-else class="nav-link" style="cursor: pointer" target="_blank">House registry</a>
-          </li>
-          <li class="nav-item">
             <a v-if="this.$route.name ==='AboutUs'" class="nav-link" @click="goToAboutUs" style="color: #8DD0FF; cursor: pointer"><fa :icon="['fas', 'circle-info'] " /></a>
             <a v-else class="nav-link" @click="goToAboutUs" style="cursor: pointer"><fa :icon="['fas', 'circle-info'] " /></a>
           </li>
         </ul>
+        <Button id="post" type="submit"  style="margin-right: 10px; margin-bottom: 0.5em; border-radius: 12px" @click="addHouse" v-if="logged===true"><fa  style="margin-right:10px" :icon="['fas', 'plus']"/>Post House</Button>
       </div>
       <!-- User dropdown -->
       <ul class="nav navbar-nav navbar-right" v-if="logged===false">
@@ -49,7 +46,7 @@
 export default {
   data () {
     return {
-      logged: null,
+      logged: false,
       itemsNotLogged: [
         {
           label: 'Login',
@@ -84,57 +81,69 @@ export default {
       ],
       username: null,
       email: null,
-      user_id: null,
+      userId: null,
       token: null
     }
   },
   methods: {
     goToRegister () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/register'})
+      this.$router.push({path: '/register'})
     },
     goToLogin () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/login'})
+      this.$router.push({path: '/login'})
     },
     goToProfile () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
       if (this.logged) {
-        this.$router.push({ path: '/profile', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
+        this.$router.push({path: '/profile'})
       }
     },
     goToAboutUs () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/aboutUs', query: {username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id} })
+      this.$router.push({path: '/aboutUs'})
+    },
+    addHouse () {
+      this.$router.push({path: '/houseRegistry'})
     },
     logOut () {
       this.logged = false
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/'})
+      localStorage.removeItem('username')
+      localStorage.removeItem('userId')
+      localStorage.removeItem('token')
+      localStorage.removeItem('email')
+      localStorage.removeItem('start_date')
+      localStorage.removeItem('end_date')
+      localStorage.removeItem('house_id')
+      localStorage.removeItem('pricePerDay')
+      localStorage.removeItem('totalPrice')
+      localStorage.removeItem('numberOfDays')
+      localStorage.removeItem('axiosStartDate')
+      localStorage.removeItem('axiosEndDate')
+      localStorage.removeItem('currentMoney')
+      this.$router.push({path: '/'})
+      this.$router.go()
     },
     goToBusinessContact () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/businessContact', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
+      this.$router.push({path: '/businessContact'})
     },
     goToHomepage () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      if (this.logged) {
-        this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
-      } else {
-        // eslint-disable-next-line standard/object-curly-even-spacing
-        this.$router.push({ path: '/'})
-      }
+      this.$router.push({path: '/'})
+    }
+  },
+  mounted () {
+    if (localStorage.username) {
+      this.logged = true
+      this.username = localStorage.username
+    }
+    if (localStorage.userId) {
+      this.userId = localStorage.userId
+    }
+    if (localStorage.token) {
+      this.token = localStorage.token
+    }
+    if (localStorage.email) {
+      this.email = localStorage.email
     }
   },
   created () {
-    this.logged = this.$route.query.logged === 'true'
-    this.username = this.$route.query.username
-    this.email = this.$route.query.email
-    this.user_id = this.$route.query.user_id
-    this.token = this.$route.query.token
-    if (this.logged === undefined) {
-      this.logged = false
-    }
   }
 }
 </script>
@@ -149,7 +158,6 @@ export default {
 .nav-item .nav-link:hover {
   color: #8DD0FF;
 }
-
 .loginIcon:hover{
   color: #8DD0FF;
 }

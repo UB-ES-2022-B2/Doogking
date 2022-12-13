@@ -7,18 +7,25 @@
           <ul>
             <li><a href="#" @click="goToAboutUs" id="aboutUs">About Us</a></li>
             <li><a href="#" @click="goToPrivacyPolicy" id="privacyPolicy">Privacy policy</a></li>
+            <li><a href="#" @click="goToProfile" id="goToProfile" v-if="logged" >Profile</a></li>
             <li><a href="#" @click="goToRegister" id="goRegister">Register</a></li>
+            <li><a href="#" @click="goToLogin" id="goRegister">Login</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h4>Support</h4>
           <ul>
-            <li><a href="#" @click="goToBusinessContact" target="_blank">Business contact</a></li>
+            <li><a href="#" @click="goToBusinessContact">Business contact</a></li>
           </ul>
         </div>
         <div class="footer-col">
           <h4>Housing</h4>
           <ul>
+            <li><a href="#" @click="addHouse" id="goToAddHouse" v-if="logged">House Registry</a></li>
+            <li><a href="#" @click="goToProfile" id="goToHouses" v-if="logged">Your houses</a></li>
+            <li><a href="#" @click="goToProfile" id="goToFavorites" v-if="logged" >Favorites</a></li>
+            <li><a href="#" @click="goToProfile" id="goToReservations" v-if="logged">Your reservations</a></li>
+            <li><a href="#" @click="goToProfile" id="goToReserved" v-if="logged">Your reserved houses</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -39,42 +46,55 @@
 export default {
   data () {
     return {
-      logged: false
+      logged: false,
+      username: null,
+      userId: null,
+      token: null,
+      email: null
     }
   },
   methods: {
-    go_to_login () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/login'})
-    },
-    login () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.logged = true
+    goToLogin () {
+      this.$router.push({path: '/login'})
     },
     goToPrivacyPolicy () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/privacyPolicy', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
+      this.$router.push({path: '/privacyPolicy'})
     },
     goToAboutUs () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/aboutUs', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
+      this.$router.push({path: '/aboutUs'})
     },
     goToRegister () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/register'})
+      this.$router.push({path: '/register'})
     },
     goToBusinessContact () {
-      // eslint-disable-next-line standard/object-curly-even-spacing
-      this.$router.push({ path: '/businessContact', query: { username: this.username, logged: this.logged, token: this.token, email: this.email, user_id: this.user_id } })
+      this.$router.push({path: '/businessContact'})
+    },
+    addHouse () {
+      this.$router.push({path: '/houseRegistry'})
+    },
+    goToProfile () {
+      if (this.logged) {
+        this.$router.push({path: '/profile'})
+      }
+    },
+    loadLocalStorage () {
+      if (localStorage.username) {
+        this.logged = true
+        this.username = localStorage.username
+      }
+      if (localStorage.userId) {
+        this.userId = localStorage.userId
+      }
+      if (localStorage.token) {
+        this.token = localStorage.token
+      }
+      if (localStorage.email) {
+        this.email = localStorage.email
+      }
     }
   },
   created () {
-    this.logged = this.$route.query.logged === 'true'
-    this.username = this.$route.query.username
-    this.token = this.$route.query.token
-    if (this.logged === undefined) {
-      this.logged = false
-    }
+    this.loadLocalStorage()
   }
 }
 </script>

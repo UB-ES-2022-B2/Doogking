@@ -1,11 +1,13 @@
-name: Regression tests
+name: Functional tests
 on:
   push:
     branches:
       - main
+      - integration
   pull_request:
     branches:
       - main
+      - integration
 jobs:
   build:
 
@@ -45,18 +47,12 @@ jobs:
       with:
         name: vue_build
         path: ./frontend/dist/
-    - name: Test models
+    - name: Functional test housing
       run: |
-        python3 manage.py test tests.test_models
-    - name: Test admin
+        python3 manage.py test tests.test_housing_view
+    - name: Functional tests card
       run: |
-        python3 manage.py test tests.admin
-    - name: Test login
+        python3 manage.py test tests.test_payment
+    - name: Functional tests posting
       run: |
-        python3 manage.py test tests.test_login
-    - name: Test register
-      run: |
-        python3 manage.py test tests.test_register
-    - name: Test views
-      run: |
-        python3 manage.py test tests.test_view
+        python3 manage.py test tests.test_house_registry
