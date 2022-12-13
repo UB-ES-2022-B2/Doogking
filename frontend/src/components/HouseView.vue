@@ -21,16 +21,21 @@
                   </div>
                 </template>
               </MultiSelect>
-              <Button id="searchButton" type="button" @click="onSearch" icon="pi pi-search" style=""/>
+              <Button id="searchButton" type="button" @click="getHouses()" icon="pi pi-search" style=""/>
             </div>
             <div class="col-6 text-right">
               <DataViewLayoutOptions v-model="layout" />
             </div>
-            <Calendar class="calendarIcon" id="icon" placeholder="Check-in" v-model="checkInDate" :showIcon="true" style="width: 9.65rem; margin-top: 0.5em; margin-right: 0.5em;"/>
-            <Calendar class="calendarIcon" id="icon" placeholder="Check-out" v-model="checkOutDate" :showIcon="true" style="width: 9.65rem; margin-top: 0.5em; margin-right: 0.5em;"/>
+            <Calendar class="calendarIcon" id="check_in" placeholder="Check-in" v-model="checkInDate" :showIcon="true" style="width: 9.65rem; margin-top: 0.5em; margin-right: 0.5em;"/>
+            <Calendar class="calendarIcon" id="check_out" placeholder="Check-out" v-model="checkOutDate" @click="checkOutGreater()" :showIcon="true" style="width: 9.65rem; margin-top: 0.5em; margin-right: 0.5em;"/>
             <ConfirmPopup id="confirmPopup" ></ConfirmPopup>
-            <Toast/>
+            <Toast id="error_toast"/>
             <Button id="removeFiltersBtn" @click="confirmRemoveFilters($event)" icon="pi pi-times" style="background-color: indianred; border-color: indianred; color: white; margin-top: 0.5em;"/>
+          </div>
+          <div class="col-3 text-left">
+            <h5>Price range per day: {{priceRangeValue}}</h5>
+            <Slider id="priceRange" v-model="priceRangeValue" :step="5" :min="0" :max="500" :range="true"/>
+            <h9>Note: min: 0, max: 500</h9>
           </div>
           <Divider id="gridDivider" v-if="layout=='grid'"></Divider>
         </template>
@@ -117,7 +122,9 @@ export default {
       layout: 'grid',
       checkInDate: null,
       checkOutDate: null,
-      h: [],
+      priceRangeValue: [0, 500],
+      minPrice: null,
+      maxPrice: null,
       numHouses: null,
       myFavorites: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
       loaderActive: false,
@@ -134,8 +141,8 @@ export default {
         {name: 'Zaragoza', code: 'ZG'},
         {name: 'Málaga', code: 'ML'},
         {name: 'Palma de Mallorca', code: 'MLL'},
-        {name: 'Las Palmas de Gran Canaria', code: 'MLL'},
-        {name: 'Hospitalet de Llobregat', code: 'MLL'}
+        {name: 'Las Palmas de Gran Canaria', code: 'PGC'},
+        {name: 'Hospitalet de Llobregat', code: 'HL'}
       ]
     }
   },
@@ -148,7 +155,7 @@ export default {
         acceptClass: 'p-button-danger',
         accept: () => {
           this.$toast.add({severity: 'info', summary: 'Confirmed', detail: 'Filters removed', life: 3000})
-          this.selectedCities = null
+          this.selectedCities = []
           this.checkInDate = null
           this.checkOutDate = null
           this.getHouses()
@@ -162,22 +169,8 @@ export default {
         this.checkOutDate = null
         this.$toast.add({severity: 'error', summary: 'Error message', detail: 'Check-out date should be greater than check-in date', life: 2000})
       }
-      if (this.houses.length !== this.numHouses) {
-        this.getHouses()
-      }
-      if (this.selectedCities.length !== 0) {
-        this.h.length = 0
-        for (let i = 0; i < this.selectedCities.length; i++) {
-          for (let j = 0; j < this.houses.length; j++) {
-            if (this.selectedCities[i].name === this.houses[j].city) {
-              this.h.push(this.houses[j])
-            }
-          }
-        } this.houses = this.h
-      } else if (this.selectedCities.length === 0) {
-        this.houses.length = 0
-        this.getHouses()
-      } this.selectedCities.length = 0
+      this.getHouses()
+      // this.selectedCities.length = 0
     },
     goToLogin () {
       this.$router.push({path: '/login'})
@@ -263,9 +256,33 @@ export default {
       }
     },
     getHouses () {
-      // const pathHouses = 'http://127.0.0.1:8000/api/housing/'
+      this.minPrice = this.priceRangeValue[0]
+      this.maxPrice = this.priceRangeValue[1]
+      // local: 127.0.0.1:8000, cloud: doogking.azurewebsites.net
       const headers = {'Access-Control-Allow-Origin': '*'}
-      const pathHouses = 'https://doogking.azurewebsites.net/api/housing/'
+      var pathHouses = 'https://doogking.azurewebsites.net/api/housing/?min_price=' + this.minPrice + '&max_price=' + this.maxPrice
+      // Filter Cities
+      if (this.selectedCities.length !== 0) {
+        for (let i = 0; i < this.selectedCities.length; i++) {
+          pathHouses += '&city=' + this.selectedCities[i].name
+        }
+      }
+      if (this.checkOutDate !== null && this.checkInDate !== null) {
+        // Check In
+        const checkInString = this.checkInDate.toString()
+        var checkIn = checkInString.substring(11, 15) + '-'
+        var month = checkInString.substring(4, 7)
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        checkIn += (months.indexOf(month) + 1).toLocaleString('en-US', {minimumIntegerDigits: 2}) + '-' +
+          checkInString.substring(8, 10)
+        // Check Out
+        const checkOutString = this.checkInDate.toString()
+        var checkOut = checkOutString.substring(11, 15) + '-'
+        month = checkOutString.substring(4, 7)
+        checkOut += (months.indexOf(month) + 1).toLocaleString('en-US', {minimumIntegerDigits: 2}) + '-' +
+          checkOutString.substring(8, 10)
+        pathHouses += '&check_in=' + checkIn + '&check_out=' + checkOut
+      }
       axios.get(pathHouses, headers)
         .then((response) => {
           this.houses = response.data
@@ -277,6 +294,7 @@ export default {
                 found = true
               }
             }
+            console.log(response)
           }
         })
         .catch((error) => {
