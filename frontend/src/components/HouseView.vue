@@ -226,6 +226,35 @@ export default {
           })
       }
     },
+    // eslint-disable-next-line camelcase
+    addHouseToFavorites (house_id) {
+      if (this.logged === false) {
+        this.$toast.add({severity: 'warn', summary: 'Warn message', detail: 'You need to login to add favorites.', life: 2000})
+      } else {
+        var data = JSON.stringify({
+          // eslint-disable-next-line camelcase
+          'housing': 'https://doogking.azurewebsites.net/api/housing/' + house_id + '/',
+          'user': 'https://doogking.azurewebsites.net/api/profiles/' + this.userId + '/'
+        })
+        var config = {
+          method: 'post',
+          url: 'https://doogking.azurewebsites.net/api/favourites/',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Token ' + this.token,
+            'Content-Type': 'application/json'
+          },
+          data: data
+        }
+        axios(config)
+          .then((response) => {
+            this.$toast.add({severity: 'info', summary: 'Favorite', detail: 'House added to your favorites list. You can see it in you profile.', life: 3000})
+          })
+          .catch((error) => {
+            this.error = error
+          })
+      }
+    },
     getHouses () {
       this.minPrice = this.priceRangeValue[0]
       this.maxPrice = this.priceRangeValue[1]
