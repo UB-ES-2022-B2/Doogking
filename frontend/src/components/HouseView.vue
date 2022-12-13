@@ -33,9 +33,8 @@
             <Button id="removeFiltersBtn" @click="confirmRemoveFilters($event)" icon="pi pi-times" style="background-color: indianred; border-color: indianred; color: white; margin-top: 0.5em;"/>
           </div>
           <div class="col-3 text-left">
-            <h5>Price range per day: {{priceRangeValue}}</h5>
-            <Slider id="priceRange" v-model="priceRangeValue" :step="5" :min="0" :max="500" :range="true"/>
-            <h9>Note: min: 0, max: 500</h9>
+            <h6 style="margin-top:0.5em; margin-bottom: 1.5em;">Price range per day: {{priceRangeValue}}</h6>
+            <Slider id="priceRange" v-model="priceRangeValue" :step="5" :min="0" :max="500" :range="true" style="margin-left: 0.2vw; width: 20vw;"/>
           </div>
           <Divider id="gridDivider" v-if="layout=='grid'"></Divider>
         </template>
