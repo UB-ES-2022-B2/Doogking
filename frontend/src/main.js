@@ -45,6 +45,7 @@ import FileUpload from 'primevue/fileupload'
 import Slider from 'primevue/slider'
 import InputMask from 'primevue/inputmask'
 import ToggleButton from 'primevue/togglebutton'
+import Textarea from 'primevue/textarea'
 
 library.add(fas, fab)
 Vue.component('fa', FontAwesomeIcon)
@@ -84,6 +85,7 @@ Vue.component('FileUpload', FileUpload)
 Vue.component('Slider', Slider)
 Vue.component('InputMask', InputMask)
 Vue.component('ToggleButton', ToggleButton)
+Vue.component('Textarea', Textarea)
 
 /* eslint-disable no-new */
 new Vue({
