@@ -81,7 +81,7 @@
           </div>
         </template>
       </Carousel>
-      <Carousel :value="myFavorites" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="4000">
+      <Carousel :value="myFavorites" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true">
         <template #header>
           <h5 style="text-align: left; margin-left: 6vw; color: white;">My favorite houses</h5>
           <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
@@ -124,7 +124,7 @@
           </div>
         </template>
       </Carousel>
-    <Carousel :value="myReservations" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="4000">
+    <Carousel :value="myReservations" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true">
       <template #header>
         <h5 style="text-align: left; margin-left: 6vw; color: white;">My reservations</h5>
         <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
@@ -168,7 +168,7 @@
         </div>
       </template>
     </Carousel>
-      <Carousel :value="myReservedHouses" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true" :autoplayInterval="4000">
+      <Carousel :value="myReservedHouses" :page="0" :numVisible="3" :numScroll="1" class="custom-carousel" :circular="true">
         <template #header>
           <h5 style="text-align: left; margin-left: 6vw; color: white;">My houses reserved by other users</h5>
           <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
