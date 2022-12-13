@@ -1,5 +1,5 @@
 <template>
-  <div className="flex-wrapper">
+  <div class="flex-wrapper">
     <Header></Header>
     <HouseView id="houseView"></HouseView>
     <Footer id="footer"></Footer>
