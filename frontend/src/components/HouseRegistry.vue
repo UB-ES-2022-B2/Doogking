@@ -34,12 +34,26 @@
         <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
         <h5 style="margin-top: 1em">Missing images!</h5>
         <p style="text-align: center">
-          You have to upload at least one image before submitting your new house.
+          You have to choose and upload at least one image before submitting your new house.
         </p>
       </div>
       <template #footer>
         <div class="flex justify-content-center">
           <Button label="OK" @click="toggleDialogImages" class="p-button-text" />
+        </div>
+      </template>
+    </Dialog>
+    <Dialog :visible="showNullFieldError" :breakpoints="{ '960px': '80vw' }" :style="{ width: '30vw' }" position="top">
+      <div class="flex align-items-center flex-column pt-6 px-3">
+        <i class="pi pi-info-circle" :style="{fontSize: '5rem', color: 'var(--red-500)' }"></i>
+        <h5 style="margin-top: 1em">Form Error!</h5>
+        <p style="text-align: center">
+          Please enter all the information about your house before posting it.
+        </p>
+      </div>
+      <template #footer>
+        <div class="flex justify-content-center">
+          <Button label="OK" @click="toggleDialogNull" class="p-button-text" />
         </div>
       </template>
     </Dialog>
@@ -64,26 +78,26 @@
               <div class="field">
                 <div class="p-float-label">
                     <span class="p-float-label">
-                      <InputText id="street" type="text" class="form-control" v-model="addUserForm.street" aria-describedby="inputGroupPrepend2" placeholder="Street" />
+                      <InputText id="street" type="text" class="form-control" autofocus v-model="addUserForm.street" aria-describedby="inputGroupPrepend2" placeholder="Street" style="color: white; background-color: #20262E;"/>
                     </span>
                   <h1></h1>
                   <span class="p-float-label" style="margin-right:30px">
-                      <InputText id="street_number" type="text" autofocus v-model="addUserForm.street_number" aria-describedby="inputGroupPrepend2" style="width:130px" placeholder="Street Number"/>
-                      <InputText id="floor" type="text" v-model="addUserForm.floor" aria-describedby="inputGroupPrepend2" style="width:80px" placeholder="Floor"/>
-                      <InputText id="door" type="text" v-model="addUserForm.door" aria-describedby="inputGroupPrepend2" style="width:80px" placeholder="Door"/>
-                      <InputText id="house_dimension" type="text" v-model="addUserForm.house_dimension" aria-describedby="inputGroupPrepend2" style="width:150px" placeholder="House Dimension"/>
+                      <InputText id="street_number" type="text" v-model="addUserForm.street_number" aria-describedby="inputGroupPrepend2" style="color: white; width:130px" placeholder="Street Number"/>
+                      <InputText id="floor" type="text" v-model="addUserForm.floor" aria-describedby="inputGroupPrepend2" style="color: white; width:80px" placeholder="Floor"/>
+                      <InputText id="door" type="text" v-model="addUserForm.door" aria-describedby="inputGroupPrepend2" style="color: white; width:80px" placeholder="Door"/>
+                      <InputText id="house_dimension" type="text" v-model="addUserForm.house_dimension" aria-describedby="inputGroupPrepend2" style="color: white; width:150px" placeholder="House Dimension"/>
                     </span>
                   <h1></h1>
                   <div class="p-float-label">
-                    <InputText id="city" type="text" class="form-control" v-model="addUserForm.city" aria-describedby="inputGroupPrepend2" placeholder="City" />
+                    <InputText id="city" type="text" class="form-control" v-model="addUserForm.city" aria-describedby="inputGroupPrepend2" placeholder="City" style="color: white; background-color: #20262E;"/>
                   </div>
                   <h1></h1>
                   <span class="p-float-label">
-                <InputText id="price" type="number" class="form-control" v-model="addUserForm.price_per_day" aria-describedby="inputGroupPrepend2" placeholder="Price per day" />
+                <InputText id="price" type="number" class="form-control" v-model="addUserForm.price_per_day" aria-describedby="inputGroupPrepend2" placeholder="Price per day" style="color: white; background-color: #20262E;"/>
               </span>
                   <h1></h1>
                   <span class="p-float-label">
-                <InputText id="description" type="text" class="form-control" v-model="addUserForm.description" aria-describedby="inputGroupPrepend2" style="height:100px" placeholder="Description"/>
+                <Textarea id="description" type="text" class="form-control" v-model="addUserForm.description" aria-describedby="inputGroupPrepend2" placeholder="Description" :autoResize="true" style="height:100px; color: white; background-color: #20262E;"/>
               </span>
                   <h1></h1>
                   <div class="btn-group">
@@ -137,6 +151,7 @@ export default {
       showSuccessMessage: false,
       showErrorMessage: false,
       showImagesMessage: false,
+      showNullFieldError: false,
       addUserForm: {
         city: null,
         street: null,
@@ -151,7 +166,11 @@ export default {
   },
   methods: {
     goPostHouse () {
-      if (this.uploadedFiles === false) {
+      if (this.addUserForm.city == null || this.addUserForm.street == null || this.addUserForm.street_number == null ||
+        this.addUserForm.floor == null || this.addUserForm.house_dimension == null || this.addUserForm.price_per_day == null ||
+        this.addUserForm.description == null) {
+        this.showNullFieldError = true
+      } else if (this.uploadedFiles === false) {
         this.showImagesMessage = true
       } else {
         var data = JSON.stringify({
@@ -237,6 +256,11 @@ export default {
     toggleDialogImages () {
       this.showImagesMessage = !this.showImagesMessage
       if (!this.showImagesMessage) {
+      }
+    },
+    toggleDialogNull () {
+      this.showNullFieldError = !this.showNullFieldError
+      if (!this.showNullFieldError) {
         this.resetForm()
       }
     },
