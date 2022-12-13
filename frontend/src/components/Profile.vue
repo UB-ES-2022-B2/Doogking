@@ -30,7 +30,7 @@
                 <div class="row">
                   <div class="col"><fa :icon="['fas', 'envelope']"/>          {{email}}</div>
                   <div class="w-100"></div>
-                  <div class="col"><fa :icon="['fas', 'house']"/>       {{numHouses}}</div>
+                  <div class="col"><fa :icon="['fas', 'house']"/>       {{myHousesLength}}</div>
                 </div>
               </div>
             </div>
@@ -50,7 +50,8 @@
           <hr style="width:90vw; color: white; margin-left: auto; margin-right: auto; margin-bottom:1vw" class="solid"/>
         </template>
         <template #item="slotProps">
-          <div class="product-item">
+          <div v-if="slotProps.data.skeleton===true"></div>
+          <div class="product-item" v-else>
             <div class="product-item-content">
               <div class="card" style="margin:auto;">
                 <div id ="container-image" class="container">
@@ -227,6 +228,7 @@ export default {
       logged: false,
       username: null,
       email: null,
+      myHousesLength: 0,
       myHouses: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
       numReservations: 0,
       myReservations: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
@@ -268,7 +270,24 @@ export default {
       const headers = {'Access-Control-Allow-Origin': '*'}
       const pathHouses = 'https://doogking.azurewebsites.net/api/housing/?owner=' + this.userId
       axios.get(pathHouses, headers)
-        .then(response => (this.myHouses = response.data))
+        .then((response) => {
+          this.myHouses = response.data
+          this.myHousesLength = 0
+          if (response.data.length === 0) {
+            this.myFavorites = null
+          } else if (response.data.length === 1) {
+            this.myHousesLength = this.myHouses.length
+            var secondHouse = {'skeleton': true}
+            var thirdHouse = {'skeleton': true}
+            this.myFavorites = response.data.concat(secondHouse, thirdHouse)
+          } else if (response.data.length === 2) {
+            this.myHousesLength = this.myHouses.length
+            var thirdHouses = {'skeleton': true}
+            this.myFavorites = response.data.concat(thirdHouses)
+          } else {
+            this.myHousesLength = this.myHouses.length
+          }
+        })
         .catch((error) => {
           this.error = error
         })
@@ -285,17 +304,22 @@ export default {
       axios(config)
         .then((response) => {
           this.myReservations = response.data
+          this.numReservations = 0
           if (response.data.length === 0) {
             this.myReservations = null
           } else if (response.data.length === 1) {
+            this.numReservations = response.data.length
             var secondHouse = {'skeleton': true}
             var thirdHouse = {'skeleton': true}
             this.myReservations = response.data.concat(secondHouse, thirdHouse)
           } else if (response.data.length === 2) {
+            this.numReservations = response.data.length
             var thirdHouses = {'skeleton': true}
             this.myReservations = response.data.concat(thirdHouses)
+          } else {
+            this.numReservations = response.data.length
           }
-          for (let i = 0; i < this.myReservations.length; i++) {
+          for (let i = 0; i < this.numReservations; i++) {
             var found = false
             for (let j = 0; j < this.myFavoritesLength && found === false; j++) {
               if (this.myReservations[i].housing.house_id === this.myFavorites[j].housing.house_id) {
